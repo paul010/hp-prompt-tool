@@ -1,10 +1,8 @@
 import Papa from 'papaparse';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { Prompt, BusinessScenario, AIPlatform } from './types';
 
-// 本地数据文件路径
-const DATA_FILE_PATH = join(process.cwd(), 'data', 'prompts.csv');
+// 数据源 URL - 直接从上游获取
+const DATA_SOURCE_URL = 'https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv';
 
 export interface RawPromptData {
   act: string;
@@ -13,9 +11,17 @@ export interface RawPromptData {
   type: string;
 }
 
-// 从本地 CSV 文件加载提示词
+// 从上游 URL 加载提示词（带缓存）
 export async function loadPrompts(): Promise<Prompt[]> {
-  const csvText = readFileSync(DATA_FILE_PATH, 'utf-8');
+  const response = await fetch(DATA_SOURCE_URL, {
+    next: { revalidate: 3600 }, // 缓存1小时
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch prompts: ${response.statusText}`);
+  }
+
+  const csvText = await response.text();
 
   return new Promise((resolve, reject) => {
     Papa.parse<RawPromptData>(csvText, {
