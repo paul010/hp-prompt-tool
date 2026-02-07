@@ -174,45 +174,54 @@ function inferDifficulty(act: string, prompt: string, forDevs: boolean): '入门
 }
 
 function inferPlatforms(act: string, prompt: string, scenario: BusinessScenario, forDevs: boolean): AIPlatform[] {
-  let platforms: AIPlatform[] = ['chatgpt', 'claude'];
+  let platforms: AIPlatform[] = ['copilot', 'chatgpt', 'claude'];
   const text = `${act} ${prompt}`.toLowerCase();
 
   // 面向开发者
   if (forDevs) {
-    platforms = ['claude', 'chatgpt'];
+    platforms = ['claude', 'chatgpt', 'copilot'];
     if (text.includes('excel') || text.includes('office') || text.includes('microsoft')) {
-      platforms.push('copilot');
+      platforms = ['copilot', 'claude', 'chatgpt'];
     }
   }
 
   // 根据场景推荐
   switch (scenario) {
     case '办公效率':
-      platforms = ['chatgpt', 'claude', 'copilot', 'kimi'];
+      platforms = ['copilot', 'chatgpt', 'claude', 'kimi'];
       break;
     case '编程开发':
       platforms = ['claude', 'chatgpt', 'copilot'];
       break;
     case '创意写作':
-      platforms = ['chatgpt', 'claude', 'gemini'];
+      platforms = ['chatgpt', 'claude', 'gemini', 'copilot'];
       break;
     case '数据分析':
-      platforms = ['claude', 'chatgpt', 'kimi', 'copilot'];
+      platforms = ['copilot', 'claude', 'chatgpt', 'kimi'];
       break;
     case '翻译本地化':
-      platforms = ['chatgpt', 'claude', 'wenxin', 'tongyi'];
+      platforms = ['chatgpt', 'claude', 'wenxin', 'tongyi', 'copilot'];
       break;
     case '学习培训':
-      platforms = ['chatgpt', 'claude', 'gemini'];
+      platforms = ['chatgpt', 'claude', 'gemini', 'copilot'];
+      break;
+    case '客户服务':
+      platforms = ['copilot', 'chatgpt', 'claude'];
+      break;
+    case '项目管理':
+      platforms = ['copilot', 'chatgpt', 'claude'];
+      break;
+    case '演示汇报':
+      platforms = ['copilot', 'chatgpt', 'claude'];
       break;
     default:
-      platforms = ['chatgpt', 'claude'];
+      platforms = ['copilot', 'chatgpt', 'claude'];
   }
 
   // 根据内容关键词微调
-  if (text.includes('office') || text.includes('excel') || text.includes('powerpoint')) {
+  if (text.includes('office') || text.includes('excel') || text.includes('powerpoint') || text.includes('word') || text.includes('outlook')) {
     if (!platforms.includes('copilot')) {
-      platforms.push('copilot');
+      platforms.unshift('copilot');
     }
   }
   if (text.includes('chinese') || text.includes('中文') || text.includes('翻译')) {

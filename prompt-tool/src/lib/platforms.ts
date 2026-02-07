@@ -2,6 +2,16 @@ import { PlatformConfig, AIPlatform } from "./types";
 
 export const AI_PLATFORMS: PlatformConfig[] = [
   {
+    id: "copilot",
+    name: "Copilot M365",
+    nameEn: "Copilot",
+    icon: "🌐",
+    color: "#00a4ef",
+    url: "https://copilot.microsoft.com",
+    description: "微软的 AI 助手，深度集成 Office 365",
+    strengths: ["Office 文档处理", "企业协作", "邮件写作", "Excel 分析"],
+  },
+  {
     id: "chatgpt",
     name: "ChatGPT",
     nameEn: "ChatGPT",
@@ -61,16 +71,6 @@ export const AI_PLATFORMS: PlatformConfig[] = [
     description: "Moonshot 的长文本 AI，支持超长文档",
     strengths: ["超长文档", "资料分析", "研报解读", "论文阅读"],
   },
-  {
-    id: "copilot",
-    name: "Copilot M365",
-    nameEn: "Copilot",
-    icon: "🌐",
-    color: "#00a4ef",
-    url: "https://copilot.microsoft.com",
-    description: "微软的 AI 助手，深度集成 Office 365",
-    strengths: ["Office 文档处理", "企业协作", "邮件写作", "Excel 分析"],
-  },
 ];
 
 // 生成 AI 平台跳转 URL
@@ -78,6 +78,8 @@ export function getPlatformUrl(platform: AIPlatform, prompt: string): string {
   const encodedPrompt = encodeURIComponent(prompt);
 
   switch (platform) {
+    case "copilot":
+      return `https://copilot.microsoft.com/?prompt=${encodedPrompt}`;
     case "chatgpt":
       return `https://chat.openai.com/?prompt=${encodedPrompt}`;
     case "claude":
@@ -90,8 +92,6 @@ export function getPlatformUrl(platform: AIPlatform, prompt: string): string {
       return `https://tongyi.aliyun.com/qianwen/?prompt=${encodedPrompt}`;
     case "kimi":
       return `https://kimi.moonshot.cn/?prompt=${encodedPrompt}`;
-    case "copilot":
-      return `https://copilot.microsoft.com/?prompt=${encodedPrompt}`;
     default:
       return "#";
   }
@@ -105,33 +105,44 @@ export function getRecommendedPlatforms(
 ): AIPlatform[] {
   const platforms: AIPlatform[] = [];
 
-  // 面向开发者的提示词优先推荐 Claude 和 ChatGPT
-  if (forDevelopers) {
-    platforms.push("claude", "chatgpt");
+  // 办公效率场景优先推荐 Copilot
+  if (scenario === "办公效率") {
+    platforms.push("copilot", "chatgpt", "claude", "kimi");
   }
-
+  // 面向开发者的提示词优先推荐 Claude 和 ChatGPT，但也包含 Copilot
+  else if (forDevelopers) {
+    platforms.push("claude", "chatgpt", "copilot");
+  }
   // 根据场景推荐
-  switch (scenario) {
-    case "创意写作":
-      platforms.push("chatgpt", "gemini", "wenxin");
-      break;
-    case "数据分析":
-      platforms.push("claude", "chatgpt", "kimi");
-      break;
-    case "翻译本地化":
-      platforms.push("claude", "chatgpt", "wenxin", "tongyi");
-      break;
-    case "办公效率":
-      platforms.push("chatgpt", "claude", "copilot", "kimi");
-      break;
-    case "编程开发":
-      platforms.push("claude", "chatgpt");
-      break;
-    case "学习培训":
-      platforms.push("chatgpt", "claude", "gemini");
-      break;
-    default:
-      platforms.push("chatgpt", "claude");
+  else {
+    switch (scenario) {
+      case "创意写作":
+        platforms.push("chatgpt", "gemini", "wenxin", "copilot");
+        break;
+      case "数据分析":
+        platforms.push("copilot", "claude", "chatgpt", "kimi");
+        break;
+      case "翻译本地化":
+        platforms.push("claude", "chatgpt", "wenxin", "tongyi", "copilot");
+        break;
+      case "编程开发":
+        platforms.push("claude", "chatgpt", "copilot");
+        break;
+      case "学习培训":
+        platforms.push("chatgpt", "claude", "gemini", "copilot");
+        break;
+      case "客户服务":
+        platforms.push("chatgpt", "claude", "copilot");
+        break;
+      case "项目管理":
+        platforms.push("chatgpt", "claude", "copilot");
+        break;
+      case "演示汇报":
+        platforms.push("copilot", "chatgpt", "claude");
+        break;
+      default:
+        platforms.push("copilot", "chatgpt", "claude");
+    }
   }
 
   // 去重

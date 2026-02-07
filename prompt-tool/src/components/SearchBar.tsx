@@ -10,9 +10,11 @@ interface SearchBarProps {
   onScenarioChange: (scenario: string) => void;
   onPlatformChange: (platform: string) => void;
   onDifficultyChange: (difficulty: string) => void;
+  onSortChange?: (sort: string) => void;
   selectedScenario: string;
   selectedPlatform: string;
   selectedDifficulty: string;
+  selectedSort?: string;
   searchQuery: string;
 }
 
@@ -21,9 +23,11 @@ export function SearchBar({
   onScenarioChange,
   onPlatformChange,
   onDifficultyChange,
+  onSortChange,
   selectedScenario,
   selectedPlatform,
   selectedDifficulty,
+  selectedSort = "relevance",
   searchQuery,
 }: SearchBarProps) {
   const [localQuery, setLocalQuery] = useState(searchQuery);
@@ -60,7 +64,7 @@ export function SearchBar({
         </div>
 
         {/* 筛选器 */}
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4 items-center">
           {/* 业务场景筛选 */}
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-gray-700">场景:</span>
@@ -153,6 +157,22 @@ export function SearchBar({
               ))}
             </div>
           </div>
+
+          {/* 排序选择器 */}
+          {onSortChange && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-700">排序:</span>
+              <select
+                value={selectedSort}
+                onChange={(e) => onSortChange(e.target.value)}
+                className="px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-100 border-none focus:ring-2 focus:ring-hp-blue cursor-pointer"
+              >
+                <option value="relevance">相关度</option>
+                <option value="difficulty">难度级别</option>
+                <option value="name">名称 A-Z</option>
+              </select>
+            </div>
+          )}
         </div>
       </div>
     </div>

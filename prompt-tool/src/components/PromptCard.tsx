@@ -8,9 +8,10 @@ import { PlatformModal } from "./PlatformModal";
 
 interface PromptCardProps {
   prompt: Prompt;
+  compact?: boolean;
 }
 
-export function PromptCard({ prompt }: PromptCardProps) {
+export function PromptCard({ prompt, compact = false }: PromptCardProps) {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [showPlatformModal, setShowPlatformModal] = useState(false);
@@ -31,6 +32,87 @@ export function PromptCard({ prompt }: PromptCardProps) {
     ? AI_PLATFORMS.filter((p) => prompt.recommendedPlatforms.includes(p.id))
     : AI_PLATFORMS.filter((p) => recommendedPlatforms.includes(p.id));
 
+  // 紧凑模式
+  if (compact) {
+    return (
+      <div className="bg-white rounded-xl border border-gray-200 hover:border-hp-blue hover:shadow-lg transition-all overflow-hidden p-4">
+        <div className="flex items-start gap-3 mb-3">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base font-semibold text-gray-900 truncate">
+              {prompt.nameZh}
+            </h3>
+            <p className="text-xs text-gray-500 truncate">{prompt.name}</p>
+          </div>
+          <span className={`px-2 py-0.5 text-xs font-medium rounded flex-shrink-0 ${
+            prompt.difficulty === "入门" ? "bg-green-100 text-green-700" :
+            prompt.difficulty === "进阶" ? "bg-yellow-100 text-yellow-700" :
+            "bg-red-100 text-red-700"
+          }`}>
+            {prompt.difficulty}
+          </span>
+        </div>
+
+        <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+          {prompt.description}
+        </p>
+
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          <span className="px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded">
+            {prompt.scenario}
+          </span>
+          {prompt.tags.slice(0, 3).map((tag) => (
+            <span key={tag} className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded">
+              {tag}
+            </span>
+          ))}
+          {prompt.tags.length > 3 && (
+            <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-500 rounded">
+              +{prompt.tags.length - 3}
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+          <button
+            onClick={handleCopy}
+            className={`text-sm font-medium transition-all ${
+              copied ? "text-green-600" : "text-hp-blue hover:underline"
+            }`}
+          >
+            {copied ? "已复制" : "复制"}
+          </button>
+          <div className="flex gap-1.5">
+            {platformsToShow.slice(0, 4).map((platform) => (
+              <button
+                key={platform.id}
+                onClick={() => window.open(getPlatformUrl(platform.id, prompt.content), "_blank")}
+                className="w-8 h-8 rounded-lg border border-gray-200 hover:border-hp-blue hover:bg-gray-50 flex items-center justify-center transition-all"
+                title={platform.name}
+              >
+                {platform.icon}
+              </button>
+            ))}
+            {platformsToShow.length > 4 && (
+              <button
+                onClick={() => setShowPlatformModal(true)}
+                className="w-8 h-8 rounded-lg border border-dashed border-gray-300 hover:border-hp-blue flex items-center justify-center text-xs text-gray-500 hover:text-hp-blue transition-all"
+              >
+                +{platformsToShow.length - 4}
+              </button>
+            )}
+          </div>
+        </div>
+
+        <PlatformModal
+          prompt={prompt}
+          isOpen={showPlatformModal}
+          onClose={() => setShowPlatformModal(false)}
+        />
+      </div>
+    );
+  }
+
+  // 完整模式（原有布局）
   return (
     <div className="prompt-card p-6 animate-fade-in">
       {/* 头部：标题和标签 */}
