@@ -61,6 +61,16 @@ export const AI_PLATFORMS: PlatformConfig[] = [
     description: "Moonshot 的长文本 AI，支持超长文档",
     strengths: ["超长文档", "资料分析", "研报解读", "论文阅读"],
   },
+  {
+    id: "copilot",
+    name: "Copilot M365",
+    nameEn: "Copilot",
+    icon: "🌐",
+    color: "#00a4ef",
+    url: "https://copilot.microsoft.com",
+    description: "微软的 AI 助手，深度集成 Office 365",
+    strengths: ["Office 文档处理", "企业协作", "邮件写作", "Excel 分析"],
+  },
 ];
 
 // 生成 AI 平台跳转 URL
@@ -80,6 +90,8 @@ export function getPlatformUrl(platform: AIPlatform, prompt: string): string {
       return `https://tongyi.aliyun.com/qianwen/?prompt=${encodedPrompt}`;
     case "kimi":
       return `https://kimi.moonshot.cn/?prompt=${encodedPrompt}`;
+    case "copilot":
+      return `https://copilot.microsoft.com/?prompt=${encodedPrompt}`;
     default:
       return "#";
   }
@@ -110,7 +122,7 @@ export function getRecommendedPlatforms(
       platforms.push("claude", "chatgpt", "wenxin", "tongyi");
       break;
     case "办公效率":
-      platforms.push("chatgpt", "claude", "kimi");
+      platforms.push("chatgpt", "claude", "copilot", "kimi");
       break;
     case "编程开发":
       platforms.push("claude", "chatgpt");

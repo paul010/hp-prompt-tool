@@ -11,7 +11,7 @@ export type BusinessScenario =
   | "翻译本地化";
 
 // AI 平台类型
-export type AIPlatform = "chatgpt" | "claude" | "gemini" | "wenxin" | "tongyi" | "kimi";
+export type AIPlatform = "chatgpt" | "claude" | "gemini" | "wenxin" | "tongyi" | "kimi" | "copilot";
 
 // 提示词数据结构
 export interface Prompt {
