@@ -28,6 +28,13 @@ const config: Config = {
           blue: '#0096D6',
           dark: '#003B5C',
           light: '#6BCDF6',
+        },
+        // AI Summit 2026 主题色
+        summit: {
+          primary: '#6366F1',
+          secondary: '#EC4899',
+          accent: '#10B981',
+          dark: '#1E293B',
         }
       },
       fontFamily: {

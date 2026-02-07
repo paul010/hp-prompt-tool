@@ -8,6 +8,7 @@ import { Sidebar } from "./Sidebar";
 import { Pagination } from "./Pagination";
 import { ActiveFilters } from "./ActiveFilters";
 import { SCENARIOS } from "@/data/prompts";
+import { Shield, Zap, Target, Users, Sparkles } from "lucide-react";
 
 interface PromptListProps {
   prompts: Prompt[];
@@ -113,13 +114,57 @@ export function PromptList({ prompts }: PromptListProps) {
 
       {/* 主内容区 */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* 顶部横幅 */}
-        <div className="bg-gradient-to-r from-hp-dark to-hp-blue text-white py-6 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-2xl sm:text-3xl font-bold mb-2">HP AI 提示词库</h1>
-            <p className="text-white/90 text-sm sm:text-base">
-              精选 {prompts.length}+ 企业场景 AI 提示词，支持 Copilot M365、ChatGPT、Claude 等平台
+        {/* 顶部横幅 - AI Summit 2026 主题风格 */}
+        <div className="bg-gradient-to-r from-hp-dark via-hp-blue to-hp-light text-white py-8 sm:py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+          {/* 背景装饰 */}
+          <div className="absolute inset-0 opacity-10 pointer-events-none">
+            <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/2 translate-y-1/2"></div>
+          </div>
+
+          <div className="max-w-7xl mx-auto relative z-10">
+            {/* 主题标签 */}
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium mb-4">
+              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+              AI Summit 2026
+            </div>
+
+            {/* 主标题 */}
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3">
+              HP AI Learning Academy
+            </h1>
+
+            {/* 副标题 - 核心理念 */}
+            <p className="text-lg sm:text-xl text-white/90 mb-4">
+              安全 · 实用 · 有目的
             </p>
+
+            {/* 描述文案 */}
+            <p className="text-white/80 text-sm sm:text-base max-w-3xl mb-6">
+              从动手尝试到系统学习，再到深度探索。精选 <span className="text-white font-semibold">{prompts.length}+</span> 企业场景 AI 提示词，
+              以 <span className="text-white font-semibold">Microsoft Copilot</span> 为核心工具生态，
+              助力 HP 员工在实际业务场景中建立 AI 应用信心。
+            </p>
+
+            {/* 特性标签 */}
+            <div className="flex flex-wrap gap-3">
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm">
+                <Shield className="w-4 h-4 text-green-300" />
+                <span>安全合规</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm">
+                <Zap className="w-4 h-4 text-yellow-300" />
+                <span>即用即走</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm">
+                <Target className="w-4 h-4 text-blue-300" />
+                <span>业务导向</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm">
+                <Users className="w-4 h-4 text-purple-300" />
+                <span>全员参与</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -193,12 +238,26 @@ export function PromptList({ prompts }: PromptListProps) {
           )}
 
           {/* 页脚 */}
-          <footer className="mt-12 pt-8 border-t border-gray-200">
-            <div className="text-center text-sm text-gray-500">
+          <footer className="mt-12 pt-8 border-t border-gray-200 bg-gradient-to-r from-hp-blue/5 to-hp-dark/5">
+            <div className="text-center text-sm text-gray-600">
+              {/* 品牌标识 */}
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-hp-blue rounded-lg flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-lg font-bold text-gray-900">HP AI Learning Academy</span>
+              </div>
+
               <p className="mb-2">
                 <strong>HP FY26 数字学院</strong> - AI 提示词库工具
               </p>
-              <p>
+
+              {/* 核心理念 */}
+              <p className="text-xs text-gray-500 mb-3">
+                以「安全、实用、有目的」为理念，重点推广 Microsoft Copilot 工具生态
+              </p>
+
+              <p className="mb-1">
                 数据来源:{" "}
                 <a
                   href="https://prompts.chat"
@@ -210,9 +269,17 @@ export function PromptList({ prompts }: PromptListProps) {
                 </a>{" "}
                 (CC0 许可)
               </p>
-              <p className="mt-2 text-xs">
-                本工具仅供内部培训演示使用 • 支持 Copilot M365、ChatGPT、Claude、Gemini、文心一言、通义千问、Kimi
+
+              <p className="mt-3 text-xs text-gray-400">
+                本工具仅供 HP 内部培训演示使用 • 支持平台：Copilot M365、ChatGPT、Claude、Gemini、文心一言、通义千问、Kimi
               </p>
+
+              {/* AI Summit 标识 */}
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <p className="text-xs text-gray-400">
+                  🎯 AI Summit 2026 主题：赋能未来工作，安全引领转型
+                </p>
+              </div>
             </div>
           </footer>
         </main>
