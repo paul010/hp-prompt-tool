@@ -131,7 +131,7 @@ export function PromptList({ prompts }: PromptListProps) {
 
             {/* 主标题 */}
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3">
-              HP AI Learning Academy
+              HP FY26 数字学院
             </h1>
 
             {/* 副标题 - 核心理念 */}
@@ -245,7 +245,7 @@ export function PromptList({ prompts }: PromptListProps) {
                 <div className="w-8 h-8 bg-hp-blue rounded-lg flex items-center justify-center">
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-lg font-bold text-gray-900">HP AI Learning Academy</span>
+                <span className="text-lg font-bold text-gray-900">HP FY26 数字学院</span>
               </div>
 
               <p className="mb-2">
