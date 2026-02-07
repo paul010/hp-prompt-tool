@@ -1,10 +1,11 @@
 "use client";
 
 import { Prompt } from "@/lib/types";
-import { Copy, ChevronDown, ChevronUp } from "lucide-react";
+import { Copy, ChevronDown, ChevronUp, Eye } from "lucide-react";
 import { useState } from "react";
 import { AI_PLATFORMS, getPlatformUrl, getRecommendedPlatforms } from "@/lib/platforms";
 import { PlatformModal } from "./PlatformModal";
+import { PromptDetailModal } from "./PromptDetailModal";
 
 interface PromptCardProps {
   prompt: Prompt;
@@ -15,6 +16,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [showPlatformModal, setShowPlatformModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(prompt.content);
@@ -73,14 +75,23 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
         </div>
 
         <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-          <button
-            onClick={handleCopy}
-            className={`text-sm font-medium transition-all ${
-              copied ? "text-green-600" : "text-hp-blue hover:underline"
-            }`}
-          >
-            {copied ? "已复制" : "复制"}
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={handleCopy}
+              className={`text-sm font-medium transition-all ${
+                copied ? "text-green-600" : "text-hp-blue hover:underline"
+              }`}
+            >
+              {copied ? "已复制" : "复制"}
+            </button>
+            <button
+              onClick={() => setShowDetailModal(true)}
+              className="text-sm font-medium text-gray-600 hover:text-hp-blue flex items-center gap-1 transition-all"
+            >
+              <Eye className="w-3.5 h-3.5" />
+              查看详情
+            </button>
+          </div>
           <div className="flex gap-1.5">
             {platformsToShow.slice(0, 4).map((platform) => (
               <button
@@ -107,6 +118,11 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
           prompt={prompt}
           isOpen={showPlatformModal}
           onClose={() => setShowPlatformModal(false)}
+        />
+        <PromptDetailModal
+          prompt={prompt}
+          isOpen={showDetailModal}
+          onClose={() => setShowDetailModal(false)}
         />
       </div>
     );
@@ -198,17 +214,26 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
 
       {/* 操作按钮 */}
       <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-        <button
-          onClick={handleCopy}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
-            copied
-              ? "bg-green-100 text-green-700"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-          }`}
-        >
-          <Copy className="w-4 h-4" />
-          {copied ? "已复制" : "复制提示词"}
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleCopy}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+              copied
+                ? "bg-green-100 text-green-700"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            <Copy className="w-4 h-4" />
+            {copied ? "已复制" : "复制提示词"}
+          </button>
+          <button
+            onClick={() => setShowDetailModal(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium bg-blue-50 text-blue-700 hover:bg-blue-100 transition-all"
+          >
+            <Eye className="w-4 h-4" />
+            查看详情
+          </button>
+        </div>
 
         <div className="flex items-center gap-3">
           <span className="text-sm text-gray-500">在 AI 中使用：</span>
@@ -247,6 +272,11 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
         prompt={prompt}
         isOpen={showPlatformModal}
         onClose={() => setShowPlatformModal(false)}
+      />
+      <PromptDetailModal
+        prompt={prompt}
+        isOpen={showDetailModal}
+        onClose={() => setShowDetailModal(false)}
       />
     </div>
   );
