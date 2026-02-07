@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd prompt-tool && npm run build",
+  "devCommand": "cd prompt-tool && npm run dev",
+  "installCommand": "cd prompt-tool && npm install",
+  "outputDirectory": "prompt-tool/.next"
+}
