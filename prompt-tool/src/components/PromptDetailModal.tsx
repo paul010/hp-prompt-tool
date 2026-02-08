@@ -1,9 +1,12 @@
 "use client";
 
-import { X, Copy, Check, BookOpen, Lightbulb, ExternalLink } from "lucide-react";
-import { Prompt, AIPlatform } from "@/lib/types";
-import { AI_PLATFORMS, getPlatformUrl } from "@/lib/platforms";
-import { useState } from "react";
+import { X, Copy, Check, BookOpen, Lightbulb, ExternalLink, Settings } from "lucide-react";
+import { Prompt, AIPlatform, InputField } from "../lib/types";
+import { AI_PLATFORMS, getPlatformUrl } from "../lib/platforms";
+import { useState, useMemo } from "react";
+import { useLanguage } from "../contexts/LanguageContext";
+import { getLocalized } from "../lib/i18n";
+import { PromptBuilderModal } from "./PromptBuilderModal";
 
 interface PromptDetailModalProps {
   prompt: Prompt;
@@ -12,15 +15,15 @@ interface PromptDetailModalProps {
 }
 
 // 为不同场景的提示词生成示例使用场景
-const generateUseScenarios = (prompt: Prompt): string[] => {
-  const { scenario, nameZh, description } = prompt;
+const generateUseScenarios = (prompt: Prompt, displayName: string, displayDescription: string): string[] => {
+  const { scenario } = prompt;
 
   // 基于场景生成具体的使用案例
   const scenarioTemplates: Record<string, string[]> = {
     "办公效率": [
-      `处理${nameZh}相关的日常工作任务，快速完成${description.split("，")[0]}`,
-      `团队协作中需要${nameZh}，提高工作效率和文档质量`,
-      `面对紧急的${nameZh}需求，快速生成专业内容节省时间`,
+      `处理${displayName}相关的日常工作任务，快速完成${displayDescription.split("，")[0]}`,
+      `团队协作中需要${displayName}，提高工作效率和文档质量`,
+      `面对紧急的${displayName}需求，快速生成专业内容节省时间`,
     ],
     "数据分析": [
       `对销售数据进行深度分析，生成可视化报告和业务洞察`,
@@ -38,56 +41,117 @@ const generateUseScenarios = (prompt: Prompt): string[] => {
       `企业博客写作，创作有深度的行业分析文章`,
     ],
     "学习培训": [
-      `新员工入职培训，${nameZh}帮助快速掌握必备技能`,
-      `团队技能提升，使用${nameZh}进行系统性学习和练习`,
-      `自我学习过程中，${nameZh}作为私人教师讲解复杂概念`,
+      `新员工入职培训，${displayName}帮助快速掌握必备技能`,
+      `团队技能提升，使用${displayName}进行系统性学习和练习`,
+      `自我学习过程中，${displayName}作为私人教师讲解复杂概念`,
     ],
     "客户服务": [
       `处理客户关于产品功能的咨询，提供专业解答`,
-      `客户反馈投诉时，使用${nameZh}生成合适的回应方案`,
+      `客户反馈投诉时，使用${displayName}生成合适的回应方案`,
       `为客户服务团队培训，模拟常见问题场景进行练习`,
     ],
     "项目管理": [
-      `新项目启动时，使用${nameZh}制定详细的项目计划和时间表`,
+      `新项目启动时，使用${displayName}制定详细的项目计划和时间表`,
       `项目执行过程中，跟踪进度并调整资源配置`,
       `项目复盘阶段，总结经验教训并优化后续流程`,
     ],
     "演示汇报": [
-      `向客户提案时，使用${nameZh}设计有说服力的演示结构`,
+      `向客户提案时，使用${displayName}设计有说服力的演示结构`,
       `内部技术分享，整理知识点并制作清晰易懂的幻灯片`,
-      `季度汇报会议，用${nameZh}梳理工作成果和下阶段计划`,
+      `季度汇报会议，用${displayName}梳理工作成果和下阶段计划`,
     ],
     "翻译本地化": [
       `HP 全球产品文档的中英文互译，保持术语一致性`,
       `营销材料本地化，确保文案在不同市场的文化适应性`,
       `技术文档翻译，准确传达专业概念和技术细节`,
     ],
+    "销售": [
+      `撰写个性化的销售外联邮件，提高客户回复率`,
+      `为客户演示准备针对性内容，突出产品价值`,
+      `分析销售数据并生成高管汇报总结`,
+    ],
+    "产品": [
+      `用户调研分析，提取关键洞察和需求模式`,
+      `产品功能规划，撰写详细的 PRD 文档`,
+      `竞品分析报告，识别差异化机会`,
+    ],
+    "人力资源": [
+      `职位描述优化，吸引更合适的候选人`,
+      `员工培训材料开发，提升培训效果`,
+      `绩效评估反馈，提供专业的成长建议`,
+    ],
+    "IT支持": [
+      `技术文档编写，确保清晰易懂`,
+      `故障排查指导，快速定位问题`,
+      `系统监控分析，预防潜在问题`,
+    ],
+    "高管": [
+      `战略规划文档，梳理发展路径`,
+      `投资者沟通材料，清晰传达价值`,
+      `组织变革方案，平稳推动转型`,
+    ],
   };
 
   return scenarioTemplates[scenario] || [
-    `在日常工作中使用${nameZh}，${description.split("，")[0]}`,
-    `团队协作场景中，利用${nameZh}提高沟通效率`,
-    `专业任务处理时，通过${nameZh}获得高质量输出`,
+    `在日常工作中使用${displayName}，${displayDescription.split("，")[0]}`,
+    `团队协作场景中，利用${displayName}提高沟通效率`,
+    `专业任务处理时，通过${displayName}获得高质量输出`,
   ];
 };
 
 export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModalProps) {
+  const { language } = useLanguage();
   const [copied, setCopied] = useState(false);
+  const [showBuilderModal, setShowBuilderModal] = useState(false);
+
+  // 获取本地化内容
+  const displayName = useMemo(() => {
+    if (typeof prompt.name === "string") {
+      return language.startsWith("zh") ? (prompt.nameZh || prompt.name) : prompt.name;
+    }
+    return getLocalized(prompt.name, language);
+  }, [prompt.name, prompt.nameZh, language]);
+
+  const displayDescription = useMemo(() => {
+    if (typeof prompt.description === "string") return prompt.description;
+    return getLocalized(prompt.description, language);
+  }, [prompt.description, language]);
+
+  const displayContent = useMemo(() => {
+    if (typeof prompt.content === "string") return prompt.content;
+    return getLocalized(prompt.content, language);
+  }, [prompt.content, language]);
+
+  // 获取 inputFields
+  const inputFields = useMemo(() => {
+    if (!prompt.inputFields) return [];
+    if (Array.isArray(prompt.inputFields) && typeof prompt.inputFields[0] === "string") {
+      return (prompt.inputFields as string[]).map((name) => ({
+        name,
+        label: { en: name, "zh-CN": name },
+        type: "text" as const,
+        required: true,
+      }));
+    }
+    return prompt.inputFields as InputField[];
+  }, [prompt.inputFields]);
+
+  const hasInputFields = inputFields.length > 0;
 
   if (!isOpen) return null;
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(prompt.content);
+    await navigator.clipboard.writeText(displayContent);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handlePlatformOpen = (platformId: AIPlatform) => {
-    const url = getPlatformUrl(platformId, prompt.content);
+    const url = getPlatformUrl(platformId, displayContent);
     window.open(url, "_blank");
   };
 
-  const useScenarios = generateUseScenarios(prompt);
+  const useScenarios = generateUseScenarios(prompt, displayName, displayDescription);
   const platformsToShow = prompt.recommendedPlatforms.length > 0
     ? AI_PLATFORMS.filter((p) => prompt.recommendedPlatforms.includes(p.id))
     : AI_PLATFORMS.slice(0, 3);
@@ -114,14 +178,13 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
         <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-hp-blue/5 to-hp-dark/5">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-hp-blue to-hp-dark flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
-              {prompt.nameZh.charAt(0)}
+              {displayName.charAt(0)}
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="text-xl font-bold text-gray-900 mb-1">
-                {prompt.nameZh}
+                {displayName}
               </h3>
-              <p className="text-sm text-gray-500 mb-2">{prompt.name}</p>
-              <p className="text-sm text-gray-600">{prompt.description}</p>
+              <p className="text-sm text-gray-600">{displayDescription}</p>
 
               {/* 标签 */}
               <div className="flex flex-wrap gap-2 mt-3">
@@ -175,30 +238,41 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
                 <BookOpen className="w-4 h-4 text-blue-500" />
                 提示词内容
               </h4>
-              <button
-                onClick={handleCopy}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
-                  copied
-                    ? "bg-green-100 text-green-700"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {copied ? (
-                  <>
-                    <Check className="w-3.5 h-3.5" />
-                    已复制
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-3.5 h-3.5" />
-                    复制
-                  </>
+              <div className="flex gap-2">
+                {hasInputFields && (
+                  <button
+                    onClick={() => setShowBuilderModal(true)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 transition-all"
+                  >
+                    <Settings className="w-3.5 h-3.5" />
+                    填写参数
+                  </button>
                 )}
-              </button>
+                <button
+                  onClick={handleCopy}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
+                    copied
+                      ? "bg-green-100 text-green-700"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {copied ? (
+                    <>
+                      <Check className="w-3.5 h-3.5" />
+                      已复制
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      复制
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
             <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
               <pre className="whitespace-pre-wrap text-sm text-gray-700 font-mono leading-relaxed">
-                {prompt.content}
+                {displayContent}
               </pre>
             </div>
           </div>
@@ -210,6 +284,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
               <li>• 根据具体需求调整提示词中的细节参数</li>
               <li>• 首次使用建议添加 HP 相关的上下文信息</li>
               <li>• 可以要求 AI 提供多个方案进行对比选择</li>
+              {hasInputFields && <li>• 点击"填写参数"按钮快速填充占位符内容</li>}
             </ul>
           </div>
         </div>
@@ -237,7 +312,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
                 <button
                   onClick={() => {
                     AI_PLATFORMS.slice(3).forEach((p) =>
-                      window.open(getPlatformUrl(p.id, prompt.content), "_blank")
+                      window.open(getPlatformUrl(p.id, displayContent), "_blank")
                     );
                   }}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-dashed border-gray-300 hover:border-hp-blue transition-all text-sm text-gray-500"
@@ -249,6 +324,12 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
           </div>
         </div>
       </div>
+
+      <PromptBuilderModal
+        prompt={prompt}
+        isOpen={showBuilderModal}
+        onClose={() => setShowBuilderModal(false)}
+      />
     </div>
   );
 }

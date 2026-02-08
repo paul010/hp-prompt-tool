@@ -1,20 +1,43 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Prompt } from "@/lib/types";
+import { Prompt, LocalizedContent } from "../lib/types";
 import { PromptCard } from "./PromptCard";
 import { SearchBar } from "./SearchBar";
 import { Sidebar } from "./Sidebar";
 import { Pagination } from "./Pagination";
 import { ActiveFilters } from "./ActiveFilters";
-import { SCENARIOS } from "@/data/prompts";
+import { SCENARIOS } from "../data/prompts";
 import { Shield, Zap, Target, Users, Sparkles } from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
+import { getLocalized } from "../lib/i18n";
 
 interface PromptListProps {
   prompts: Prompt[];
 }
 
+// Helper function to get name from prompt (handles both string and LocalizedContent)
+function getPromptName(prompt: Prompt, language: string): string {
+  if (typeof prompt.name === "string") {
+    return language.startsWith("zh") ? (prompt.nameZh || prompt.name) : prompt.name;
+  }
+  return getLocalized(prompt.name, language as any);
+}
+
+// Helper function to get description from prompt
+function getPromptDescription(prompt: Prompt, language: string): string {
+  if (typeof prompt.description === "string") return prompt.description;
+  return getLocalized(prompt.description, language as any);
+}
+
+// Helper function to get content from prompt
+function getPromptContent(prompt: Prompt, language: string): string {
+  if (typeof prompt.content === "string") return prompt.content;
+  return getLocalized(prompt.content, language as any);
+}
+
 export function PromptList({ prompts }: PromptListProps) {
+  const { language } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedScenario, setSelectedScenario] = useState("");
   const [selectedPlatform, setSelectedPlatform] = useState("");
@@ -38,12 +61,14 @@ export function PromptList({ prompts }: PromptListProps) {
       // 搜索过滤
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
+        const name = getPromptName(prompt, language);
+        const description = getPromptDescription(prompt, language);
+        const content = getPromptContent(prompt, language);
         const matchesSearch =
-          prompt.nameZh.toLowerCase().includes(query) ||
-          prompt.name.toLowerCase().includes(query) ||
-          prompt.description.toLowerCase().includes(query) ||
-          prompt.tags.some((tag) => tag.toLowerCase().includes(query)) ||
-          prompt.content.toLowerCase().includes(query);
+          name.toLowerCase().includes(query) ||
+          description.toLowerCase().includes(query) ||
+          content.toLowerCase().includes(query) ||
+          prompt.tags.some((tag) => tag.toLowerCase().includes(query));
         if (!matchesSearch) return false;
       }
 
@@ -72,11 +97,11 @@ export function PromptList({ prompts }: PromptListProps) {
       const order: Record<string, number> = { "入门": 1, "进阶": 2, "专家": 3 };
       filtered.sort((a, b) => order[a.difficulty] - order[b.difficulty]);
     } else if (selectedSort === "name") {
-      filtered.sort((a, b) => a.name.localeCompare(b.name));
+      filtered.sort((a, b) => getPromptName(a, language).localeCompare(getPromptName(b, language)));
     }
 
     return filtered;
-  }, [prompts, searchQuery, selectedScenario, selectedPlatform, selectedDifficulty, selectedSort]);
+  }, [prompts, searchQuery, selectedScenario, selectedPlatform, selectedDifficulty, selectedSort, language]);
 
   // 分页
   const totalPages = Math.ceil(filteredAndSortedPrompts.length / pageSize);

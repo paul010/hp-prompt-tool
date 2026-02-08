@@ -1,11 +1,14 @@
 "use client";
 
-import { Prompt } from "@/lib/types";
-import { Copy, ChevronDown, ChevronUp, Eye, Award } from "lucide-react";
-import { useState } from "react";
-import { AI_PLATFORMS, getPlatformUrl, getRecommendedPlatforms } from "@/lib/platforms";
+import { Prompt, InputField } from "../lib/types";
+import { Copy, ChevronDown, ChevronUp, Eye, Award, Settings } from "lucide-react";
+import { useState, useMemo } from "react";
+import { AI_PLATFORMS, getPlatformUrl, getRecommendedPlatforms } from "../lib/platforms";
 import { PlatformModal } from "./PlatformModal";
 import { PromptDetailModal } from "./PromptDetailModal";
+import { PromptBuilderModal } from "./PromptBuilderModal";
+import { useLanguage } from "../contexts/LanguageContext";
+import { getLocalized } from "../lib/i18n";
 
 interface PromptCardProps {
   prompt: Prompt;
@@ -13,13 +16,49 @@ interface PromptCardProps {
 }
 
 export function PromptCard({ prompt, compact = false }: PromptCardProps) {
+  const { language } = useLanguage();
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [showPlatformModal, setShowPlatformModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showBuilderModal, setShowBuilderModal] = useState(false);
+
+  // 获取本地化内容（兼容多语言和单语言格式）
+  const displayName = useMemo(() => {
+    if (typeof prompt.name === "string") {
+      return language.startsWith("zh") ? (prompt.nameZh || prompt.name) : prompt.name;
+    }
+    return getLocalized(prompt.name, language);
+  }, [prompt.name, prompt.nameZh, language]);
+
+  const displayDescription = useMemo(() => {
+    if (typeof prompt.description === "string") return prompt.description;
+    return getLocalized(prompt.description, language);
+  }, [prompt.description, language]);
+
+  const displayContent = useMemo(() => {
+    if (typeof prompt.content === "string") return prompt.content;
+    return getLocalized(prompt.content, language);
+  }, [prompt.content, language]);
+
+  // 获取 inputFields（兼容新格式和旧格式）
+  const inputFields = useMemo(() => {
+    if (!prompt.inputFields) return [];
+    if (Array.isArray(prompt.inputFields) && typeof prompt.inputFields[0] === "string") {
+      return (prompt.inputFields as string[]).map((name) => ({
+        name,
+        label: { en: name, "zh-CN": name },
+        type: "text" as const,
+        required: true,
+      }));
+    }
+    return prompt.inputFields as InputField[];
+  }, [prompt.inputFields]);
+
+  const hasInputFields = inputFields.length > 0;
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(prompt.content);
+    await navigator.clipboard.writeText(displayContent);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -41,9 +80,8 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
         <div className="flex items-start gap-3 mb-3">
           <div className="flex-1 min-w-0">
             <h3 className="text-base font-semibold text-gray-900 truncate">
-              {prompt.nameZh}
+              {displayName}
             </h3>
-            <p className="text-xs text-gray-500 truncate">{prompt.name}</p>
           </div>
           <span className={`px-2 py-0.5 text-xs font-medium rounded flex-shrink-0 ${
             prompt.difficulty === "入门" ? "bg-green-100 text-green-700" :
@@ -55,7 +93,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
         </div>
 
         <p className="text-sm text-gray-600 line-clamp-2 mb-3">
-          {prompt.description}
+          {displayDescription}
         </p>
 
         <div className="flex flex-wrap gap-1.5 mb-3">
@@ -82,6 +120,15 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
 
         <div className="flex items-center justify-between pt-3 border-t border-gray-100">
           <div className="flex gap-2">
+            {hasInputFields && (
+              <button
+                onClick={() => setShowBuilderModal(true)}
+                className="text-sm font-medium text-purple-600 hover:text-purple-700 flex items-center gap-1 transition-all"
+              >
+                <Settings className="w-3.5 h-3.5" />
+                填写
+              </button>
+            )}
             <button
               onClick={handleCopy}
               className={`text-sm font-medium transition-all ${
@@ -102,7 +149,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
             {platformsToShow.slice(0, 4).map((platform) => (
               <button
                 key={platform.id}
-                onClick={() => window.open(getPlatformUrl(platform.id, prompt.content), "_blank")}
+                onClick={() => window.open(getPlatformUrl(platform.id, displayContent), "_blank")}
                 className="w-8 h-8 rounded-lg border border-gray-200 hover:border-hp-blue hover:bg-gray-50 flex items-center justify-center transition-all"
                 title={platform.name}
               >
@@ -130,6 +177,11 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
           isOpen={showDetailModal}
           onClose={() => setShowDetailModal(false)}
         />
+        <PromptBuilderModal
+          prompt={prompt}
+          isOpen={showBuilderModal}
+          onClose={() => setShowBuilderModal(false)}
+        />
       </div>
     );
   }
@@ -142,11 +194,10 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
             <h3 className="text-lg font-semibold text-gray-900">
-              {prompt.nameZh}
+              {displayName}
             </h3>
-            <span className="text-sm text-gray-500">({prompt.name})</span>
           </div>
-          <p className="text-sm text-gray-600 mb-3">{prompt.description}</p>
+          <p className="text-sm text-gray-600 mb-3">{displayDescription}</p>
           <div className="flex flex-wrap gap-2">
             <span className="tag bg-blue-100 text-blue-700">{prompt.scenario}</span>
             {prompt.source === "openai" && (
@@ -186,7 +237,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
           }`}
         >
           <pre className="whitespace-pre-wrap text-sm text-gray-700 font-mono">
-            {prompt.content}
+            {displayContent}
           </pre>
         </div>
         <button
@@ -227,6 +278,15 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
       {/* 操作按钮 */}
       <div className="flex items-center justify-between pt-4 border-t border-gray-100">
         <div className="flex gap-2">
+          {hasInputFields && (
+            <button
+              onClick={() => setShowBuilderModal(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium bg-purple-50 text-purple-700 hover:bg-purple-100 transition-all"
+            >
+              <Settings className="w-4 h-4" />
+              填写参数
+            </button>
+          )}
           <button
             onClick={handleCopy}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
@@ -254,7 +314,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
               <button
                 key={platform.id}
                 onClick={() => {
-                  const url = getPlatformUrl(platform.id, prompt.content);
+                  const url = getPlatformUrl(platform.id, displayContent);
                   window.open(url, "_blank");
                 }}
                 className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all hover:shadow-sm group"
@@ -289,6 +349,11 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
         prompt={prompt}
         isOpen={showDetailModal}
         onClose={() => setShowDetailModal(false)}
+      />
+      <PromptBuilderModal
+        prompt={prompt}
+        isOpen={showBuilderModal}
+        onClose={() => setShowBuilderModal(false)}
       />
     </div>
   );

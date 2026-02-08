@@ -1,4 +1,7 @@
+"use client";
+
 import { Sparkles, BookOpen } from "lucide-react";
+import { LanguageSelector } from "./LanguageSelector";
 
 export function Header() {
   return (
@@ -23,14 +26,14 @@ export function Header() {
           </div>
           <div className="hidden md:block">
             <div className="bg-white/10 backdrop-blur rounded-2xl p-6 text-center">
-              <div className="text-5xl font-bold mb-2">15+</div>
-              <div className="text-white/80 text-sm">精选提示词</div>
+              <div className="text-5xl font-bold mb-2">70+</div>
+              <div className="text-white/80 text-sm">OpenAI 官方提示词</div>
             </div>
           </div>
         </div>
 
         {/* 特性标签 */}
-        <div className="flex flex-wrap gap-3 mt-8">
+        <div className="flex flex-wrap items-center gap-3 mt-8">
           <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
             <BookOpen className="w-4 h-4" />
             <span className="text-sm">即用即走</span>
@@ -43,8 +46,10 @@ export function Header() {
             <span className="text-sm">多场景覆盖</span>
           </div>
           <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
-            <span className="text-sm">中英双语</span>
+            <span className="text-sm">多语言支持</span>
           </div>
+          {/* 语言选择器 */}
+          <LanguageSelector className="bg-white/10 backdrop-blur px-3 py-2 rounded-full" />
         </div>
       </div>
     </header>

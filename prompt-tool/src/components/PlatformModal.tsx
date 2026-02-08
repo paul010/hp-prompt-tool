@@ -1,8 +1,10 @@
 "use client";
 
 import { X, ExternalLink } from "lucide-react";
-import { Prompt, AIPlatform } from "@/lib/types";
-import { AI_PLATFORMS, getPlatformUrl } from "@/lib/platforms";
+import { Prompt, AIPlatform } from "../lib/types";
+import { AI_PLATFORMS, getPlatformUrl } from "../lib/platforms";
+import { useLanguage } from "../contexts/LanguageContext";
+import { getLocalized } from "../lib/i18n";
 
 interface PlatformModalProps {
   prompt: Prompt;
@@ -11,10 +13,22 @@ interface PlatformModalProps {
 }
 
 export function PlatformModal({ prompt, isOpen, onClose }: PlatformModalProps) {
+  const { language } = useLanguage();
+
+  // Get localized content
+  const content = typeof prompt.content === "string"
+    ? prompt.content
+    : getLocalized(prompt.content, language);
+
+  // Get localized name
+  const name = typeof prompt.name === "string"
+    ? (language.startsWith("zh") ? (prompt.nameZh || prompt.name) : prompt.name)
+    : getLocalized(prompt.name, language);
+
   if (!isOpen) return null;
 
   const handleSelect = (platformId: string) => {
-    const url = getPlatformUrl(platformId as AIPlatform, prompt.content);
+    const url = getPlatformUrl(platformId as AIPlatform, content);
     window.open(url, "_blank");
     onClose();
   };
@@ -43,7 +57,7 @@ export function PlatformModal({ prompt, isOpen, onClose }: PlatformModalProps) {
             选择 AI 平台
           </h3>
           <p className="text-gray-600 text-sm">
-            为「{prompt.nameZh}」选择最适合的 AI 平台使用
+            为「{name}」选择最适合的 AI 平台使用
           </p>
         </div>
 
