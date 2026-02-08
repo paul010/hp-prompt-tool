@@ -9,7 +9,7 @@ export const DEMO_PROMPTS: Prompt[] = [
     nameZh: "邮件写作助手",
     description: "帮你撰写各类商务邮件，包括回复、询问、邀请等场景",
     content: "I want you to act as a professional email writer. I will provide you with the email type, recipient information, and key points to include. You will write a well-structured, professional email that is clear, concise, and appropriate for the business context. The email should include a compelling subject line, proper greeting, well-organized body paragraphs, and professional closing. My first request is: write a follow-up email to a client after a meeting, summarizing key discussion points and next steps.",
-    scenario: "办公效率",
+    scenario: "办公沟通",
     tags: ["邮件", "商务沟通", "写作"],
     forDevelopers: false,
     difficulty: "入门",
@@ -22,7 +22,7 @@ export const DEMO_PROMPTS: Prompt[] = [
     nameZh: "会议纪要助手",
     description: "将会议记录整理成结构化的会议纪要，包含决策和行动项",
     content: "I want you to act as a meeting minutes taker. I will provide you with notes or a transcript from a meeting. Your task is to organize this information into a structured meeting minutes document that includes: 1) Meeting basics (date, time, attendees), 2) Key discussion points, 3) Decisions made, 4) Action items with owners and deadlines, 5) Next meeting details. Format the output clearly with headings and bullet points for easy reading.",
-    scenario: "办公效率",
+    scenario: "办公沟通",
     tags: ["会议", "文档", "整理"],
     forDevelopers: false,
     difficulty: "进阶",
@@ -35,7 +35,7 @@ export const DEMO_PROMPTS: Prompt[] = [
     nameZh: "Excel 公式专家",
     description: "帮你创建复杂的 Excel 公式和数据透视表",
     content: "I want you to act as an Excel formula expert. I will describe what data analysis or calculation I need, and you will provide me with the appropriate Excel formulas. You should explain what each formula does and how to use it. When providing complex formulas, break them down into parts and explain the logic. Include alternative solutions when possible. My first request is: create a formula to calculate the weighted average based on values in column A and weights in column B.",
-    scenario: "办公效率",
+    scenario: "办公沟通",
     tags: ["Excel", "数据分析", "公式"],
     forDevelopers: false,
     difficulty: "进阶",
@@ -50,7 +50,7 @@ export const DEMO_PROMPTS: Prompt[] = [
     nameZh: "数据分析师",
     description: "分析数据趋势，生成报告和可视化建议",
     content: "I want you to act as a data analyst. I will provide you with a dataset or describe the data I'm working with. Your task is to: 1) Identify key trends and patterns, 2) Calculate relevant metrics and KPIs, 3) Suggest appropriate visualizations, 4) Provide actionable insights, 5) Highlight any anomalies or areas requiring attention. Present your analysis in a clear, structured format with executive summary first, followed by detailed findings.",
-    scenario: "数据分析",
+    scenario: "数据智能",
     tags: ["数据", "分析", "报告"],
     forDevelopers: false,
     difficulty: "进阶",
@@ -63,7 +63,7 @@ export const DEMO_PROMPTS: Prompt[] = [
     nameZh: "SQL 查询生成器",
     description: "根据自然语言描述生成 SQL 查询语句",
     content: "I want you to act as a SQL expert. I will describe the data I want to retrieve or the analysis I need to perform. You will generate the appropriate SQL query to accomplish this task. You should: 1) Use proper SQL syntax and best practices, 2) Include comments explaining complex parts of the query, 3) Suggest optimizations when appropriate, 4) Provide alternative approaches if applicable. Assume standard SQL unless I specify a particular database system.",
-    scenario: "数据分析",
+    scenario: "数据智能",
     tags: ["SQL", "数据库", "查询"],
     forDevelopers: true,
     difficulty: "专家",
@@ -78,7 +78,7 @@ export const DEMO_PROMPTS: Prompt[] = [
     nameZh: "代码审查专家",
     description: "审查代码质量，提出改进建议和潜在问题",
     content: "I want you to act as a senior code reviewer. I will provide you with code, and you will review it for: 1) Bugs and potential errors, 2) Performance issues, 3) Security vulnerabilities, 4) Code style and readability, 5) Adherence to best practices, 6) Suggestions for improvement. Provide your feedback in a constructive manner, explaining the reasoning behind each suggestion. Prioritize issues by severity (critical, major, minor).",
-    scenario: "编程开发",
+    scenario: "技术开发",
     tags: ["代码", "审查", "最佳实践"],
     forDevelopers: true,
     difficulty: "专家",
@@ -91,7 +91,7 @@ export const DEMO_PROMPTS: Prompt[] = [
     nameZh: "调试助手",
     description: "帮助分析和修复代码错误",
     content: "I want you to act as a debugging expert. I will provide you with code that isn't working as expected and a description of the problem. You will: 1) Analyze the code to identify the bug, 2) Explain why the bug is occurring, 3) Provide the corrected code, 4) Suggest how to prevent similar issues in the future, 5) Recommend testing strategies. Be thorough in your explanation to help me understand the root cause.",
-    scenario: "编程开发",
+    scenario: "技术开发",
     tags: ["调试", "错误修复", "代码"],
     forDevelopers: true,
     difficulty: "进阶",
@@ -104,7 +104,7 @@ export const DEMO_PROMPTS: Prompt[] = [
     nameZh: "API 设计师",
     description: "设计 RESTful API 接口和数据结构",
     content: "I want you to act as an API design expert. I will describe the functionality I need to build, and you will design a RESTful API to support it. Your design should include: 1) Endpoint URLs and HTTP methods, 2) Request/response schemas, 3) Authentication and authorization requirements, 4) Error response formats, 5) Rate limiting considerations. Follow REST best practices and provide clear documentation for each endpoint.",
-    scenario: "编程开发",
+    scenario: "技术开发",
     tags: ["API", "REST", "后端"],
     forDevelopers: true,
     difficulty: "专家",
@@ -119,7 +119,7 @@ export const DEMO_PROMPTS: Prompt[] = [
     nameZh: "内容创作者",
     description: "创作各类营销文案、社交媒体内容和文章",
     content: "I want you to act as a professional content creator. I will provide you with the topic, target audience, and content type (blog post, social media post, ad copy, etc.). You will create engaging, well-structured content that: 1) Grabs attention with a strong hook, 2) Provides value to the reader, 3) Has a clear call-to-action, 4) Matches the tone and style appropriate for the platform and audience. Optimize for readability and engagement.",
-    scenario: "创意写作",
+    scenario: "内容创作",
     tags: ["文案", "营销", "创作"],
     forDevelopers: false,
     difficulty: "入门",
@@ -132,7 +132,7 @@ export const DEMO_PROMPTS: Prompt[] = [
     nameZh: "创意故事作家",
     description: "创作富有想象力的故事和叙事内容",
     content: "I want you to act as a creative story writer. I will give you a theme, genre, or story premise, and you will write an engaging story with: 1) Well-developed characters with distinct personalities, 2) A clear plot with rising action, climax, and resolution, 3) Vivid descriptions and imagery, 4) Natural dialogue, 5) An engaging narrative voice. The story should be original and captivating, suitable for the intended audience.",
-    scenario: "创意写作",
+    scenario: "内容创作",
     tags: ["故事", "创意", "写作"],
     forDevelopers: false,
     difficulty: "进阶",
@@ -147,7 +147,7 @@ export const DEMO_PROMPTS: Prompt[] = [
     nameZh: "私人教师",
     description: "像私人教师一样讲解复杂概念，适合学习新知识",
     content: "I want you to act as my personal tutor. I will ask you questions about a topic I'm trying to learn, and you will help me understand it. Your teaching approach should: 1) Break down complex concepts into simpler parts, 2) Use analogies and real-world examples, 3) Check for understanding by asking questions, 4) Adjust your explanation based on my responses, 5) Provide additional resources or practice problems when helpful. Be patient and encouraging.",
-    scenario: "学习培训",
+    scenario: "学习成长",
     tags: ["教学", "学习", "解释"],
     forDevelopers: false,
     difficulty: "入门",
@@ -160,7 +160,7 @@ export const DEMO_PROMPTS: Prompt[] = [
     nameZh: "测验生成器",
     description: "根据学习内容生成测验题和练习",
     content: "I want you to act as an educational quiz generator. I will provide you with a topic or study material, and you will create a quiz to test understanding of that material. Your quiz should include: 1) A mix of question types (multiple choice, true/false, short answer), 2) Questions ranging from easy to difficult, 3) Clear and unambiguous questions, 4) An answer key with explanations, 5) The questions should effectively test key concepts from the material.",
-    scenario: "学习培训",
+    scenario: "学习成长",
     tags: ["测验", "练习", "教育"],
     forDevelopers: false,
     difficulty: "进阶",
@@ -218,7 +218,7 @@ export const DEMO_PROMPTS: Prompt[] = [
     nameZh: "演示文稿设计师",
     description: "设计和组织 PPT 演示文稿的内容结构",
     content: "I want you to act as a presentation design expert. I will provide you with the topic and purpose of my presentation, and you will help me create a well-structured presentation outline. Your outline should include: 1) A compelling opening that grabs attention, 2) Main content sections with key points for each slide, 3) Visual suggestions (charts, images, diagrams), 4) A strong closing with call-to-action, 5) Speaker notes for key slides. The structure should flow logically and keep the audience engaged.",
-    scenario: "演示汇报",
+    scenario: "演示演讲",
     tags: ["PPT", "演示", "演讲"],
     forDevelopers: false,
     difficulty: "进阶",
@@ -233,7 +233,7 @@ export const DEMO_PROMPTS: Prompt[] = [
     nameZh: "专业翻译",
     description: "中英文互译，保持原文风格和专业性",
     content: "I want you to act as a professional translator. I will give you text to translate from one language to another, and you will provide a high-quality translation that: 1) Accurately conveys the meaning of the original, 2) Uses appropriate terminology for the subject matter, 3) Flows naturally in the target language, 4) Maintains the tone and style of the original, 5) Handles idioms and culture-specific references appropriately. When in doubt about context or terminology, ask clarifying questions.",
-    scenario: "翻译本地化",
+    scenario: "多语言翻译",
     tags: ["翻译", "本地化", "多语言"],
     forDevelopers: false,
     difficulty: "进阶",
@@ -242,24 +242,60 @@ export const DEMO_PROMPTS: Prompt[] = [
   },
 ];
 
-// 场景配置
+// ============================================================
+// Unified Scenario Configuration
+// 核心业务场景（8个）+ 专项能力场景（4个）
+// ============================================================
+
+// 核心业务场景（8个）
+const CORE_SCENARIOS = [
+  { id: "办公沟通", name: "办公沟通", nameEn: "Communication", nameZh: "办公沟通", icon: "💬", color: "blue", category: "core" as const, description: "邮件、会议、文档、即时通讯" },
+  { id: "数据智能", name: "数据智能", nameEn: "Data Intelligence", nameZh: "数据智能", icon: "📊", color: "green", category: "core" as const, description: "分析、报表、SQL、可视化" },
+  { id: "技术开发", name: "技术开发", nameEn: "Development", nameZh: "技术开发", icon: "💻", color: "purple", category: "core" as const, description: "编程、调试、代码审查、API" },
+  { id: "内容创作", name: "内容创作", nameEn: "Content Creation", nameZh: "内容创作", icon: "✍️", color: "orange", category: "core" as const, description: "文案、文章、创意写作、营销" },
+  { id: "客户服务", name: "客户服务", nameEn: "Customer Service", nameZh: "客户服务", icon: "🎧", color: "pink", category: "core" as const, description: "支持、FAQ、投诉、成功管理" },
+  { id: "学习成长", name: "学习成长", nameEn: "Learning", nameZh: "学习成长", icon: "📚", color: "yellow", category: "core" as const, description: "教学、培训、辅导、认证" },
+  { id: "项目管理", name: "项目管理", nameEn: "Project Management", nameZh: "项目管理", icon: "📋", color: "red", category: "core" as const, description: "规划、时间表、里程碑、风险控制" },
+  { id: "商务决策", name: "商务决策", nameEn: "Business Decision", nameZh: "商务决策", icon: "🎯", color: "indigo", category: "core" as const, description: "战略、投资、分析、决策" },
+];
+
+// 专项能力场景（4个）
+const SPECIALIZED_SCENARIOS = [
+  { id: "多语言翻译", name: "多语言翻译", nameEn: "Translation", nameZh: "多语言翻译", icon: "🌐", color: "cyan", category: "specialized" as const, description: "中英日韩互译、本地化" },
+  { id: "演示演讲", name: "演示演讲", nameEn: "Presentation", nameZh: "演示演讲", icon: "🎤", color: "gray", category: "specialized" as const, description: "PPT、演讲、培训、路演" },
+  { id: "技术支持", name: "技术支持", nameEn: "Tech Support", nameZh: "技术支持", icon: "🖥️", color: "emerald", category: "specialized" as const, description: "IT、运维、故障排查" },
+  { id: "市场营销", name: "市场营销", nameEn: "Marketing", nameZh: "市场营销", icon: "📢", color: "violet", category: "specialized" as const, description: "推广、品牌、社交媒体" },
+];
+
+// 向后兼容：旧分类映射（保持向后兼容）
+const LEGACY_SCENARIOS = [
+  { id: "办公效率", name: "办公效率", nameEn: "Productivity", icon: "💼", color: "blue", category: "legacy" as const },
+  { id: "数据分析", name: "数据分析", nameEn: "Data Analysis", icon: "📊", color: "green", category: "legacy" as const },
+  { id: "编程开发", name: "编程开发", nameEn: "Programming", icon: "💻", color: "purple", category: "legacy" as const },
+  { id: "创意写作", name: "创意写作", nameEn: "Creative Writing", icon: "✍️", color: "orange", category: "legacy" as const },
+  { id: "学习培训", name: "学习培训", nameEn: "Training", icon: "📚", color: "yellow", category: "legacy" as const },
+  { id: "演示汇报", name: "演示汇报", nameEn: "Presentation", icon: "🎤", color: "gray", category: "legacy" as const },
+  { id: "翻译本地化", name: "翻译本地化", nameEn: "Localization", icon: "🌐", color: "cyan", category: "legacy" as const },
+  // OpenAI Prompt Packs 岗位分类（向后兼容）
+  { id: "销售", name: "销售", nameEn: "Sales", icon: "🎯", color: "indigo", category: "legacy" as const, source: "openai" as const },
+  { id: "产品", name: "产品", nameEn: "Product", icon: "📦", color: "violet", category: "legacy" as const, source: "openai" as const },
+  { id: "人力资源", name: "人力资源", nameEn: "HR", icon: "👥", color: "rose", category: "legacy" as const, source: "openai" as const },
+  { id: "IT支持", name: "IT支持", nameEn: "IT Support", icon: "🖥️", color: "emerald", category: "legacy" as const, source: "openai" as const },
+  { id: "高管", name: "高管", nameEn: "Executive", icon: "👔", color: "amber", category: "legacy" as const, source: "openai" as const },
+  { id: "经理", name: "经理", nameEn: "Manager", icon: "👨‍💼", color: "teal", category: "legacy" as const, source: "openai" as const },
+  { id: "工程师", name: "工程师", nameEn: "Engineer", icon: "👷", color: "slate", category: "legacy" as const, source: "openai" as const },
+  { id: "Marketing", name: "市场营销", nameEn: "Marketing", icon: "📢", color: "violet", category: "legacy" as const, source: "openai" as const },
+];
+
+// 统一的场景配置（包含所有场景）
 export const SCENARIOS = [
-  { id: "办公效率", name: "办公效率", nameEn: "Productivity", icon: "💼", color: "blue" },
-  { id: "数据分析", name: "数据分析", nameEn: "Data Analysis", icon: "📊", color: "green" },
-  { id: "编程开发", name: "编程开发", nameEn: "Development", icon: "💻", color: "purple" },
-  { id: "创意写作", name: "创意写作", nameEn: "Creative Writing", icon: "✍️", color: "orange" },
-  { id: "学习培训", name: "学习培训", nameEn: "Learning", icon: "📚", color: "yellow" },
-  { id: "客户服务", name: "客户服务", nameEn: "Customer Service", icon: "🎧", color: "pink" },
-  { id: "项目管理", name: "项目管理", nameEn: "Project Management", icon: "📋", color: "red" },
-  { id: "演示汇报", name: "演示汇报", nameEn: "Presentation", icon: "🎤", color: "gray" },
-  { id: "翻译本地化", name: "翻译本地化", nameEn: "Translation", icon: "🌐", color: "cyan" },
-  // OpenAI Prompt Packs 岗位分类
-  { id: "销售", name: "销售", nameEn: "Sales", icon: "🎯", color: "indigo", source: "openai" },
-  { id: "产品", name: "产品", nameEn: "Product", icon: "📦", color: "violet", source: "openai" },
-  { id: "人力资源", name: "人力资源", nameEn: "HR", icon: "👥", color: "rose", source: "openai" },
-  { id: "IT支持", name: "IT支持", nameEn: "IT Support", icon: "🖥️", color: "emerald", source: "openai" },
-  { id: "高管", name: "高管", nameEn: "Executive", icon: "👔", color: "amber", source: "openai" },
+  ...CORE_SCENARIOS,
+  ...SPECIALIZED_SCENARIOS,
+  ...LEGACY_SCENARIOS,
 ] as const;
+
+// 导出分类后的场景（方便使用）
+export { CORE_SCENARIOS, SPECIALIZED_SCENARIOS };
 
 // 难度级别
 export const DIFFICULTY_LEVELS = [

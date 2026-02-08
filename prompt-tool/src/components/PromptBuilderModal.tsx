@@ -6,7 +6,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { X, Copy, Check, Eye, EyeOff } from "lucide-react";
+import { X, Copy, Check, Eye, EyeOff, ChevronDown } from "lucide-react";
 import { Prompt, InputField, Language } from "../lib/types";
 import { getLocalized } from "../lib/i18n";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -15,6 +15,11 @@ import {
   validatePlaceholders,
   highlightPlaceholders,
 } from "../lib/placeholders";
+import {
+  getFieldOptions,
+  validateSelectValue,
+  validateMultiselectValues,
+} from "../lib/presetsUtils";
 
 interface PromptBuilderModalProps {
   prompt: Prompt;
@@ -72,29 +77,52 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
   }, [sortedFields]);
 
   // 表单状态
-  const [values, setValues] = useState<Record<string, string>>(() => {
-    const initialValues: Record<string, string> = {};
+  const [values, setValues] = useState<Record<string, string | string[]>>(() => {
+    const initialValues: Record<string, string | string[]> = {};
     for (const field of inputFields) {
-      initialValues[field.name] = (field as any).defaultValue || "";
+      if (field.type === "multiselect") {
+        initialValues[field.name] = (field as any).defaultValue || [];
+      } else {
+        initialValues[field.name] = (field as any).defaultValue || "";
+      }
     }
     return initialValues;
   });
 
+  // 多选下拉框展开状态
+  const [expandedMultiselects, setExpandedMultiselects] = useState<Record<string, boolean>>({});
+
   // 验证状态
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // 计算填充后的内容
+  // 计算填充后的内容（处理多选值）
   const filledContent = useMemo(() => {
-    return fillPlaceholders(content, values);
+    const stringValues: Record<string, string> = {};
+    for (const [key, value] of Object.entries(values)) {
+      if (Array.isArray(value)) {
+        stringValues[key] = value.join(", ");
+      } else {
+        stringValues[key] = value;
+      }
+    }
+    return fillPlaceholders(content, stringValues);
   }, [content, values]);
 
   // 验证结果
   const validationResult = useMemo(() => {
-    return validatePlaceholders(content, inputFields, values);
+    const stringValues: Record<string, string> = {};
+    for (const [key, value] of Object.entries(values)) {
+      if (Array.isArray(value)) {
+        stringValues[key] = value.join(", ");
+      } else {
+        stringValues[key] = value;
+      }
+    }
+    return validatePlaceholders(content, inputFields, stringValues);
   }, [content, inputFields, values]);
 
   // 处理字段值变化
-  const handleFieldChange = (fieldName: string, value: string) => {
+  const handleFieldChange = (fieldName: string, value: string | string[]) => {
     setValues((prev) => ({ ...prev, [fieldName]: value }));
     // 清除该字段的错误
     setErrors((prev) => {
@@ -102,6 +130,23 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
       delete newErrors[fieldName];
       return newErrors;
     });
+  };
+
+  // 处理多选框选项点击
+  const handleMultiselectToggle = (fieldName: string, optionValue: string) => {
+    const currentValues = (values[fieldName] as string[]) || [];
+    const newValues = currentValues.includes(optionValue)
+      ? currentValues.filter((v) => v !== optionValue)
+      : [...currentValues, optionValue];
+    handleFieldChange(fieldName, newValues);
+  };
+
+  // 切换多选下拉框展开状态
+  const toggleMultiselect = (fieldName: string) => {
+    setExpandedMultiselects((prev) => ({
+      ...prev,
+      [fieldName]: !prev[fieldName],
+    }));
   };
 
   // 复制填充后的内容
@@ -117,6 +162,9 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
     const placeholder = field.placeholder ? getLocalized(field.placeholder, language) : "";
     const hint = field.hint ? getLocalized(field.hint, language) : "";
     const error = errors[field.name] || validationResult.errors[field.name];
+
+    // 获取选项（支持 preset 和 options）
+    const fieldOptions = getFieldOptions(field, language);
 
     // 根据 type 渲染不同的输入控件
     let inputElement: React.ReactNode;
@@ -146,12 +194,91 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
             }`}
           >
             <option value="">请选择...</option>
-            {field.options?.map((option, index) => (
-              <option key={index} value={getLocalized(option, language)}>
-                {getLocalized(option, language)}
+            {fieldOptions.map((option, index) => (
+              <option key={index} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>
+        );
+        break;
+
+      case "multiselect":
+        const selectedValues = (values[field.name] as string[]) || [];
+        inputElement = (
+          <div className="relative">
+            {/* 选中的值显示 */}
+            <div
+              onClick={() => toggleMultiselect(field.name)}
+              className={`w-full min-h-[42px] px-3 py-2 border rounded-lg cursor-pointer transition-all ${
+                error ? "border-red-300" : "border-gray-300"
+              } ${
+                expandedMultiselects[field.name] ? "ring-2 ring-hp-blue ring-hp-blue/20" : ""
+              }`}
+            >
+              {selectedValues.length === 0 ? (
+                <span className="text-gray-400">请选择...</span>
+              ) : (
+                <div className="flex flex-wrap gap-1">
+                  {selectedValues.map((val) => {
+                    const option = fieldOptions.find((o) => o.value === val);
+                    return (
+                      <span
+                        key={val}
+                        className="inline-flex items-center gap-1 px-2 py-0.5 bg-hp-blue/10 text-hp-blue rounded-md text-xs"
+                      >
+                        {option?.label || val}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleMultiselectToggle(field.name, val);
+                          }}
+                          className="hover:text-hp-dark"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+              <ChevronDown
+                className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 transition-transform ${
+                  expandedMultiselects[field.name] ? "rotate-180" : ""
+                }`}
+              />
+            </div>
+
+            {/* 下拉选项 */}
+            {expandedMultiselects[field.name] && (
+              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                {fieldOptions.map((option) => {
+                  const isSelected = selectedValues.includes(option.value);
+                  return (
+                    <div
+                      key={option.value}
+                      onClick={() => handleMultiselectToggle(field.name, option.value)}
+                      className={`px-3 py-2 cursor-pointer hover:bg-hp-blue/5 flex items-center gap-2 ${
+                        isSelected ? "bg-hp-blue/10" : ""
+                      }`}
+                    >
+                      <div className={`w-4 h-4 border rounded flex items-center justify-center ${
+                        isSelected ? "bg-hp-blue border-hp-blue" : "border-gray-300"
+                      }`}>
+                        {isSelected && (
+                          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </div>
+                      <span className="text-sm">{option.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         );
         break;
 

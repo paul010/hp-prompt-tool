@@ -18,10 +18,32 @@ export interface LocalizedContent {
 }
 
 // ============================================================
-// 业务场景类型
+// 业务场景类型 - 整合后的统一分类
 // ============================================================
 
+// 核心业务场景（8个）
+export type CoreScenario =
+  | "办公沟通"     // 邮件、会议、文档、即时通讯
+  | "数据智能"     // 分析、报表、SQL、可视化
+  | "技术开发"     // 编程、调试、代码审查、API
+  | "内容创作"     // 文案、文章、创意写作、营销
+  | "客户服务"     // 支持、FAQ、投诉、成功管理
+  | "学习成长"     // 教学、培训、辅导、认证
+  | "项目管理"     // 规划、时间表、里程碑、风险控制
+  | "商务决策";    // 战略、投资、分析、决策
+
+// 专项能力场景（4个）
+export type SpecializedScenario =
+  | "多语言翻译"   // 中英日韩互译、本地化
+  | "演示演讲"     // PPT、演讲、培训、路演
+  | "技术支持"     // IT、运维、故障排查
+  | "市场营销";     // 推广、品牌、社交媒体
+
+// 所有业务场景（向后兼容，包含旧分类）
 export type BusinessScenario =
+  | CoreScenario
+  | SpecializedScenario
+  // 旧分类映射（向后兼容）
   | "办公效率"
   | "数据分析"
   | "编程开发"
@@ -36,6 +58,41 @@ export type BusinessScenario =
   | "人力资源"
   | "IT支持"
   | "高管";
+
+// 场景分类配置类型
+export interface ScenarioConfig {
+  id: BusinessScenario;
+  name: string;
+  nameEn: string;
+  nameZh?: string;
+  icon: string;
+  color: string;
+  description?: string;
+  category?: "core" | "specialized" | "legacy";
+  source?: "promptchat" | "openai";
+}
+
+// 角色标签类型
+export type JobRole =
+  | "销售"
+  | "产品"
+  | "HR"
+  | "人力资源"
+  | "IT"
+  | "IT支持"
+  | "高管"
+  | "工程师"
+  | "经理"
+  | "Marketing"
+  | "客户成功";
+
+export interface JobRoleConfig {
+  id: JobRole;
+  name: string;
+  nameEn: string;
+  icon: string;
+  color: string;
+}
 
 // ============================================================
 // AI 平台类型
@@ -59,6 +116,24 @@ export type FieldType =
   | "url"         // URL
   | "json";       // JSON 数据
 
+// 预设选项引用类型
+export type PresetOptionSource =
+  | "jobTitle"     // 职位预设
+  | "language"     // 语言预设
+  | "country"      // 国家/地区预设
+  | "emailType"    // 邮件类型预设
+  | "emailTone"    // 邮件语气预设
+  | "dataSource"   // 数据来源预设
+  | "analysisGoal" // 分析目标预设
+  | "programmingLanguage" // 编程语言预设
+  | "techDomain"   // 技术领域预设
+  | "contentType"  // 内容类型预设
+  | "writingStyle" // 写作风格预设
+  | "learningTopic"; // 学习主题预设
+
+// 选项值类型（可以是字符串或本地化内容）
+export type OptionValue = string | LocalizedContent;
+
 // 输入字段定义
 export interface InputField {
   name: string;           // 字段标识符（用于占位符）
@@ -67,7 +142,8 @@ export interface InputField {
   required: boolean;      // 是否必填
   placeholder?: LocalizedContent; // 输入提示
   defaultValue?: string;  // 默认值
-  options?: LocalizedContent[]; // 选项（用于 select 类型）
+  options?: OptionValue[]; // 选项值列表（用于 select/multiselect）
+  preset?: PresetOptionSource; // 引用预设配置（简化选项定义）
   min?: number;          // 最小值/长度
   max?: number;          // 最大值/长度
   multiline?: boolean;   // 是否多行输入
