@@ -34,6 +34,7 @@ export interface Prompt {
   examples?: string[];
   source?: "openai" | "community" | "custom"; // 数据来源
   sourceUrl?: string; // 来源链接
+  inputFields?: string[]; // 提示词中需要用户填入的字段（占位符）
 }
 
 // AI 平台配置
