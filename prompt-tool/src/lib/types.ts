@@ -8,7 +8,12 @@ export type BusinessScenario =
   | "客户服务"
   | "项目管理"
   | "演示汇报"
-  | "翻译本地化";
+  | "翻译本地化"
+  | "销售"
+  | "产品"
+  | "人力资源"
+  | "IT支持"
+  | "高管";
 
 // AI 平台类型
 export type AIPlatform = "chatgpt" | "claude" | "gemini" | "wenxin" | "tongyi" | "kimi" | "copilot";
@@ -27,6 +32,8 @@ export interface Prompt {
   recommendedPlatforms: AIPlatform[];
   category?: string;
   examples?: string[];
+  source?: "openai" | "community" | "custom"; // 数据来源
+  sourceUrl?: string; // 来源链接
 }
 
 // AI 平台配置

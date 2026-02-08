@@ -1,5 +1,6 @@
 import Papa from 'papaparse';
 import { Prompt, BusinessScenario, AIPlatform } from './types';
+import { OPENAI_PROMPTS } from '@/data/openaiPrompts';
 
 // 数据源 URL - 直接从上游获取
 const DATA_SOURCE_URL = 'https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv';
@@ -28,8 +29,10 @@ export async function loadPrompts(): Promise<Prompt[]> {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
-        const prompts = convertToPrompts(results.data);
-        resolve(prompts);
+        const communityPrompts = convertToPrompts(results.data);
+        // 合并社区提示词和 OpenAI 官方提示词
+        const allPrompts = [...OPENAI_PROMPTS, ...communityPrompts];
+        resolve(allPrompts);
       },
       error: (error: Error) => {
         reject(error);
@@ -60,6 +63,26 @@ function convertToPrompts(rawData: RawPromptData[]): Prompt[] {
 
 function inferScenario(act: string, prompt: string): BusinessScenario {
   const keywords: Record<string, string[]> = {
+    '销售': [
+      'sales', 'selling', 'outreach', 'prospecting', 'lead', 'deal', 'pipeline', 'quota',
+      'proposal', 'commission', 'customer', 'account', 'revenue', 'closing', 'negotiation'
+    ],
+    '产品': [
+      'product', 'feature', 'roadmap', 'prd', 'user story', 'backlog', 'mvp', 'launch',
+      'iteration', 'agile', 'scrum', 'kanban', 'stakeholder', 'prioritization'
+    ],
+    '人力资源': [
+      'hr', 'human resources', 'recruit', 'hiring', 'interview', 'onboarding', 'performance',
+      'review', 'compensation', 'benefits', 'policy', 'employee', 'training', 'learning'
+    ],
+    'IT支持': [
+      'it', 'support', 'ticket', 'troubleshoot', 'infrastructure', 'server', 'network',
+      'security', 'help desk', 'technical support', 'devops', 'system admin'
+    ],
+    '高管': [
+      'executive', 'ceo', 'cto', 'strategy', 'board', 'leadership', 'vision', 'mission',
+      'investor', 'stakeholder', 'crisis', 'announcement', 'decision', 'organization'
+    ],
     '办公效率': [
       'excel', 'powerpoint', 'email', 'document', 'sheet', 'terminal', 'console', 'linux', 'windows', 'mac',
       'word', 'outlook', 'presentation', 'slide', 'deck', 'office', 'microsoft', 'spreadsheet',
@@ -187,6 +210,21 @@ function inferPlatforms(act: string, prompt: string, scenario: BusinessScenario,
 
   // 根据场景推荐
   switch (scenario) {
+    case '销售':
+      platforms = ['copilot', 'chatgpt', 'claude'];
+      break;
+    case '产品':
+      platforms = ['claude', 'chatgpt', 'copilot'];
+      break;
+    case '人力资源':
+      platforms = ['copilot', 'chatgpt', 'claude'];
+      break;
+    case 'IT支持':
+      platforms = ['claude', 'chatgpt', 'copilot'];
+      break;
+    case '高管':
+      platforms = ['claude', 'chatgpt', 'copilot'];
+      break;
     case '办公效率':
       platforms = ['copilot', 'chatgpt', 'claude', 'kimi'];
       break;

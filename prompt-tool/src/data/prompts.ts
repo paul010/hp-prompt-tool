@@ -253,6 +253,12 @@ export const SCENARIOS = [
   { id: "项目管理", name: "项目管理", nameEn: "Project Management", icon: "📋", color: "red" },
   { id: "演示汇报", name: "演示汇报", nameEn: "Presentation", icon: "🎤", color: "gray" },
   { id: "翻译本地化", name: "翻译本地化", nameEn: "Translation", icon: "🌐", color: "cyan" },
+  // OpenAI Prompt Packs 岗位分类
+  { id: "销售", name: "销售", nameEn: "Sales", icon: "🎯", color: "indigo", source: "openai" },
+  { id: "产品", name: "产品", nameEn: "Product", icon: "📦", color: "violet", source: "openai" },
+  { id: "人力资源", name: "人力资源", nameEn: "HR", icon: "👥", color: "rose", source: "openai" },
+  { id: "IT支持", name: "IT支持", nameEn: "IT Support", icon: "🖥️", color: "emerald", source: "openai" },
+  { id: "高管", name: "高管", nameEn: "Executive", icon: "👔", color: "amber", source: "openai" },
 ] as const;
 
 // 难度级别

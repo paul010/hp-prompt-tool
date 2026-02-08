@@ -1,7 +1,7 @@
 "use client";
 
 import { Prompt } from "@/lib/types";
-import { Copy, ChevronDown, ChevronUp, Eye } from "lucide-react";
+import { Copy, ChevronDown, ChevronUp, Eye, Award } from "lucide-react";
 import { useState } from "react";
 import { AI_PLATFORMS, getPlatformUrl, getRecommendedPlatforms } from "@/lib/platforms";
 import { PlatformModal } from "./PlatformModal";
@@ -62,14 +62,20 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
           <span className="px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded">
             {prompt.scenario}
           </span>
-          {prompt.tags.slice(0, 3).map((tag) => (
+          {prompt.source === "openai" && (
+            <span className="px-2 py-0.5 text-xs bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-700 rounded flex items-center gap-1">
+              <Award className="w-3 h-3" />
+              OpenAI官方
+            </span>
+          )}
+          {prompt.tags.filter(t => t !== "OpenAI官方").slice(0, 2).map((tag) => (
             <span key={tag} className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded">
               {tag}
             </span>
           ))}
-          {prompt.tags.length > 3 && (
+          {prompt.tags.filter(t => t !== "OpenAI官方").length > 2 && (
             <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-500 rounded">
-              +{prompt.tags.length - 3}
+              +{prompt.tags.filter(t => t !== "OpenAI官方").length - 2}
             </span>
           )}
         </div>
@@ -143,7 +149,13 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
           <p className="text-sm text-gray-600 mb-3">{prompt.description}</p>
           <div className="flex flex-wrap gap-2">
             <span className="tag bg-blue-100 text-blue-700">{prompt.scenario}</span>
-            {prompt.tags.map((tag) => (
+            {prompt.source === "openai" && (
+              <span className="tag bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-700 flex items-center gap-1">
+                <Award className="w-3 h-3" />
+                OpenAI官方
+              </span>
+            )}
+            {prompt.tags.filter(t => t !== "OpenAI官方").map((tag) => (
               <span key={tag} className="tag bg-gray-100 text-gray-600">
                 {tag}
               </span>
