@@ -59,15 +59,20 @@ export function fieldHasOptions(field: InputField): boolean {
 /**
  * Get default value for a field based on options
  */
-export function getFieldDefaultValue(field: InputField, language: string): string {
+export function getFieldDefaultValue(field: InputField, language: string): string | string[] {
   if (field.defaultValue) return field.defaultValue;
 
   // For select fields, default to first option if available
-  if (field.type === "select") {
+  if (field.type === "select" || field.type === "combobox") {
     const options = getFieldOptions(field, language);
     if (options.length > 0) {
       return options[0].value;
     }
+  }
+
+  // For multiselect fields, default to empty array
+  if (field.type === "multiselect" || field.type === "multiselect-combobox") {
+    return [];
   }
 
   return "";

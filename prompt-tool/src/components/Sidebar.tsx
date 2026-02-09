@@ -1,7 +1,7 @@
 "use client";
 
 import { SCENARIOS } from "@/data/prompts";
-import { BookOpen, GraduationCap, Shield, Zap, Target } from "lucide-react";
+import { BookOpenCheck, GraduationCap, Shield, Zap, Crosshair } from "lucide-react";
 
 interface SidebarProps {
   selectedScenario: string;
@@ -49,7 +49,7 @@ export function Sidebar({ selectedScenario, onScenarioChange, counts }: SidebarP
             <span>实用工具优先</span>
           </div>
           <div className="flex items-center gap-2 text-gray-700">
-            <Target className="w-4 h-4 text-hp-blue" />
+            <Crosshair className="w-4 h-4 text-hp-blue" />
             <span>有目的的应用</span>
           </div>
         </div>
@@ -69,7 +69,7 @@ export function Sidebar({ selectedScenario, onScenarioChange, counts }: SidebarP
           }`}
         >
           <span className="flex items-center gap-2">
-            <BookOpen className="w-4 h-4" />
+            <BookOpenCheck className="w-4 h-4" />
             全部提示词
           </span>
           <span className={`text-xs ${selectedScenario === "" ? "text-white/80" : "text-gray-400"}`}>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles, BookOpen } from "lucide-react";
+import { Sparkles, BookOpenCheck } from "lucide-react";
 import { LanguageSelector } from "./LanguageSelector";
 
 export function Header() {
@@ -35,7 +35,7 @@ export function Header() {
         {/* 特性标签 */}
         <div className="flex flex-wrap items-center gap-3 mt-8">
           <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
-            <BookOpen className="w-4 h-4" />
+            <BookOpenCheck className="w-4 h-4" />
             <span className="text-sm">即用即走</span>
           </div>
           <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">

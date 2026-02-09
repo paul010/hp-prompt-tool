@@ -18,46 +18,19 @@ export interface LocalizedContent {
 }
 
 // ============================================================
-// 业务场景类型 - 整合后的统一分类
+// 业务场景类型 - 简化的8个核心分类
 // ============================================================
 
-// 核心业务场景（8个）
-export type CoreScenario =
-  | "办公沟通"     // 邮件、会议、文档、即时通讯
-  | "数据智能"     // 分析、报表、SQL、可视化
-  | "技术开发"     // 编程、调试、代码审查、API
-  | "内容创作"     // 文案、文章、创意写作、营销
+// 8个核心业务场景（简化版）
+export type BusinessScenario =
+  | "办公协作"     // 邮件、会议、文档、即时通讯、项目规划
+  | "数据分析"     // 分析、报表、SQL、可视化、商业洞察
+  | "技术开发"     // 编程、调试、代码审查、API、IT支持
+  | "内容创作"     // 文案、文章、创意写作、营销、品牌
   | "客户服务"     // 支持、FAQ、投诉、成功管理
   | "学习成长"     // 教学、培训、辅导、认证
-  | "项目管理"     // 规划、时间表、里程碑、风险控制
-  | "商务决策";    // 战略、投资、分析、决策
-
-// 专项能力场景（4个）
-export type SpecializedScenario =
-  | "多语言翻译"   // 中英日韩互译、本地化
-  | "演示演讲"     // PPT、演讲、培训、路演
-  | "技术支持"     // IT、运维、故障排查
-  | "市场营销";     // 推广、品牌、社交媒体
-
-// 所有业务场景（向后兼容，包含旧分类）
-export type BusinessScenario =
-  | CoreScenario
-  | SpecializedScenario
-  // 旧分类映射（向后兼容）
-  | "办公效率"
-  | "数据分析"
-  | "编程开发"
-  | "创意写作"
-  | "学习培训"
-  | "客户服务"
-  | "项目管理"
-  | "演示汇报"
-  | "翻译本地化"
-  | "销售"
-  | "产品"
-  | "人力资源"
-  | "IT支持"
-  | "高管";
+  | "演示汇报"     // PPT、演讲、培训、路演、多语言
+  | "商务决策";    // 战略、投资、分析、决策、规划
 
 // 场景分类配置类型
 export interface ScenarioConfig {
@@ -68,8 +41,6 @@ export interface ScenarioConfig {
   icon: string;
   color: string;
   description?: string;
-  category?: "core" | "specialized" | "legacy";
-  source?: "promptchat" | "openai";
 }
 
 // 角色标签类型
@@ -110,8 +81,10 @@ export type FieldType =
   | "textarea"    // 长文本/多行
   | "number"      // 数字
   | "date"        // 日期
-  | "select"      // 单选
-  | "multiselect" // 多选
+  | "select"      // 单选（仅预设选项）
+  | "multiselect" // 多选（仅预设选项）
+  | "combobox"    // 组合框（预设选项 + 自定义输入，单选）
+  | "multiselect-combobox" // 组合框（预设选项 + 自定义输入，多选）
   | "email"       // 邮箱
   | "url"         // URL
   | "json";       // JSON 数据
@@ -129,7 +102,8 @@ export type PresetOptionSource =
   | "techDomain"   // 技术领域预设
   | "contentType"  // 内容类型预设
   | "writingStyle" // 写作风格预设
-  | "learningTopic"; // 学习主题预设
+  | "learningTopic" // 学习主题预设
+  | "learningGoal"; // 学习目标预设
 
 // 选项值类型（可以是字符串或本地化内容）
 export type OptionValue = string | LocalizedContent;
@@ -141,8 +115,8 @@ export interface InputField {
   type: FieldType;        // 字段类型
   required: boolean;      // 是否必填
   placeholder?: LocalizedContent; // 输入提示
-  defaultValue?: string;  // 默认值
-  options?: OptionValue[]; // 选项值列表（用于 select/multiselect）
+  defaultValue?: string | string[];  // 默认值（combobox类型支持数组）
+  options?: OptionValue[]; // 选项值列表（用于 select/multiselect/combobox）
   preset?: PresetOptionSource; // 引用预设配置（简化选项定义）
   min?: number;          // 最小值/长度
   max?: number;          // 最大值/长度
@@ -152,6 +126,11 @@ export interface InputField {
   groupName?: LocalizedContent; // 分组显示名称
   order?: number;        // 显示顺序
   hint?: LocalizedContent;      // 填写提示
+
+  // Combobox 专用选项
+  allowCustomInput?: boolean;  // 是否允许自定义输入（combobox默认true）
+  displayPresetChips?: boolean; // 是否显示快速选择标签（combobox专用）
+  maxDisplayValues?: number;   // 多选时最多显示多少个选中值
 }
 
 // ============================================================

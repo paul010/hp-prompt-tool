@@ -128,7 +128,7 @@ function inferScenario(act: string, prompt: string): BusinessScenario {
       return scenario as BusinessScenario;
     }
   }
-  return '办公效率';
+  return '办公协作';
 }
 
 function extractTags(act: string, forDevs: boolean): string[] {
@@ -208,49 +208,31 @@ function inferPlatforms(act: string, prompt: string, scenario: BusinessScenario,
     }
   }
 
-  // 根据场景推荐
+  // 根据场景推荐（使用新的8个分类）
   switch (scenario) {
-    case '销售':
-      platforms = ['copilot', 'chatgpt', 'claude'];
-      break;
-    case '产品':
-      platforms = ['claude', 'chatgpt', 'copilot'];
-      break;
-    case '人力资源':
-      platforms = ['copilot', 'chatgpt', 'claude'];
-      break;
-    case 'IT支持':
-      platforms = ['claude', 'chatgpt', 'copilot'];
-      break;
-    case '高管':
-      platforms = ['claude', 'chatgpt', 'copilot'];
-      break;
-    case '办公效率':
+    case '办公协作':
       platforms = ['copilot', 'chatgpt', 'claude', 'kimi'];
-      break;
-    case '编程开发':
-      platforms = ['claude', 'chatgpt', 'copilot'];
-      break;
-    case '创意写作':
-      platforms = ['chatgpt', 'claude', 'gemini', 'copilot'];
       break;
     case '数据分析':
       platforms = ['copilot', 'claude', 'chatgpt', 'kimi'];
       break;
-    case '翻译本地化':
-      platforms = ['chatgpt', 'claude', 'wenxin', 'tongyi', 'copilot'];
+    case '技术开发':
+      platforms = ['claude', 'chatgpt', 'copilot'];
       break;
-    case '学习培训':
+    case '内容创作':
       platforms = ['chatgpt', 'claude', 'gemini', 'copilot'];
       break;
     case '客户服务':
       platforms = ['copilot', 'chatgpt', 'claude'];
       break;
-    case '项目管理':
-      platforms = ['copilot', 'chatgpt', 'claude'];
+    case '学习成长':
+      platforms = ['chatgpt', 'claude', 'gemini', 'copilot'];
       break;
     case '演示汇报':
-      platforms = ['copilot', 'chatgpt', 'claude'];
+      platforms = ['chatgpt', 'claude', 'wenxin', 'tongyi', 'copilot'];
+      break;
+    case '商务决策':
+      platforms = ['claude', 'chatgpt', 'copilot'];
       break;
     default:
       platforms = ['copilot', 'chatgpt', 'claude'];

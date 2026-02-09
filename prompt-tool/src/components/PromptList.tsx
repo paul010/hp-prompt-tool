@@ -8,7 +8,7 @@ import { Sidebar } from "./Sidebar";
 import { Pagination } from "./Pagination";
 import { ActiveFilters } from "./ActiveFilters";
 import { SCENARIOS } from "../data/prompts";
-import { Shield, Zap, Target, Users, Sparkles } from "lucide-react";
+import { Shield, Zap, Crosshair, Users, Sparkles } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { getLocalized } from "../lib/i18n";
 
@@ -182,7 +182,7 @@ export function PromptList({ prompts }: PromptListProps) {
                 <span>即用即走</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm">
-                <Target className="w-4 h-4 text-blue-300" />
+                <Crosshair className="w-4 h-4 text-blue-300" />
                 <span>业务导向</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm">

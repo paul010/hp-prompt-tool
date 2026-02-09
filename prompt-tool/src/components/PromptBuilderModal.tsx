@@ -20,6 +20,7 @@ import {
   validateSelectValue,
   validateMultiselectValues,
 } from "../lib/presetsUtils";
+import { Combobox, MultiselectCombobox } from "./ui";
 
 interface PromptBuilderModalProps {
   prompt: Prompt;
@@ -322,6 +323,36 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
             className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all ${
               error ? "border-red-300 focus:ring-red-200" : "border-gray-300"
             }`}
+          />
+        );
+        break;
+
+      case "combobox":
+        inputElement = (
+          <Combobox
+            name={field.name}
+            value={(values[field.name] as string) || ""}
+            onChange={(value) => handleFieldChange(field.name, value)}
+            options={fieldOptions}
+            placeholder={placeholder || "请选择或输入..."}
+            displayPresetChips={field.displayPresetChips}
+            allowCustomInput={field.allowCustomInput !== false} // 默认允许
+            error={!!error}
+          />
+        );
+        break;
+
+      case "multiselect-combobox":
+        inputElement = (
+          <MultiselectCombobox
+            name={field.name}
+            values={(values[field.name] as string[]) || []}
+            onChange={(value) => handleFieldChange(field.name, value)}
+            options={fieldOptions}
+            placeholder={placeholder || "请选择或输入..."}
+            allowCustomInput={field.allowCustomInput !== false} // 默认允许
+            maxDisplayValues={field.maxDisplayValues || 3}
+            error={!!error}
           />
         );
         break;

@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, X } from "lucide-react";
+import { SearchCheck, X } from "lucide-react";
 import { SCENARIOS, DIFFICULTY_LEVELS } from "@/data/prompts";
 import { AI_PLATFORMS } from "@/lib/platforms";
 import { useState } from "react";
@@ -42,7 +42,7 @@ export function SearchBar({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         {/* 搜索框 */}
         <div className="relative mb-4">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <SearchCheck className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
             type="text"
             value={localQuery}

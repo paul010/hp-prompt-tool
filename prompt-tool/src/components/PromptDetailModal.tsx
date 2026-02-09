@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Copy, Check, BookOpen, Lightbulb, ExternalLink, Settings } from "lucide-react";
+import { X, Copy, Check, BookOpenCheck, LightbulbOff, ExternalLink, Settings } from "lucide-react";
 import { Prompt, AIPlatform, InputField } from "../lib/types";
 import { AI_PLATFORMS, getPlatformUrl } from "../lib/platforms";
 import { useState, useMemo } from "react";
@@ -213,7 +213,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
           {/* 使用场景 */}
           <div>
             <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <Lightbulb className="w-4 h-4 text-yellow-500" />
+              <LightbulbOff className="w-4 h-4 text-yellow-500" />
               使用场景案例
             </h4>
             <div className="space-y-2">
@@ -235,7 +235,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
           <div>
             <div className="flex items-center justify-between mb-3">
               <h4 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-blue-500" />
+                <BookOpenCheck className="w-4 h-4 text-blue-500" />
                 提示词内容
               </h4>
               <div className="flex gap-2">
