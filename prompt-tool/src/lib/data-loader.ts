@@ -62,72 +62,104 @@ function convertToPrompts(rawData: RawPromptData[]): Prompt[] {
 }
 
 function inferScenario(act: string, prompt: string): BusinessScenario {
-  const keywords: Record<string, string[]> = {
-    '销售': [
-      'sales', 'selling', 'outreach', 'prospecting', 'lead', 'deal', 'pipeline', 'quota',
-      'proposal', 'commission', 'customer', 'account', 'revenue', 'closing', 'negotiation'
-    ],
-    '产品': [
-      'product', 'feature', 'roadmap', 'prd', 'user story', 'backlog', 'mvp', 'launch',
-      'iteration', 'agile', 'scrum', 'kanban', 'stakeholder', 'prioritization'
-    ],
-    '人力资源': [
-      'hr', 'human resources', 'recruit', 'hiring', 'interview', 'onboarding', 'performance',
-      'review', 'compensation', 'benefits', 'policy', 'employee', 'training', 'learning'
-    ],
-    'IT支持': [
-      'it', 'support', 'ticket', 'troubleshoot', 'infrastructure', 'server', 'network',
-      'security', 'help desk', 'technical support', 'devops', 'system admin'
-    ],
-    '高管': [
-      'executive', 'ceo', 'cto', 'strategy', 'board', 'leadership', 'vision', 'mission',
-      'investor', 'stakeholder', 'crisis', 'announcement', 'decision', 'organization'
-    ],
-    '办公效率': [
-      'excel', 'powerpoint', 'email', 'document', 'sheet', 'terminal', 'console', 'linux', 'windows', 'mac',
-      'word', 'outlook', 'presentation', 'slide', 'deck', 'office', 'microsoft', 'spreadsheet',
-      'calendar', 'schedule', 'meeting', 'note', 'notepad', 'organize', 'copilot'
+  // 直接使用8个核心分类的关键词进行匹配
+  const scenarioKeywords: Record<string, string[]> = {
+    '办公协作': [
+      // 办公效率相关
+      'excel', 'powerpoint', 'email', 'document', 'sheet', 'word', 'outlook',
+      'presentation', 'slide', 'deck', 'office', 'microsoft', 'spreadsheet',
+      'calendar', 'schedule', 'meeting', 'note', 'notepad', 'organize', 'copilot',
+      // 项目管理相关
+      'project', 'plan', 'manage', 'organize', 'timeline', 'milestone',
+      'agile', 'scrum', 'kanban', 'sprint', 'roadmap', 'deadline', 'deliverable',
+      // 人力资源相关
+      'hr', 'human resources', 'recruit', 'hiring', 'interview', 'onboarding',
+      'performance', 'review', 'compensation', 'benefits', 'policy', 'employee', 'training',
+      // 办公沟通
+      'communication', 'coordination', 'collaboration', 'teamwork'
     ],
     '数据分析': [
       'sql', 'data', 'chart', 'statistic', 'analyze', 'report', 'visualization', 'graph',
-      'database', 'query', 'table', 'pivot', 'dashboard', 'metrics', 'kpi'
+      'database', 'query', 'table', 'pivot', 'dashboard', 'metrics', 'kpi',
+      'analytics', 'insight', 'business intelligence', 'etl', 'warehouse'
     ],
-    '编程开发': [
-      'code', 'developer', 'programming', 'javascript', 'python', 'git', 'api', 'function', 'debug', 'refactor',
-      'algorithm', 'variable', 'syntax', 'compile', 'library', 'framework', 'frontend', 'backend'
+    '技术开发': [
+      // 编程开发
+      'code', 'developer', 'programming', 'javascript', 'python', 'java', 'git',
+      'api', 'function', 'debug', 'refactor', 'algorithm', 'variable', 'syntax',
+      'compile', 'library', 'framework', 'frontend', 'backend', 'fullstack',
+      'software', 'engineering', 'architecture', 'design pattern',
+      // IT支持
+      'it', 'support', 'ticket', 'troubleshoot', 'infrastructure', 'server', 'network',
+      'security', 'help desk', 'technical support', 'devops', 'system admin',
+      'linux', 'terminal', 'console', 'bash', 'shell', 'command line'
     ],
-    '创意写作': [
+    '内容创作': [
+      // 创意写作
       'write', 'story', 'content', 'copy', 'essay', 'creative', 'novel', 'script',
-      'blog', 'article', 'headline', 'caption', 'narrative', 'plot'
-    ],
-    '学习培训': [
-      'teacher', 'tutor', 'learn', 'explain', 'education', 'study', 'instructor',
-      'course', 'tutorial', 'train', 'instruct', 'example', 'understand'
+      'blog', 'article', 'headline', 'caption', 'narrative', 'plot',
+      // 市场营销
+      'marketing', 'brand', 'advertising', 'social media', 'influencer',
+      'campaign', 'seo', 'sem', 'ppc', 'conversion', 'funnel',
+      'sales', 'selling', 'outreach', 'prospecting', 'lead', 'deal', 'negotiation'
     ],
     '客户服务': [
       'support', 'service', 'help', 'assistant', 'customer', 'faq',
-      'inquiry', 'complaint', 'feedback', 'satisfaction'
+      'inquiry', 'complaint', 'feedback', 'satisfaction', 'ticket',
+      'call center', 'helpdesk', 'troubleshooting', 'issue', 'problem'
     ],
-    '项目管理': [
-      'project', 'plan', 'manage', 'organize', 'timeline', 'milestone', 'agile',
-      'scrum', 'kanban', 'sprint', 'roadmap', 'deadline', 'deliverable'
+    '学习成长': [
+      'teacher', 'tutor', 'learn', 'explain', 'education', 'study', 'instructor',
+      'course', 'tutorial', 'train', 'instruct', 'example', 'understand',
+      'coach', 'mentor', 'guide', 'practice', 'exercise', 'quiz', 'test',
+      'exam', 'certification', 'skill', 'knowledge'
     ],
     '演示汇报': [
       'presentation', 'slide', 'speech', 'pitch', 'deck',
-      'visual', 'diagram', 'chart', 'graph', 'proposal'
-    ],
-    '翻译本地化': [
+      'visual', 'diagram', 'chart', 'proposal', 'powerpoint', 'ppt',
+      // 翻译本地化
       'translate', 'language', 'translation', 'localization', 'locale',
-      'chinese', 'english', 'japanese', 'korean', 'multilingual'
+      'chinese', 'english', 'japanese', 'korean', 'multilingual',
+      // 公开演讲
+      'public speaking', 'keynote', 'talk', 'conference', 'workshop'
+    ],
+    '商务决策': [
+      // 高管相关
+      'executive', 'ceo', 'cto', 'cfo', 'strategy', 'board', 'leadership',
+      'vision', 'mission', 'investor', 'stakeholder', 'crisis', 'announcement',
+      // 产品相关
+      'product management', 'product owner', 'feature', 'roadmap', 'prd',
+      'user story', 'backlog', 'mvp', 'launch', 'iteration', 'stakeholder',
+      'prioritization', 'market research', 'competitive analysis',
+      // 决策相关
+      'decision', 'analysis', 'investment', 'funding', 'finance', 'budget',
+      'revenue', 'growth', 'startup', 'business model', 'swot', 'pester'
     ],
   };
 
   const text = `${act} ${prompt}`.toLowerCase();
-  for (const [scenario, words] of Object.entries(keywords)) {
-    if (words.some(word => text.includes(word))) {
-      return scenario as BusinessScenario;
+
+  // 按优先级顺序检查（从最具体到最通用）
+  const priorityOrder: BusinessScenario[] = [
+    '商务决策',
+    '技术开发',
+    '数据分析',
+    '内容创作',
+    '演示汇报',
+    '学习成长',
+    '客户服务',
+    '办公协作'
+  ];
+
+  // 先尝试按优先级匹配
+  for (const scenario of priorityOrder) {
+    const keywords = scenarioKeywords[scenario];
+    if (keywords && keywords.some(word => text.includes(word))) {
+      return scenario;
     }
   }
+
+  // 如果都没有匹配，默认为办公协作
   return '办公协作';
 }
 
