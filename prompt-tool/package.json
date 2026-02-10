@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "sync-prompts": "node ../scripts/sync-prompts.js"
+    "sync-prompts": "node ../scripts/sync-prompts.js",
+    "smoke:prompts-chat-images": "node ../scripts/prompts-chat-smoke-run.js"
   },
   "dependencies": {
     "@types/papaparse": "^5.5.2",

@@ -152,6 +152,9 @@ export interface Prompt {
   examples?: string[];
   source?: "openai" | "community" | "custom"; // 数据来源
   sourceUrl?: string; // 来源链接
+  imageUrl?: string; // 可选图片地址（主要用于 prompts.chat 来源）
+  imageAlt?: string; // 图片替代文本
+  imageSource?: string; // 图片来源标识
   inputFields?: string[] | InputField[]; // 支持旧版字符串数组和新版 InputField 对象
 }
 

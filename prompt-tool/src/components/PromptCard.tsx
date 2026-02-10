@@ -1,14 +1,16 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { Prompt, InputField } from "../lib/types";
 import { Copy, ChevronDown, ChevronUp, Eye, Award, Settings } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { AI_PLATFORMS, getPlatformUrl, getRecommendedPlatforms } from "../lib/platforms";
 import { PlatformModal } from "./PlatformModal";
 import { PromptDetailModal } from "./PromptDetailModal";
 import { PromptBuilderModal } from "./PromptBuilderModal";
 import { useLanguage } from "../contexts/LanguageContext";
 import { getLocalized } from "../lib/i18n";
+import { shouldRenderPromptImage } from "../lib/promptImageUtils";
 
 interface PromptCardProps {
   prompt: Prompt;
@@ -22,6 +24,11 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
   const [showPlatformModal, setShowPlatformModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showBuilderModal, setShowBuilderModal] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [prompt.id, prompt.imageUrl]);
 
   // 获取本地化内容（兼容多语言和单语言格式）
   const displayName = useMemo(() => {
@@ -56,6 +63,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
   }, [prompt.inputFields]);
 
   const hasInputFields = inputFields.length > 0;
+  const canRenderImage = shouldRenderPromptImage(prompt) && !imageFailed;
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(displayContent);
@@ -77,6 +85,17 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
   if (compact) {
     return (
       <div className="bg-white rounded-xl border border-gray-200 hover:border-hp-blue hover:shadow-lg transition-all overflow-hidden p-4">
+        {canRenderImage && (
+          <div className="mb-3 overflow-hidden rounded-lg border border-gray-100 bg-gray-50">
+            <img
+              src={prompt.imageUrl}
+              alt={prompt.imageAlt || displayName}
+              loading="lazy"
+              onError={() => setImageFailed(true)}
+              className="h-36 w-full object-cover"
+            />
+          </div>
+        )}
         <div className="flex items-start gap-3 mb-3">
           <div className="flex-1 min-w-0">
             <h3 className="text-base font-semibold text-gray-900 truncate">
@@ -189,6 +208,17 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
   // 完整模式（原有布局）
   return (
     <div className="prompt-card p-6 animate-fade-in">
+      {canRenderImage && (
+        <div className="mb-4 overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
+          <img
+            src={prompt.imageUrl}
+            alt={prompt.imageAlt || displayName}
+            loading="lazy"
+            onError={() => setImageFailed(true)}
+            className="h-56 w-full object-cover"
+          />
+        </div>
+      )}
       {/* 头部：标题和标签 */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">

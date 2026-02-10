@@ -1,6 +1,7 @@
 import Papa from 'papaparse';
 import { Prompt, BusinessScenario, AIPlatform } from './types';
 import { OPENAI_PROMPTS } from '@/data/openaiPrompts';
+import { withPromptsChatImageMetadata } from './promptImageUtils';
 
 // 数据源 URL - 直接从上游获取
 const DATA_SOURCE_URL = 'https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv';
@@ -10,6 +11,13 @@ export interface RawPromptData {
   prompt: string;
   for_devs: string;
   type: string;
+  source_url?: string;
+  sourceUrl?: string;
+  image_url?: string;
+  imageUrl?: string;
+  image_alt?: string;
+  imageAlt?: string;
+  [key: string]: string | undefined;
 }
 
 // 从上游 URL 加载提示词（带缓存）
@@ -45,8 +53,25 @@ function convertToPrompts(rawData: RawPromptData[]): Prompt[] {
   return rawData.map((row, index) => {
     const forDevs = row.for_devs === 'TRUE';
     const scenario = inferScenario(row.act, row.prompt);
+    const sourceUrl = pickFirstNonEmpty(
+      row.source_url,
+      row.sourceUrl,
+      row.source,
+      row.url
+    );
+    const imageUrl = pickFirstNonEmpty(
+      row.image_url,
+      row.imageUrl,
+      row.thumbnail,
+      row.image
+    );
+    const imageAlt = pickFirstNonEmpty(
+      row.image_alt,
+      row.imageAlt,
+      row.image_description
+    );
 
-    return {
+    const prompt: Prompt = {
       id: `prompt-${index}`,
       name: row.act,
       nameZh: row.act,
@@ -57,8 +82,20 @@ function convertToPrompts(rawData: RawPromptData[]): Prompt[] {
       forDevelopers: forDevs,
       difficulty: inferDifficulty(row.act, row.prompt, forDevs),
       recommendedPlatforms: inferPlatforms(row.act, row.prompt, scenario, forDevs),
+      source: 'community',
+      sourceUrl,
+      imageUrl,
+      imageAlt,
+      imageSource: imageUrl ? 'upstream' : undefined,
     };
+
+    return withPromptsChatImageMetadata(prompt);
   });
+}
+
+function pickFirstNonEmpty(...values: Array<string | undefined>): string | undefined {
+  const nextValue = values.find((value) => typeof value === 'string' && value.trim().length > 0);
+  return nextValue?.trim();
 }
 
 function inferScenario(act: string, prompt: string): BusinessScenario {

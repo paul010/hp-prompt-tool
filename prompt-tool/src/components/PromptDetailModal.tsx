@@ -1,12 +1,14 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { X, Copy, Check, BookOpenCheck, LightbulbOff, ExternalLink, Settings } from "lucide-react";
 import { Prompt, AIPlatform, InputField } from "../lib/types";
 import { AI_PLATFORMS, getPlatformUrl } from "../lib/platforms";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { getLocalized } from "../lib/i18n";
 import { PromptBuilderModal } from "./PromptBuilderModal";
+import { shouldRenderPromptImage } from "../lib/promptImageUtils";
 
 interface PromptDetailModalProps {
   prompt: Prompt;
@@ -103,6 +105,11 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
   const { language } = useLanguage();
   const [copied, setCopied] = useState(false);
   const [showBuilderModal, setShowBuilderModal] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [prompt.id, prompt.imageUrl]);
 
   // 获取本地化内容
   const displayName = useMemo(() => {
@@ -137,6 +144,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
   }, [prompt.inputFields]);
 
   const hasInputFields = inputFields.length > 0;
+  const canRenderImage = shouldRenderPromptImage(prompt) && !imageFailed;
 
   if (!isOpen) return null;
 
@@ -210,6 +218,17 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
 
         {/* 可滚动内容区 */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          {canRenderImage && (
+            <div className="overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
+              <img
+                src={prompt.imageUrl}
+                alt={prompt.imageAlt || displayName}
+                loading="lazy"
+                onError={() => setImageFailed(true)}
+                className="h-64 w-full object-cover"
+              />
+            </div>
+          )}
           {/* 使用场景 */}
           <div>
             <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">

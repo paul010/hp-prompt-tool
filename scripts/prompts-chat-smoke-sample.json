@@ -1,0 +1,70 @@
+[
+  {
+    "id": "pc-001",
+    "act": "Linux Terminal",
+    "sourceUrl": "https://prompts.chat/prompts/linux-terminal",
+    "imageUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80"
+  },
+  {
+    "id": "pc-002",
+    "act": "English Translator and Improver",
+    "sourceUrl": "https://www.prompts.chat/p/english-translator"
+  },
+  {
+    "id": "pc-003",
+    "act": "JavaScript Console",
+    "sourceUrl": "https://m.prompts.chat/prompts/js-console"
+  },
+  {
+    "id": "pc-004",
+    "act": "Excel Sheet",
+    "sourceUrl": "https://prompts.chat/library/excel-sheet?utm=feed"
+  },
+  {
+    "id": "pc-005",
+    "act": "Travel Guide",
+    "sourceUrl": "HTTPS://PROMPTS.CHAT/travel-guide"
+  },
+  {
+    "id": "pc-006",
+    "act": "Personal Trainer",
+    "sourceUrl": "https://prompts.chat/personal-trainer"
+  },
+  {
+    "id": "pc-007",
+    "act": "Interviewer",
+    "sourceUrl": "https://prompts.chat/interviewer",
+    "imageUrl": "https://example.invalid/broken-image.jpg",
+    "simulateImageLoadFail": true
+  },
+  {
+    "id": "pc-008",
+    "act": "Essay Writer",
+    "sourceUrl": "https://prompts.chat/essay-writer"
+  },
+  {
+    "id": "pc-009",
+    "act": "Mathematician",
+    "sourceUrl": "https://prompts.chat/mathematician"
+  },
+  {
+    "id": "pc-010",
+    "act": "Chef",
+    "sourceUrl": "https://prompts.chat/chef"
+  },
+  {
+    "id": "pc-011",
+    "act": "Unknown Role Without Catalog Image",
+    "sourceUrl": "https://prompts.chat/unknown-role"
+  },
+  {
+    "id": "pc-012",
+    "act": "Cover Letter",
+    "sourceUrl": "https://prompts.chat/cover-letter"
+  },
+  {
+    "id": "np-001",
+    "act": "Git Commit Message Writer",
+    "sourceUrl": "https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv"
+  }
+]
