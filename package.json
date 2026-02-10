@@ -1,0 +1,13 @@
+{
+  "name": "hp-prompt-tool-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "prompt-tool"
+  ],
+  "scripts": {
+    "dev": "cd prompt-tool && next dev",
+    "build": "cd prompt-tool && next build",
+    "start": "cd prompt-tool && next start"
+  }
+}
