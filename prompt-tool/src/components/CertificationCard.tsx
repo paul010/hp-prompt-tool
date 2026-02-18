@@ -15,18 +15,9 @@ export function CertificationCard({ certification }: CertificationCardProps) {
   const isZh = language.startsWith('zh');
 
   return (
-    <div className="group relative">
-      {/* 背景光晕 */}
-      <div
-        className="absolute inset-0 rounded-3xl blur-2xl opacity-0 group-hover:opacity-30 transition-opacity duration-500"
-        style={{ background: `linear-gradient(135deg, ${certification.color}44, transparent)` }}
-      />
-
+    <div className="group">
       {/* 卡片主体 */}
-      <div
-        className="relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border-2 group-hover:-translate-y-2"
-        style={{ borderColor: `${certification.color}33` }}
-      >
+      <div className="bg-white rounded-xl p-8 border border-slate-100 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1">
         <div className="flex flex-col md:flex-row items-start gap-8">
           {/* 左侧：徽章 */}
           <div className="flex-shrink-0">
@@ -36,57 +27,52 @@ export function CertificationCard({ certification }: CertificationCardProps) {
           {/* 右侧：内容 */}
           <div className="flex-1 w-full">
             {/* 标题 */}
-            <h3
-              className="text-3xl font-bold mb-3 bg-gradient-to-r bg-clip-text text-transparent"
-              style={{
-                backgroundImage: `linear-gradient(to right, ${certification.color}, ${certification.color}cc)`,
-              }}
-            >
+            <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
               {isZh ? certification.nameZh : certification.name}
             </h3>
 
             {/* 描述 */}
-            <p className="text-gray-600 text-lg mb-6">
+            <p className="text-slate-600 text-base md:text-lg mb-6 leading-relaxed">
               {isZh ? certification.descriptionZh : certification.description}
             </p>
 
             {/* 信息卡片网格 */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
               {/* 受众 */}
-              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-4">
+              <div className="bg-primary-50 border border-primary-100 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <Users className="w-5 h-5 text-blue-600" />
-                  <span className="text-sm font-semibold text-blue-900">
+                  <Users className="w-5 h-5 text-primary-600" />
+                  <span className="text-sm font-bold text-primary-900">
                     {isZh ? '受众' : 'Audience'}
                   </span>
                 </div>
                 {certification.audiences.map((aud, idx) => (
-                  <p key={idx} className="text-sm text-blue-700">
+                  <p key={idx} className="text-sm text-primary-700 font-semibold">
                     {aud.number} {isZh ? '人' : 'people'}
                   </p>
                 ))}
               </div>
 
               {/* 提示词 */}
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-4">
+              <div className="bg-secondary-50 border border-secondary-100 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <BookOpen className="w-5 h-5 text-purple-600" />
-                  <span className="text-sm font-semibold text-purple-900">
+                  <BookOpen className="w-5 h-5 text-secondary-600" />
+                  <span className="text-sm font-bold text-secondary-900">
                     {isZh ? '提示词' : 'Prompts'}
                   </span>
                 </div>
-                <p className="text-sm text-purple-700 font-bold">
+                <p className="text-sm text-secondary-700 font-bold">
                   {certification.prompts.count}+
                 </p>
               </div>
 
               {/* ROI */}
-              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-4">
+              <div className="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <TrendingUp className="w-5 h-5 text-green-600" />
-                  <span className="text-sm font-semibold text-green-900">ROI</span>
+                  <TrendingUp className="w-5 h-5 text-emerald-600" />
+                  <span className="text-sm font-bold text-emerald-900">ROI</span>
                 </div>
-                <p className="text-sm text-green-700 font-bold">
+                <p className="text-sm text-emerald-700 font-bold">
                   {certification.value}
                 </p>
               </div>
@@ -98,11 +84,7 @@ export function CertificationCard({ certification }: CertificationCardProps) {
                 {certification.prompts.scenes.map((scene) => (
                   <span
                     key={scene}
-                    className="px-3 py-1 rounded-full text-sm font-medium"
-                    style={{
-                      backgroundColor: `${certification.color}15`,
-                      color: certification.color,
-                    }}
+                    className="px-3 py-1.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-full border border-slate-200"
                   >
                     {scene}
                   </span>
@@ -114,20 +96,13 @@ export function CertificationCard({ certification }: CertificationCardProps) {
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href={`/?scenario=all`}
-                className="group/btn flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-white transition-all shadow-lg hover:shadow-xl hover:scale-105"
-                style={{
-                  background: `linear-gradient(to right, ${certification.color}, ${certification.color}dd)`,
-                }}
+                className="group/btn inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-bold rounded-full shadow-button hover:-translate-y-0.5 hover:shadow-button transition-all duration-200"
               >
                 <span>{isZh ? '查看提示词' : 'View Prompts'}</span>
                 <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
               </Link>
               <button
-                className="px-6 py-3 rounded-xl font-bold border-2 transition-all hover:shadow-lg"
-                style={{
-                  borderColor: certification.color,
-                  color: certification.color,
-                }}
+                className="px-6 py-3 bg-white border-2 border-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-all duration-200"
               >
                 {isZh ? '了解详情' : 'Learn More'}
               </button>
