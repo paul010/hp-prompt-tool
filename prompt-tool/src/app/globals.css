@@ -89,7 +89,7 @@
 
   /* 标签 */
   .tag {
-    @apply inline-flex items-center px-4 py-2 border-3 border-academy-black rounded-none text-sm font-black bg-academy-yellow;
+    @apply inline-flex items-center px-4 py-2 border-4 border-academy-black rounded-none text-sm font-black bg-academy-yellow;
   }
 
   /* Feature Card - 堆叠风格 */

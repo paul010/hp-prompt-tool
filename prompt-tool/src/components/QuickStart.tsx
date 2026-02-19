@@ -144,7 +144,7 @@ function QuickStartCard({
         {/* CTA 按钮 */}
         <div className={`inline-flex items-center gap-2 font-black group-hover:gap-3 transition-all ${
           index === 2 ? 'bg-white text-academy-blue' : 'bg-academy-black text-white'
-        } px-4 py-2 border-3 border-${index === 2 ? 'white' : 'academy-black'} rounded-none`}
+        } px-4 py-2 border-4 border-${index === 2 ? 'white' : 'academy-black'} rounded-none`}
           style={{ fontStyle: 'italic' }}>
           <span>{isZh ? '開始' : 'Start'}</span>
           <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />

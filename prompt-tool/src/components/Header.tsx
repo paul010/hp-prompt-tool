@@ -43,22 +43,22 @@ export function Header() {
 
         {/* 特性标签 */}
         <div className="flex flex-wrap items-center gap-3 mt-8">
-          <div className="flex items-center gap-2 bg-white/20 px-4 py-2 border-3 border-white rounded-none font-bold">
+          <div className="flex items-center gap-2 bg-white/20 px-4 py-2 border-4 border-white rounded-none font-bold">
             <BookOpenCheck className="w-4 h-4" />
             <span className="text-sm">即用即走</span>
           </div>
-          <div className="flex items-center gap-2 bg-academy-pink px-4 py-2 border-3 border-white rounded-none font-bold">
+          <div className="flex items-center gap-2 bg-academy-pink px-4 py-2 border-4 border-white rounded-none font-bold">
             <Zap className="w-4 h-4" />
             <span className="text-sm">安全合規</span>
           </div>
-          <div className="flex items-center gap-2 bg-white/20 px-4 py-2 border-3 border-white rounded-none font-bold">
+          <div className="flex items-center gap-2 bg-white/20 px-4 py-2 border-4 border-white rounded-none font-bold">
             <span className="text-sm">12+ 場景</span>
           </div>
-          <div className="flex items-center gap-2 bg-white/20 px-4 py-2 border-3 border-white rounded-none font-bold">
+          <div className="flex items-center gap-2 bg-white/20 px-4 py-2 border-4 border-white rounded-none font-bold">
             <span className="text-sm">多語言支援</span>
           </div>
           {/* 语言选择器 */}
-          <LanguageSelector className="bg-academy-yellow text-academy-blue border-3 border-white px-3 py-2 rounded-none font-bold" />
+          <LanguageSelector className="bg-academy-yellow text-academy-blue border-4 border-white px-3 py-2 rounded-none font-bold" />
         </div>
       </div>
     </header>
