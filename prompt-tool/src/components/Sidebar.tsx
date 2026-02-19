@@ -11,7 +11,7 @@ interface SidebarProps {
 
 export function Sidebar({ selectedScenario, onScenarioChange, counts }: SidebarProps) {
   return (
-    <aside className="w-64 flex-shrink-0 bg-white border-r border-gray-200 p-4 hidden md:block">
+    <aside className="w-64 flex-shrink-0 bg-academy-gray-light border-r border-4 border-academy-black p-4 hidden md:block">
       {/* 学习路径指示 */}
       <div className="mb-6 p-4 bg-gradient-to-br from-hp-blue/10 to-hp-dark/10 rounded-xl border border-hp-blue/20">
         <h3 className="text-sm font-semibold text-hp-dark mb-3 flex items-center gap-2">
@@ -102,7 +102,7 @@ export function Sidebar({ selectedScenario, onScenarioChange, counts }: SidebarP
         <div className="flex items-center gap-2 mb-2">
           <span className="text-2xl">🌐</span>
           <div>
-            <h4 className="text-sm font-semibold text-gray-900">Microsoft Copilot</h4>
+            <h4 className="text-sm font-semibold text-academy-black">Microsoft Copilot</h4>
             <p className="text-xs text-gray-600">HP 首选 AI 工具</p>
           </div>
         </div>

@@ -38,7 +38,7 @@ export function SearchBar({
   };
 
   return (
-    <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+    <div className="bg-white border-b border-4 border-academy-200 sticky top-0 z-10 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         {/* 搜索框 */}
         <div className="relative mb-4">
@@ -51,7 +51,7 @@ export function SearchBar({
               onSearchChange(e.target.value);
             }}
             placeholder="搜索提示词...（如：邮件、代码、数据分析）"
-            className="w-full pl-12 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-hp-blue focus:border-transparent outline-none transition-all"
+            className="w-full pl-12 pr-12 py-3 bg-gray-50 border border-4 border-academy-200 rounded-xl focus:ring-2 focus:ring-hp-blue focus:border-transparent outline-none transition-all"
           />
           {localQuery && (
             <button
@@ -74,7 +74,7 @@ export function SearchBar({
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                   selectedScenario === ""
                     ? "bg-hp-blue text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    : "bg-gray-100 text-academy-black hover:bg-gray-200"
                 }`}
               >
                 全部
@@ -86,7 +86,7 @@ export function SearchBar({
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-1 ${
                     selectedScenario === scenario.id
                       ? "bg-hp-blue text-white"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      : "bg-gray-100 text-academy-black hover:bg-gray-200"
                   }`}
                 >
                   <span>{scenario.icon}</span>
@@ -105,7 +105,7 @@ export function SearchBar({
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                   selectedPlatform === ""
                     ? "bg-gray-800 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    : "bg-gray-100 text-academy-black hover:bg-gray-200"
                 }`}
               >
                 全部
@@ -117,7 +117,7 @@ export function SearchBar({
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-1 ${
                     selectedPlatform === platform.id
                       ? "bg-gray-800 text-white"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      : "bg-gray-100 text-academy-black hover:bg-gray-200"
                   }`}
                   title={platform.description}
                 >
@@ -137,7 +137,7 @@ export function SearchBar({
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                   selectedDifficulty === ""
                     ? "bg-gray-600 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    : "bg-gray-100 text-academy-black hover:bg-gray-200"
                 }`}
               >
                 全部
@@ -149,7 +149,7 @@ export function SearchBar({
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                     selectedDifficulty === level.id
                       ? "bg-gray-600 text-white"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      : "bg-gray-100 text-academy-black hover:bg-gray-200"
                   }`}
                 >
                   {level.name}

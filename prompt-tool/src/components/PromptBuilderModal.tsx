@@ -178,8 +178,8 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
             onChange={(e) => handleFieldChange(field.name, e.target.value)}
             placeholder={placeholder}
             rows={field.rows || 4}
-            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all ${
-              error ? "border-red-300 focus:ring-red-200" : "border-gray-300"
+            className={`w-full px-3 py-2 border rounded-none focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all ${
+              error ? "border-red-300 focus:ring-red-200" : "border-4 border-academy-300"
             }`}
           />
         );
@@ -190,8 +190,8 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
           <select
             value={values[field.name] || ""}
             onChange={(e) => handleFieldChange(field.name, e.target.value)}
-            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all bg-white ${
-              error ? "border-red-300 focus:ring-red-200" : "border-gray-300"
+            className={`w-full px-3 py-2 border rounded-none focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all bg-white ${
+              error ? "border-red-300 focus:ring-red-200" : "border-4 border-academy-300"
             }`}
           >
             <option value="">请选择...</option>
@@ -211,8 +211,8 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
             {/* 选中的值显示 */}
             <div
               onClick={() => toggleMultiselect(field.name)}
-              className={`w-full min-h-[42px] px-3 py-2 border rounded-lg cursor-pointer transition-all ${
-                error ? "border-red-300" : "border-gray-300"
+              className={`w-full min-h-[42px] px-3 py-2 border rounded-none cursor-pointer transition-all ${
+                error ? "border-red-300" : "border-4 border-academy-300"
               } ${
                 expandedMultiselects[field.name] ? "ring-2 ring-hp-blue ring-hp-blue/20" : ""
               }`}
@@ -253,7 +253,7 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
 
             {/* 下拉选项 */}
             {expandedMultiselects[field.name] && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              <div className="absolute z-10 w-full mt-1 bg-white border border-4 border-academy-300 rounded-none shadow-lg max-h-60 overflow-y-auto">
                 {fieldOptions.map((option) => {
                   const isSelected = selectedValues.includes(option.value);
                   return (
@@ -265,7 +265,7 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
                       }`}
                     >
                       <div className={`w-4 h-4 border rounded flex items-center justify-center ${
-                        isSelected ? "bg-hp-blue border-hp-blue" : "border-gray-300"
+                        isSelected ? "bg-hp-blue border-hp-blue" : "border-4 border-academy-300"
                       }`}>
                         {isSelected && (
                           <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -292,8 +292,8 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
             placeholder={placeholder}
             min={field.min}
             max={field.max}
-            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all ${
-              error ? "border-red-300 focus:ring-red-200" : "border-gray-300"
+            className={`w-full px-3 py-2 border rounded-none focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all ${
+              error ? "border-red-300 focus:ring-red-200" : "border-4 border-academy-300"
             }`}
           />
         );
@@ -306,8 +306,8 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
             value={values[field.name] || ""}
             onChange={(e) => handleFieldChange(field.name, e.target.value)}
             placeholder={placeholder}
-            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all ${
-              error ? "border-red-300 focus:ring-red-200" : "border-gray-300"
+            className={`w-full px-3 py-2 border rounded-none focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all ${
+              error ? "border-red-300 focus:ring-red-200" : "border-4 border-academy-300"
             }`}
           />
         );
@@ -320,8 +320,8 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
             value={values[field.name] || ""}
             onChange={(e) => handleFieldChange(field.name, e.target.value)}
             placeholder={placeholder}
-            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all ${
-              error ? "border-red-300 focus:ring-red-200" : "border-gray-300"
+            className={`w-full px-3 py-2 border rounded-none focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all ${
+              error ? "border-red-300 focus:ring-red-200" : "border-4 border-academy-300"
             }`}
           />
         );
@@ -364,8 +364,8 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
             value={values[field.name] || ""}
             onChange={(e) => handleFieldChange(field.name, e.target.value)}
             placeholder={placeholder}
-            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all ${
-              error ? "border-red-300 focus:ring-red-200" : "border-gray-300"
+            className={`w-full px-3 py-2 border rounded-none focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all ${
+              error ? "border-red-300 focus:ring-red-200" : "border-4 border-academy-300"
             }`}
           />
         );
@@ -405,8 +405,8 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
         </button>
 
         {/* 头部 */}
-        <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-hp-blue/5 to-hp-dark/5">
-          <h3 className="text-xl font-bold text-gray-900 mb-1">
+        <div className="p-6 border-b border-4 border-academy-100 bg-gradient-to-r from-hp-blue/5 to-hp-dark/5">
+          <h3 className="text-xl font-bold text-academy-black mb-1">
             填写提示词参数
           </h3>
           <p className="text-sm text-gray-600">
@@ -435,7 +435,7 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
             {/* 右侧：预览 */}
             <div className="lg:sticky lg:top-0">
               <div className="flex items-center justify-between mb-3">
-                <h4 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                <h4 className="text-sm font-semibold text-academy-black flex items-center gap-2">
                   {showPreview ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
                   预览结果
                 </h4>
@@ -448,7 +448,7 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
               </div>
 
               {showPreview && (
-                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                <div className="bg-gray-50 rounded-none p-4 border border-4 border-academy-200">
                   <pre className="whitespace-pre-wrap text-sm text-gray-700 font-mono leading-relaxed break-words">
                     {filledContent}
                   </pre>
@@ -459,7 +459,7 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
               <button
                 onClick={handleCopy}
                 disabled={!validationResult.isValid}
-                className={`w-full mt-4 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all ${
+                className={`w-full mt-4 flex items-center justify-center gap-2 px-4 py-3 rounded-none font-medium transition-all ${
                   validationResult.isValid && inputFields.length > 0
                     ? copied
                       ? "bg-green-100 text-green-700"
@@ -482,7 +482,7 @@ export function PromptBuilderModal({ prompt, isOpen, onClose }: PromptBuilderMod
 
               {/* 验证状态提示 */}
               {inputFields.length > 0 && !validationResult.isValid && (
-                <div className="mt-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                <div className="mt-3 p-3 bg-amber-50 rounded-none border border-amber-200">
                   <p className="text-xs text-amber-700">
                     ⚠️ 请填写所有必填字段后再复制
                   </p>

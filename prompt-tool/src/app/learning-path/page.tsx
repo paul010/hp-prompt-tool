@@ -11,9 +11,9 @@ export default function LearningPathPage() {
   const isZh = language.startsWith('zh');
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-academy-gray-light">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-white border-b border-slate-200">
+      <section className="relative overflow-hidden bg-white border-b-4 border-academy-black">
         {/* 背景装饰 */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-primary-200/20 rounded-full blur-3xl" />
@@ -27,7 +27,7 @@ export default function LearningPathPage() {
             <span>{isZh ? 'HP FY26 数字学院' : 'HP FY26 Digital Academy'}</span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-academy-black mb-6 leading-tight">
             {isZh ? (
               <>
                 AI 能力<span className="gradient-text">认证体系</span>
@@ -38,7 +38,7 @@ export default function LearningPathPage() {
               </>
             )}
           </h1>
-          <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-academy-black mb-10 max-w-3xl mx-auto leading-relaxed">
             {isZh
               ? '从入门到精通，递进式培养 AI 时代人才'
               : 'Progressive AI talent development from beginner to expert'}
@@ -57,10 +57,10 @@ export default function LearningPathPage() {
       {/* 认证体系介绍 */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 lg:py-24">
         <div className="text-center mb-12 lg:mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-academy-black mb-4">
             {isZh ? '三级认证体系' : 'Three-tier Certification System'}
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg text-academy-black max-w-2xl mx-auto">
             {isZh
               ? '针对不同人群和技能水平，设计了递进式的认证体系'
               : 'Progressive certification system designed for different groups and skill levels'}
@@ -75,13 +75,13 @@ export default function LearningPathPage() {
       </section>
 
       {/* 学习路线图 */}
-      <section className="bg-white border-y border-slate-200 py-16 sm:py-20 lg:py-24">
+      <section className="bg-academy-gray-light border-y border-4 border-academy-black py-16 sm:py-20 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12 lg:mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-academy-black mb-4">
               {isZh ? '学习路线图' : 'Learning Roadmap'}
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-lg text-academy-black max-w-2xl mx-auto">
               {isZh
                 ? '三步走，从动手尝试到获得认证'
                 : 'Three steps from hands-on to certification'}
@@ -138,14 +138,14 @@ export default function LearningPathPage() {
                   </div>
 
                   {/* 卡片 */}
-                  <div className={`mt-6 bg-white ${item.bg} border ${item.border} rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 group-hover:-translate-y-1`}>
+                  <div className={`mt-6 bg-academy-gray-light ${item.bg} border ${item.border} rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 group-hover:-translate-y-1`}>
                     <div className={`inline-flex p-3 rounded-xl ${item.iconBg} text-white mb-4 shadow-soft`}>
                       {item.icon}
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-3">
+                    <h3 className="text-xl font-bold text-academy-black mb-3">
                       {isZh ? item.titleZh : item.titleEn}
                     </h3>
-                    <p className="text-slate-600 leading-relaxed">
+                    <p className="text-academy-black leading-relaxed">
                       {isZh ? item.descZh : item.descEn}
                     </p>
                   </div>
@@ -171,7 +171,7 @@ export default function LearningPathPage() {
               <Link
                 key={cert.level}
                 href={`/?difficulty=${cert.prompts.difficulty[0]}`}
-                className="group inline-flex items-center gap-2 px-6 py-3 bg-white text-primary-600 font-bold rounded-full hover:bg-primary-50 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                className="group inline-flex items-center gap-2 px-6 py-3 bg-academy-gray-light text-primary-600 font-bold rounded-full hover:bg-primary-50 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
               >
                 <span>{cert.emoji}</span>
                 <span>Level {cert.level}: {isZh ? cert.nameZh.split('认证')[0] : cert.name}</span>
