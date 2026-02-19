@@ -2,7 +2,6 @@ import { PromptList } from "../components/PromptList";
 import { Hero } from "../components/Hero";
 import { CertificationBanner } from "../components/CertificationBanner";
 import { QuickStart } from "../components/QuickStart";
-import { TabNav } from "../components/TabNav";
 import { loadPrompts } from "../lib/data-loader";
 
 export default async function HomePage() {
@@ -20,12 +19,9 @@ export default async function HomePage() {
       <QuickStart />
 
       {/* 提示词列表 */}
-      <div className="border-t-4 border-academy-black pb-24">
+      <div className="border-t-4 border-academy-black">
         <PromptList prompts={prompts} />
       </div>
-
-      {/* 底部 Tab 导航 */}
-      <TabNav />
     </div>
   );
 }
