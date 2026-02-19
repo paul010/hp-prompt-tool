@@ -129,7 +129,7 @@ export function PromptList({ prompts }: PromptListProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row">
+    <div className="min-h-screen bg-white flex flex-col md:flex-row">
       {/* 侧边栏 - 桌面端显示 */}
       <Sidebar
         selectedScenario={selectedScenario}
@@ -140,7 +140,7 @@ export function PromptList({ prompts }: PromptListProps) {
       {/* 主内容区 */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* 顶部横幅 - AI Summit 2026 主题风格 */}
-        <div className="bg-gradient-to-r from-hp-dark via-hp-blue to-hp-light text-white py-8 sm:py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="bg-academy-black text-white py-8 sm:py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
           {/* 背景装饰 */}
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
@@ -233,7 +233,7 @@ export function PromptList({ prompts }: PromptListProps) {
         <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6 overflow-y-auto">
           {/* 结果统计 */}
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-academy-black">
               {filteredAndSortedPrompts.length > 0
                 ? `找到 ${filteredAndSortedPrompts.length} 个提示词`
                 : "没有找到匹配的提示词"}
@@ -253,7 +253,7 @@ export function PromptList({ prompts }: PromptListProps) {
           ) : (
             <div className="text-center py-16">
               <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">
+              <h3 className="text-xl font-semibold text-academy-black mb-2">
                 没有找到匹配的提示词
               </h3>
               <p className="text-gray-500">
@@ -263,14 +263,14 @@ export function PromptList({ prompts }: PromptListProps) {
           )}
 
           {/* 页脚 */}
-          <footer className="mt-12 pt-8 border-t border-gray-200 bg-gradient-to-r from-hp-blue/5 to-hp-dark/5">
+          <footer className="mt-12 pt-8 border-t border-4 border-academy-black bg-gradient-to-r from-hp-blue/5 to-hp-dark/5">
             <div className="text-center text-sm text-gray-600">
               {/* 品牌标识 */}
               <div className="flex items-center justify-center gap-2 mb-4">
                 <div className="w-8 h-8 bg-hp-blue rounded-lg flex items-center justify-center">
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-lg font-bold text-gray-900">HP FY26 数字学院</span>
+                <span className="text-lg font-bold text-academy-black">HP FY26 数字学院</span>
               </div>
 
               <p className="mb-2">
@@ -300,7 +300,7 @@ export function PromptList({ prompts }: PromptListProps) {
               </p>
 
               {/* AI Summit 标识 */}
-              <div className="mt-4 pt-4 border-t border-gray-200">
+              <div className="mt-4 pt-4 border-t border-4 border-academy-black">
                 <p className="text-xs text-gray-400">
                   🎯 AI Summit 2026 主题：赋能未来工作，安全引领转型
                 </p>

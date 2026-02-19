@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,20 +6,23 @@
 
 @layer base {
   :root {
-    /* Corporate Trust 颜色系统 */
-    --background: 210 40% 98%; /* Slate 50 */
-    --foreground: 222 47% 11%; /* Slate 900 */
+    /* 数字学院色彩系统 */
+    --academy-blue: #0052CC;
+    --academy-pink: #FF1493;
+    --academy-yellow: #FFD700;
+    --academy-black: #1A1A1A;
+    --academy-gray-light: #F5F5F5;
     
     /* 字体变量 */
     --font-plus-jakarta: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
   * {
-    @apply border-slate-200;
+    @apply border-academy-black;
   }
 
   body {
-    @apply bg-slate-50 text-slate-900;
+    @apply bg-white text-academy-black;
     font-family: var(--font-plus-jakarta);
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
@@ -28,16 +31,19 @@
 
   /* 标题层级 */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight;
+    @apply font-black tracking-tight;
+    font-style: italic;
   }
 
   h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl leading-tight;
+    @apply text-5xl md:text-6xl lg:text-7xl leading-tight;
     letter-spacing: -0.02em;
+    transform: skewY(-3deg);
   }
 
   h2 {
     @apply text-3xl md:text-4xl leading-snug;
+    transform: skewY(-2deg);
   }
 
   h3 {
@@ -46,88 +52,116 @@
 }
 
 @layer components {
-  /* Card 组件 - Corporate Trust 风格 */
+  /* Card 组件 - 数字学院风格 */
   .prompt-card {
-    @apply bg-white rounded-xl border border-slate-100 shadow-card hover:shadow-card-hover transition-all duration-200;
+    @apply bg-white border-4 border-academy-black rounded-none transition-all duration-300;
+    box-shadow: 0 8px 16px rgba(26, 26, 26, 0.2), -4px 4px 0 rgba(26, 26, 26, 0.1);
   }
 
   .prompt-card:hover {
-    @apply -translate-y-1;
+    @apply -translate-y-2;
+    box-shadow: 0 16px 32px rgba(26, 26, 26, 0.25), -6px 6px 0 rgba(26, 26, 26, 0.15);
   }
 
   /* 按钮系统 */
   .btn-primary {
-    @apply bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-semibold px-6 py-3 rounded-full shadow-button transition-all duration-200;
+    @apply bg-academy-pink text-white font-black px-8 py-4 border-4 border-academy-black rounded-none shadow-lg transition-all duration-200;
+    font-style: italic;
   }
 
   .btn-primary:hover {
-    @apply -translate-y-0.5 shadow-button;
+    @apply -translate-y-1 shadow-xl;
   }
 
   .btn-secondary {
-    @apply bg-white border-2 border-slate-200 text-slate-700 font-semibold px-6 py-3 rounded-lg transition-all duration-200;
+    @apply bg-white border-4 border-academy-black text-academy-black font-black px-8 py-4 rounded-none transition-all duration-200;
+    font-style: italic;
   }
 
   .btn-secondary:hover {
-    @apply bg-slate-50 border-slate-300;
+    @apply bg-academy-yellow shadow-lg -translate-y-1;
   }
 
-  /* 输入框 - Corporate Trust 风格 */
+  /* 输入框 */
   .input-field {
-    @apply w-full px-4 py-3 bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 focus:border-primary-500 outline-none transition-all;
+    @apply w-full px-4 py-3 bg-white border-4 border-academy-black rounded-none text-academy-black placeholder:text-gray-500 focus:ring-2 focus:ring-academy-pink focus:border-academy-pink outline-none transition-all font-semibold;
   }
 
   /* 标签 */
   .tag {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+    @apply inline-flex items-center px-4 py-2 border-3 border-academy-black rounded-none text-sm font-black bg-academy-yellow;
   }
 
-  /* Feature Card - 3D Isometric 效果 */
+  /* Feature Card - 堆叠风格 */
   .feature-card {
-    @apply bg-white rounded-xl border border-slate-100 p-6 shadow-card transition-all duration-300;
-    transform-style: preserve-3d;
+    @apply bg-white border-4 border-academy-black p-8 rounded-none transition-all duration-300;
+    box-shadow: 0 8px 16px rgba(26, 26, 26, 0.2), -4px 4px 0 rgba(26, 26, 26, 0.1);
   }
 
   .feature-card:hover {
-    @apply shadow-card-hover -translate-y-1;
-    transform: rotateX(2deg) rotateY(-4deg) translateY(-4px);
+    @apply -translate-y-2;
+    box-shadow: 0 16px 32px rgba(26, 26, 26, 0.25), -6px 6px 0 rgba(26, 26, 26, 0.15);
   }
 
   /* 渐变文字 */
   .gradient-text {
-    @apply bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent;
+    @apply text-academy-pink;
+    font-style: italic;
   }
 
   /* Glow Badge */
   .glow-badge {
-    @apply shadow-glow;
+    @apply shadow-lg border-4 border-academy-pink;
+  }
+
+  /* 点阵背景 */
+  .dotted-bg {
+    background-image: radial-gradient(circle, #ddd 1px, transparent 1px);
+    background-size: 20px 20px;
   }
 }
 
-/* Scrollbar styling - Corporate Trust */
+/* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-slate-100;
+  @apply bg-academy-gray-light;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 rounded-full;
+  @apply bg-academy-black rounded-full;
+  border: 3px solid white;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-400;
+  @apply bg-academy-pink;
 }
 
-/* Focus 可见性 - 无障碍 */
+/* Focus 可见性 */
 *:focus-visible {
-  @apply ring-2 ring-primary-500 ring-offset-2 outline-none;
+  @apply ring-4 ring-academy-pink ring-offset-2 outline-none;
 }
 
 /* 选择文本颜色 */
 ::selection {
-  @apply bg-primary-200 text-primary-900;
+  @apply bg-academy-yellow text-academy-black;
+}
+
+/* 倾斜体 + 粗黑 */
+.skew-italic {
+  font-style: italic;
+  transform: skewY(-2deg);
+  font-weight: 900;
+}
+
+/* 堆叠阴影 */
+.stack-shadow {
+  box-shadow: 0 8px 16px rgba(26, 26, 26, 0.2), -4px 4px 0 rgba(26, 26, 26, 0.1);
+}
+
+.stack-shadow:hover {
+  box-shadow: 0 16px 32px rgba(26, 26, 26, 0.25), -6px 6px 0 rgba(26, 26, 26, 0.15);
 }

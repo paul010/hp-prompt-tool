@@ -43,7 +43,7 @@ export function Pagination({
   if (totalPages <= 1) return null;
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200">
+    <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-4 border-academy-200">
       {/* 左侧：显示信息 */}
       <div className="text-sm text-gray-700 hidden sm:block">
         显示 <span className="font-medium">{startItem}</span> 到{" "}
@@ -94,7 +94,7 @@ export function Pagination({
       <select
         value={pageSize}
         onChange={(e) => onPageSizeChange(Number(e.target.value))}
-        className="text-sm border border-gray-300 rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-hp-blue focus:border-transparent"
+        className="text-sm border border-4 border-academy-300 rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-hp-blue focus:border-transparent"
       >
         <option value={12}>12 条/页</option>
         <option value={24}>24 条/页</option>

@@ -177,8 +177,8 @@ export function Combobox({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled}
-          className={`w-full px-3 py-2 pr-20 border rounded-lg focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all bg-white ${
-            error ? "border-red-300 focus:ring-red-200" : "border-gray-300"
+          className={`w-full px-3 py-2 pr-20 border rounded-none focus:outline-none focus:ring-2 focus:ring-hp-blue transition-all bg-white ${
+            error ? "border-red-300 focus:ring-red-200" : "border-4 border-academy-300"
           } ${disabled ? "bg-gray-100 cursor-not-allowed" : ""} ${
             isOpen ? "ring-2 ring-hp-blue/20" : ""
           }`}
@@ -220,7 +220,7 @@ export function Combobox({
       {isOpen && filteredOptions.length > 0 && (
         <ul
           ref={listRef}
-          className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+          className="absolute z-10 w-full mt-1 bg-white border border-4 border-academy-300 rounded-none shadow-lg max-h-60 overflow-y-auto"
         >
           {filteredOptions.map((option, index) => (
             <li
@@ -242,7 +242,7 @@ export function Combobox({
 
       {/* 无结果提示 */}
       {isOpen && inputValue && filteredOptions.length === 0 && allowCustomInput && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg px-3 py-2">
+        <div className="absolute z-10 w-full mt-1 bg-white border border-4 border-academy-300 rounded-none shadow-lg px-3 py-2">
           <p className="text-sm text-gray-500">
             使用自定义值: <span className="font-medium text-gray-700">"{inputValue}"</span>
           </p>
@@ -263,7 +263,7 @@ export function Combobox({
               className={`px-2 py-1 text-xs rounded-full border transition-all ${
                 value === option.value
                   ? "bg-hp-blue text-white border-hp-blue"
-                  : "bg-gray-50 text-gray-600 border-gray-200 hover:border-hp-blue hover:text-hp-blue"
+                  : "bg-gray-50 text-gray-600 border-4 border-academy-200 hover:border-hp-blue hover:text-hp-blue"
               }`}
             >
               {option.label}

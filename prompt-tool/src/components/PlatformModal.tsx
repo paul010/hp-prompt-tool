@@ -52,8 +52,8 @@ export function PlatformModal({ prompt, isOpen, onClose }: PlatformModalProps) {
         </button>
 
         {/* 头部 */}
-        <div className="p-6 border-b border-gray-100">
-          <h3 className="text-xl font-bold text-gray-900 mb-2">
+        <div className="p-6 border-b border-4 border-academy-100">
+          <h3 className="text-xl font-bold text-academy-black mb-2">
             选择 AI 平台
           </h3>
           <p className="text-gray-600 text-sm">
@@ -72,20 +72,20 @@ export function PlatformModal({ prompt, isOpen, onClose }: PlatformModalProps) {
                 <button
                   key={platform.id}
                   onClick={() => handleSelect(platform.id)}
-                  className="w-full flex items-center gap-4 p-4 rounded-xl border-2 hover:border-hp-blue transition-all group"
+                  className="w-full flex items-center gap-4 p-4 rounded-none border-2 hover:border-hp-blue transition-all group"
                   style={{
                     borderColor: isRecommended ? platform.color : "#e5e7eb",
                   }}
                 >
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
+                    className="w-12 h-12 rounded-none flex items-center justify-center text-2xl"
                     style={{ backgroundColor: platform.color + "20" }}
                   >
                     {platform.icon}
                   </div>
                   <div className="flex-1 text-left">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-semibold text-gray-900">
+                      <span className="font-semibold text-academy-black">
                         {platform.name}
                       </span>
                       {isRecommended && (

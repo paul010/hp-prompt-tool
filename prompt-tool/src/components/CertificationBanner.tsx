@@ -9,24 +9,28 @@ export function CertificationBanner() {
   const isZh = language.startsWith('zh');
 
   return (
-    <section className="bg-white border-y border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <div className="group flex flex-col md:flex-row items-center justify-between gap-6 p-6 md:p-8 bg-gradient-to-r from-primary-50 to-secondary-50 rounded-xl border border-primary-100 shadow-card hover:shadow-card-hover transition-all duration-300">
+    <section className="border-t-4 border-b-4 border-academy-black bg-academy-yellow">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <div className="group flex flex-col md:flex-row items-center justify-between gap-6 p-8 md:p-12 bg-academy-yellow border-4 border-academy-black rounded-none"
+          style={{
+            boxShadow: '0 12px 24px rgba(26,26,26,0.2), -6px 6px 0 rgba(26,26,26,0.15)',
+          }}>
           {/* 左侧内容 */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             {/* 图标 */}
-            <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-primary-600 to-secondary-600 rounded-xl flex items-center justify-center shadow-button">
-              <Award className="w-7 h-7 text-white" />
+            <div className="flex-shrink-0 w-16 h-16 bg-academy-black border-4 border-academy-pink rounded-none flex items-center justify-center">
+              <Award className="w-8 h-8 text-academy-yellow" />
             </div>
 
             {/* 文字 */}
             <div>
-              <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-1">
-                {isZh ? 'HP FY26 数字学院' : 'HP FY26 Digital Academy'}
+              <h2 className="text-2xl md:text-3xl font-black text-academy-black mb-2"
+                style={{ fontStyle: 'italic' }}>
+                {isZh ? 'HP FY26 數字學院' : 'HP FY26 Digital Academy'}
               </h2>
-              <p className="text-slate-600 text-sm font-medium">
+              <p className="text-academy-black text-base font-bold">
                 {isZh
-                  ? '获得专业认证徽章，释放 AI 价值'
+                  ? '獲得專業認證徽章，釋放 AI 價值'
                   : 'Earn professional badges and unleash AI power'}
               </p>
             </div>
@@ -35,10 +39,11 @@ export function CertificationBanner() {
           {/* 右侧按钮 */}
           <Link
             href="/learning-path"
-            className="group/btn flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-bold rounded-full shadow-button hover:-translate-y-0.5 hover:shadow-button transition-all duration-200 whitespace-nowrap"
+            className="group/btn flex items-center gap-3 px-8 py-4 bg-academy-pink text-white font-black border-4 border-academy-black rounded-none shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-200 whitespace-nowrap"
+            style={{ fontStyle: 'italic' }}
           >
-            <span>{isZh ? '了解认证体系' : 'Learn More'}</span>
-            <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+            <span>{isZh ? '了解認證' : 'Learn More'}</span>
+            <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-2 transition-transform" />
           </Link>
         </div>
       </div>

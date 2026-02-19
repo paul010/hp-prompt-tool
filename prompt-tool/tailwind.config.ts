@@ -11,6 +11,12 @@ const config: Config = {
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        // 数字学院主色系 (PathUnfold 风格)
+        'academy-blue': '#0052CC',
+        'academy-pink': '#FF1493',
+        'academy-yellow': '#FFD700',
+        'academy-black': '#1A1A1A',
+        'academy-gray-light': '#F5F5F5',
         // Corporate Trust 主色调
         primary: {
           50: '#eef2ff',

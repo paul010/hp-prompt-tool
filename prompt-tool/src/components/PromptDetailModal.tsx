@@ -183,13 +183,13 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
         </button>
 
         {/* 头部 */}
-        <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-hp-blue/5 to-hp-dark/5">
+        <div className="p-6 border-b border-4 border-academy-100 bg-gradient-to-r from-hp-blue/5 to-hp-dark/5">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-hp-blue to-hp-dark flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
+            <div className="w-12 h-12 rounded-none bg-gradient-to-br from-hp-blue to-hp-dark flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
               {displayName.charAt(0)}
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="text-xl font-bold text-gray-900 mb-1">
+              <h3 className="text-xl font-bold text-academy-black mb-1">
                 {displayName}
               </h3>
               <p className="text-sm text-gray-600">{displayDescription}</p>
@@ -219,7 +219,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
         {/* 可滚动内容区 */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {canRenderImage && (
-            <div className="overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
+            <div className="overflow-hidden rounded-none border border-4 border-academy-100 bg-gray-50">
               <img
                 src={prompt.imageUrl}
                 alt={prompt.imageAlt || displayName}
@@ -231,7 +231,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
           )}
           {/* 使用场景 */}
           <div>
-            <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+            <h4 className="text-sm font-semibold text-academy-black mb-3 flex items-center gap-2">
               <LightbulbOff className="w-4 h-4 text-yellow-500" />
               使用场景案例
             </h4>
@@ -239,7 +239,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
               {useScenarios.map((scenario, index) => (
                 <div
                   key={index}
-                  className="flex items-start gap-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-100"
+                  className="flex items-start gap-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-none border border-blue-100"
                 >
                   <div className="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
                     {index + 1}
@@ -253,7 +253,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
           {/* 提示词内容 */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+              <h4 className="text-sm font-semibold text-academy-black flex items-center gap-2">
                 <BookOpenCheck className="w-4 h-4 text-blue-500" />
                 提示词内容
               </h4>
@@ -261,7 +261,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
                 {hasInputFields && (
                   <button
                     onClick={() => setShowBuilderModal(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 transition-all"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-none bg-purple-50 text-purple-700 hover:bg-purple-100 transition-all"
                   >
                     <Settings className="w-3.5 h-3.5" />
                     填写参数
@@ -269,7 +269,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
                 )}
                 <button
                   onClick={handleCopy}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-none transition-all ${
                     copied
                       ? "bg-green-100 text-green-700"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -289,7 +289,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
                 </button>
               </div>
             </div>
-            <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+            <div className="bg-gray-50 rounded-none p-4 border border-4 border-academy-200">
               <pre className="whitespace-pre-wrap text-sm text-gray-700 font-mono leading-relaxed">
                 {displayContent}
               </pre>
@@ -297,7 +297,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
           </div>
 
           {/* 使用建议 */}
-          <div className="p-4 bg-amber-50 rounded-xl border border-amber-200">
+          <div className="p-4 bg-amber-50 rounded-none border border-amber-200">
             <h5 className="text-sm font-semibold text-amber-800 mb-2">💡 使用建议</h5>
             <ul className="text-xs text-amber-700 space-y-1">
               <li>• 根据具体需求调整提示词中的细节参数</li>
@@ -309,7 +309,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
         </div>
 
         {/* 底部操作栏 */}
-        <div className="p-4 border-t border-gray-100 bg-gray-50">
+        <div className="p-4 border-t border-4 border-academy-100 bg-gray-50">
           <div className="flex items-center justify-between">
             <span className="text-sm text-gray-600">在 AI 平台中使用：</span>
             <div className="flex gap-2">
@@ -317,11 +317,11 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
                 <button
                   key={platform.id}
                   onClick={() => handlePlatformOpen(platform.id)}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-gray-200 hover:border-hp-blue hover:bg-white transition-all group"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-none border-2 border-4 border-academy-200 hover:border-hp-blue hover:bg-white transition-all group"
                   title={platform.description}
                 >
                   <span className="text-lg">{platform.icon}</span>
-                  <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                  <span className="text-sm font-medium text-gray-700 group-hover:text-academy-black">
                     {platform.name}
                   </span>
                   <ExternalLink className="w-3.5 h-3.5 text-gray-400 group-hover:text-hp-blue" />
@@ -334,7 +334,7 @@ export function PromptDetailModal({ prompt, isOpen, onClose }: PromptDetailModal
                       window.open(getPlatformUrl(p.id, displayContent), "_blank")
                     );
                   }}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-dashed border-gray-300 hover:border-hp-blue transition-all text-sm text-gray-500"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-none border-2 border-dashed border-4 border-academy-300 hover:border-hp-blue transition-all text-sm text-gray-500"
                 >
                   更多平台
                 </button>

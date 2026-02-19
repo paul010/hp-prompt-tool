@@ -2,14 +2,15 @@ import { PromptList } from "../components/PromptList";
 import { Hero } from "../components/Hero";
 import { CertificationBanner } from "../components/CertificationBanner";
 import { QuickStart } from "../components/QuickStart";
+import { TabNav } from "../components/TabNav";
 import { loadPrompts } from "../lib/data-loader";
 
 export default async function HomePage() {
   const prompts = await loadPrompts();
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Hero 区域 - Corporate Trust 风格 */}
+    <div className="min-h-screen bg-white">
+      {/* Hero 区域 - 数字学院风格 */}
       <Hero />
 
       {/* 认证横幅 */}
@@ -19,9 +20,12 @@ export default async function HomePage() {
       <QuickStart />
 
       {/* 提示词列表 */}
-      <div className="bg-white border-t border-slate-200">
+      <div className="border-t-4 border-academy-black pb-24">
         <PromptList prompts={prompts} />
       </div>
+
+      {/* 底部 Tab 导航 */}
+      <TabNav />
     </div>
   );
 }
