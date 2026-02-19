@@ -112,7 +112,32 @@ export default function ModulesPage() {
                 </div>
               </div>
 
-              {/* Prerequisites */}
+              {/* Video Player */}
+              {currentModule.video?.youtubeId && (
+                <div className="mb-8">
+                  <h3 className="text-lg font-black text-academy-black mb-3 border-b-4 border-academy-pink pb-2">
+                    🎬 课程视频
+                  </h3>
+                  <div className="relative w-full bg-black rounded-sm overflow-hidden" style={{ paddingBottom: '56.25%' }}>
+                    <iframe
+                      className="absolute top-0 left-0 w-full h-full border-2 border-academy-black"
+                      src={`https://www.youtube.com/embed/${currentModule.video.youtubeId}?cc_load_policy=1&hl=zh-CN`}
+                      title={currentModule.video.title || currentModule.title}
+                      allowFullScreen
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    />
+                  </div>
+                  {currentModule.video.subtitleUrl && (
+                    <p className="text-xs text-gray-600 mt-2">
+                      💡 <a href={currentModule.video.subtitleUrl} className="text-academy-blue hover:underline">
+                        下载字幕文件
+                      </a>
+                    </p>
+                  )}
+                </div>
+              )}
+
+
               <div className="mb-8">
                 <h3 className="text-lg font-black text-academy-black mb-3 border-b-4 border-academy-pink pb-2">
                   📋 前置条件

@@ -22,6 +22,12 @@ export interface Module {
     url?: string;
   }[];
   keyPrompts: string[];
+  video?: {
+    youtubeId?: string;
+    biliBiliId?: string;
+    title?: string;
+    subtitleUrl?: string;
+  };
 }
 
 export const m365Modules: Module[] = [
