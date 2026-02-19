@@ -1,11 +1,27 @@
 "use client";
 
+import Link from "next/link";
 import { Zap, BookOpenCheck } from "lucide-react";
 import { LanguageSelector } from "./LanguageSelector";
 
 export function Header() {
   return (
     <header className="bg-academy-blue text-white border-b-4 border-academy-black">
+      {/* Navigation Bar */}
+      <nav className="bg-academy-black border-b-4 border-academy-yellow">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex gap-8">
+          <Link href="/" className="text-white font-black hover:text-academy-yellow transition-colors">
+            📚 提示词库
+          </Link>
+          <Link href="/learning-path" className="text-white font-black hover:text-academy-yellow transition-colors">
+            🎓 学习路线
+          </Link>
+          <Link href="/modules" className="text-white font-black hover:text-academy-yellow transition-colors">
+            📖 M365 课程
+          </Link>
+        </div>
+      </nav>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex items-center justify-between">
           <div>
