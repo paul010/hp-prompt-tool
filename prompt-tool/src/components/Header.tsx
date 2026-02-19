@@ -1,55 +1,64 @@
 "use client";
 
-import { Sparkles, BookOpenCheck } from "lucide-react";
+import { Zap, BookOpenCheck } from "lucide-react";
 import { LanguageSelector } from "./LanguageSelector";
 
 export function Header() {
   return (
-    <header className="bg-gradient-to-r from-hp-blue to-hp-dark text-white">
+    <header className="bg-academy-blue text-white border-b-4 border-academy-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex items-center justify-between">
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur">
-                <Sparkles className="w-7 h-7" />
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-14 h-14 bg-academy-yellow text-academy-blue border-4 border-academy-black flex items-center justify-center rounded-none" style={{
+                boxShadow: '0 4px 0 rgba(26,26,26,0.3)',
+              }}>
+                <Zap className="w-8 h-8 font-black" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold">HP FY26 数字学院</h1>
-                <p className="text-white/80 text-sm">AI 提示词库工具</p>
+                <h1 className="text-4xl font-black text-white" style={{ fontStyle: 'italic' }}>
+                  用 AI 發電
+                </h1>
+                <p className="text-blue-100 text-sm font-bold">
+                  FY26 數字學院 · AI 提示詞庫
+                </p>
               </div>
             </div>
-            <p className="text-white/90 max-w-2xl text-lg leading-relaxed">
-              精选企业级 AI 提示词模板，一键复制，智能推荐 AI 平台。
+            <p className="text-white/95 max-w-2xl text-lg leading-relaxed font-semibold">
+              精選 1342+ 企業級 AI 提示詞模板，安全·實用·有目的。
               <br />
-              让 ChatGPT、Claude、Gemini 等成为你的高效工作助手。
+              一鍵複製，讓 ChatGPT、Claude、Gemini 成為你的高效工作助手。
             </p>
           </div>
           <div className="hidden md:block">
-            <div className="bg-white/10 backdrop-blur rounded-2xl p-6 text-center">
-              <div className="text-5xl font-bold mb-2">70+</div>
-              <div className="text-white/80 text-sm">OpenAI 官方提示词</div>
+            <div className="bg-academy-yellow text-academy-blue border-4 border-academy-black rounded-none p-6 text-center font-black"
+              style={{
+                boxShadow: '0 8px 0 rgba(26,26,26,0.2), -4px 4px 0 rgba(26,26,26,0.1)',
+              }}>
+              <div className="text-5xl font-black mb-2">1342+</div>
+              <div className="text-academy-black text-sm font-black">提示詞</div>
             </div>
           </div>
         </div>
 
         {/* 特性标签 */}
         <div className="flex flex-wrap items-center gap-3 mt-8">
-          <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
+          <div className="flex items-center gap-2 bg-white/20 px-4 py-2 border-3 border-white rounded-none font-bold">
             <BookOpenCheck className="w-4 h-4" />
             <span className="text-sm">即用即走</span>
           </div>
-          <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
-            <Sparkles className="w-4 h-4" />
-            <span className="text-sm">智能平台推荐</span>
+          <div className="flex items-center gap-2 bg-academy-pink px-4 py-2 border-3 border-white rounded-none font-bold">
+            <Zap className="w-4 h-4" />
+            <span className="text-sm">安全合規</span>
           </div>
-          <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
-            <span className="text-sm">多场景覆盖</span>
+          <div className="flex items-center gap-2 bg-white/20 px-4 py-2 border-3 border-white rounded-none font-bold">
+            <span className="text-sm">12+ 場景</span>
           </div>
-          <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
-            <span className="text-sm">多语言支持</span>
+          <div className="flex items-center gap-2 bg-white/20 px-4 py-2 border-3 border-white rounded-none font-bold">
+            <span className="text-sm">多語言支援</span>
           </div>
           {/* 语言选择器 */}
-          <LanguageSelector className="bg-white/10 backdrop-blur px-3 py-2 rounded-full" />
+          <LanguageSelector className="bg-academy-yellow text-academy-blue border-3 border-white px-3 py-2 rounded-none font-bold" />
         </div>
       </div>
     </header>
