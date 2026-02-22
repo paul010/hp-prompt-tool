@@ -1,9 +1,0 @@
-{
-  "monorepo": true,
-  "projects": {
-    "prompt-tool": {
-      "root": "prompt-tool",
-      "alias": "prompt-tool"
-    }
-  }
-}
