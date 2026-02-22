@@ -1,4 +1,5 @@
 {
-  "framework": "nextjs",
-  "rootDirectory": "prompt-tool"
+  "buildCommand": "cd prompt-tool && npm run build",
+  "installCommand": "npm install && cd prompt-tool && npm install",
+  "outputDirectory": "prompt-tool/.next"
 }
