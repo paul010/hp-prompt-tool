@@ -18,157 +18,84 @@ export function Hero() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-academy-gray-light via-white to-academy-gray-light">
-      {/* 点阵背景 */}
-      <div className="absolute inset-0 opacity-30" style={{
-        backgroundImage: 'radial-gradient(circle, #ddd 1px, transparent 1px)',
-        backgroundSize: '20px 20px',
-      }} />
+    <section className="relative overflow-hidden bg-white">
+      {/* 主内容 - Swiss 布局：单列 + 无边框 + 聚焦排版 */}
+      <div className="max-w-2xl mx-auto px-8 sm:px-12 py-24 sm:py-32 lg:py-48">
+        {/* 前导标签 - 清晰但次要 */}
+        <div className="mb-12">
+          <p className="text-sm font-medium tracking-widest text-gray-600 uppercase">
+            {isZh ? 'HP 數字學院 FY26' : 'HP Digital Academy FY26'}
+          </p>
+        </div>
 
-      {/* 主内容 */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-40">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* 左侧：文字内容 */}
-          <div className="text-center lg:text-left">
-            {/* 徽章 */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 bg-white border-4 border-academy-black rounded-none text-academy-black text-sm font-extrabold shadow-lg">
-              <Zap className="w-4 h-4 text-academy-yellow" />
-              <span>{isZh ? '用AI發電 FY26' : 'AI Generator FY26'}</span>
+        {/* 主标题 - 超大、粗黑、简洁 */}
+        <h1 className="text-7xl sm:text-8xl lg:text-9xl font-black text-black leading-[0.95] mb-12"
+          style={{ 
+            fontWeight: 900,
+            letterSpacing: '-0.02em',
+          }}>
+          {isZh ? (
+            <>用AI<br/>拉想法</>
+          ) : (
+            <>Turn ideas<br/>into action</>
+          )}
+        </h1>
+
+        {/* 副标题 - 较大但轻量 */}
+        <p className="text-xl sm:text-2xl text-gray-600 font-light leading-relaxed mb-16 max-w-xl">
+          {isZh ? (
+            'HP 提示词工程學院。一站式探索 AI 驅動的工作方式，專為企業和個人設計。'
+          ) : (
+            'Discover AI-powered prompting strategies. Curated for enterprise and personal growth.'
+          )}
+        </p>
+
+        {/* 搜索框 - 簡約、無邊框 */}
+        <form onSubmit={handleSearch} className="mb-12">
+          <div className="flex gap-3">
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                placeholder={isZh ? '搜索提示詞...' : 'Search prompts...'}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-gray-50 text-base font-medium placeholder-gray-400 py-4 px-0 border-b-2 border-black focus:outline-none focus:bg-white transition"
+              />
             </div>
-
-            {/* 主标题 - 倾斜体，大胆 */}
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-academy-black mb-8 leading-tight"
-              style={{ 
-                fontStyle: 'italic',
-                transform: 'skewY(-3deg)',
-                textShadow: '2px 2px 0 rgba(0,0,0,0.1)',
-              }}>
-              {isZh ? (
-                <>
-                  用AI<span className="text-academy-pink">拉想法</span>
-                  <br/>
-                  變成<span className="text-academy-yellow">現實</span>
-                </>
-              ) : (
-                <>
-                  Use AI to turn <span className="text-academy-pink">ideas</span>
-                  <br />
-                  into <span className="text-academy-yellow">reality</span>
-                </>
-              )}
-            </h1>
-
-            {/* 副标题 */}
-            <p className="text-lg sm:text-xl text-academy-black mb-12 max-w-xl mx-auto lg:mx-0 leading-relaxed font-semibold">
-              {isZh
-                ? '精選 1342+ 企業場景 AI 提示詞，全員參與，安全·實用·有目的'
-                : 'Select 1342+ enterprise AI prompts, safe, practical, purposeful'}
-            </p>
-
-            {/* CTA 按钮组 */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-16">
-              <Link
-                href="/learning-path"
-                className="group inline-flex items-center gap-2 px-8 py-4 bg-academy-pink text-white font-black border-4 border-academy-black rounded-none shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-200"
-                style={{ fontStyle: 'italic' }}
-              >
-                <Target className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                <span>{isZh ? '查看學習路線' : 'View Learning Path'}</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-              </Link>
-              <Link
-                href="/?difficulty=入門"
-                className="group inline-flex items-center gap-2 px-8 py-4 bg-white text-academy-black font-black border-4 border-academy-black rounded-none hover:bg-academy-yellow transition-all duration-200"
-                style={{ fontStyle: 'italic' }}
-              >
-                <Zap className="w-5 h-5 group-hover:scale-125 transition-transform" />
-                <span>{isZh ? '立即開始' : 'Get Started'}</span>
-              </Link>
-            </div>
-
-            {/* 统计数据 - 粗体卡片风格 */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto lg:mx-0">
-              {[
-                { label: isZh ? '提示詞' : 'Prompts', value: '1342+', icon: '📋' },
-                { label: isZh ? '場景' : 'Scenarios', value: '12+', icon: '🎯' },
-                { label: isZh ? '學員' : 'Students', value: '215+', icon: '👥' },
-                { label: 'ROI', value: '¥1176萬', icon: '💰' },
-              ].map((stat) => (
-                <div key={stat.label} className="bg-white border-4 border-academy-black rounded-none p-4 shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-200">
-                  <div className="text-3xl mb-2">{stat.icon}</div>
-                  <div className="text-2xl sm:text-3xl font-black text-academy-black mb-1">
-                    {stat.value}
-                  </div>
-                  <div className="text-xs text-academy-black font-bold">{stat.label}</div>
-                </div>
-              ))}
-            </div>
+            <button
+              type="submit"
+              className="bg-black text-white px-8 py-4 font-black text-base hover:bg-gray-900 transition"
+            >
+              {isZh ? '搜尋' : 'Search'}
+            </button>
           </div>
+        </form>
 
-          {/* 右侧：搜索框 + 热门场景 */}
-          <div className="relative">
-            {/* 卡片容器 - 粗黑边框 */}
-            <div className="relative bg-white border-4 border-academy-black rounded-none p-8 shadow-lg"
-              style={{
-                boxShadow: '0 12px 24px rgba(0,0,0,0.1), -8px 8px 0 rgba(26,26,26,0.5)',
-              }}>
-              
-              {/* 搜索栏 */}
-              <form onSubmit={handleSearch} className="mb-8">
-                <label className="block text-sm font-black text-academy-black mb-3"
-                  style={{ fontStyle: 'italic' }}>
-                  {isZh ? '🔍 快速搜索提示詞' : '🔍 Quick Search'}
-                </label>
-                <div className="relative mb-4">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Search className="w-5 h-5 text-academy-black" />
-                  </div>
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder={isZh ? '搜索提示詞、場景、標籤...' : 'Search prompts, scenarios, tags...'}
-                    className="w-full pl-12 pr-4 py-3 border-4 border-academy-black rounded-none font-semibold text-academy-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-academy-pink"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full px-6 py-3 bg-academy-pink text-white font-black border-4 border-academy-black rounded-none shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-200"
-                  style={{ fontStyle: 'italic' }}
-                >
-                  {isZh ? '搜索' : 'Search'}
-                </button>
-              </form>
+        {/* CTA 按鈕 - 清晰層級 */}
+        <div className="flex gap-4 flex-wrap">
+          <Link
+            href="#prompts"
+            className="bg-black text-white px-8 py-4 font-black text-base hover:bg-gray-900 transition inline-block"
+          >
+            {isZh ? '瀏覽全部提示詞' : 'Explore Prompts'}
+          </Link>
+          <Link
+            href="/learning-path"
+            className="bg-gray-100 text-black px-8 py-4 font-black text-base border-b border-black hover:bg-gray-200 transition inline-block"
+          >
+            {isZh ? '學習路徑' : 'Learning Path'}
+          </Link>
+        </div>
 
-              {/* 快速入口 - 热门场景 */}
-              <div className="space-y-4">
-                <div className="text-sm font-black text-academy-black mb-4"
-                  style={{ fontStyle: 'italic' }}>
-                  🎯 {isZh ? '熱門場景' : 'Popular Scenarios'}
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  {[
-                    { label: isZh ? '文案創作' : 'Copywriting', href: '/?scenario=文案创作' },
-                    { label: isZh ? '數據分析' : 'Analysis', href: '/?scenario=数据分析' },
-                    { label: isZh ? '代碼輔助' : 'Coding', href: '/?scenario=代码辅助' },
-                    { label: isZh ? '會議助手' : 'Meetings', href: '/?scenario=会议助手' },
-                  ].map((item) => (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      className="inline-flex items-center px-4 py-2 bg-academy-yellow text-academy-black font-black border-4 border-academy-black rounded-none hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
-                      style={{ fontStyle: 'italic' }}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* 装饰角标 */}
-            <div className="absolute -bottom-6 -right-6 w-24 h-24 border-4 border-academy-black rounded-none opacity-30" />
-          </div>
+        {/* 底部說明 - 輕量文案 */}
+        <div className="mt-20 pt-12 border-t border-gray-200">
+          <p className="text-sm text-gray-500 font-light">
+            {isZh ? (
+              '精選 1000+ 高價值提示詞。由 HP AI 產品經理、數據科學家與工程師共同設計。'
+            ) : (
+              '1000+ curated prompts for modern workflows. Built for enterprises and creators.'
+            )}
+          </p>
         </div>
       </div>
     </section>
