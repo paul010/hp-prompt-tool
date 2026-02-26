@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { Prompt, InputField } from "../lib/types";
-import { Copy, ChevronDown, ChevronUp, Eye, Award, Settings } from "lucide-react";
+import { Copy, ChevronDown, ChevronUp, Eye, Award, Settings, Palette } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
 import { AI_PLATFORMS, getPlatformUrl, getRecommendedPlatforms } from "../lib/platforms";
 import { PlatformModal } from "./PlatformModal";
@@ -15,6 +15,16 @@ import { shouldRenderPromptImage } from "../lib/promptImageUtils";
 interface PromptCardProps {
   prompt: Prompt;
   compact?: boolean;
+}
+
+// 模型名称显示映射
+function getModelDisplayName(model: string): string {
+  const modelNames: Record<string, string> = {
+    "midjourney": "Midjourney",
+    "dalle": "DALL-E 3",
+    "stable-diffusion": "Stable Diffusion"
+  };
+  return modelNames[model] || model;
 }
 
 export function PromptCard({ prompt, compact = false }: PromptCardProps) {
@@ -39,14 +49,20 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
   }, [prompt.name, prompt.nameZh, language]);
 
   const displayDescription = useMemo(() => {
-    if (typeof prompt.description === "string") return prompt.description;
+    if (typeof prompt.description === "string") {
+      // 添加对中文翻译的支持
+      return language.startsWith("zh") ? (prompt.descriptionZh || prompt.description) : prompt.description;
+    }
     return getLocalized(prompt.description, language);
-  }, [prompt.description, language]);
+  }, [prompt.description, prompt.descriptionZh, language]);
 
   const displayContent = useMemo(() => {
-    if (typeof prompt.content === "string") return prompt.content;
+    if (typeof prompt.content === "string") {
+      // 添加对中文翻译的支持
+      return language.startsWith("zh") ? (prompt.contentZh || prompt.content) : prompt.content;
+    }
     return getLocalized(prompt.content, language);
-  }, [prompt.content, language]);
+  }, [prompt.content, prompt.contentZh, language]);
 
   // 获取 inputFields（兼容新格式和旧格式）
   const inputFields = useMemo(() => {
@@ -96,6 +112,23 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
             />
           </div>
         )}
+        {/* 图像提示词专用徽章 */}
+        {prompt.promptType === "image" && prompt.imagePromptMetadata && (
+          <div className="flex flex-wrap items-center gap-1.5 mb-3">
+            <span className="px-2 py-0.5 text-xs bg-gradient-to-r from-pink-100 to-rose-100 text-pink-700 rounded-full flex items-center gap-1">
+              <Palette className="w-3 h-3" />
+              文生图
+            </span>
+            <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-700 rounded">
+              {getModelDisplayName(prompt.imagePromptMetadata.model)}
+            </span>
+            {prompt.imagePromptMetadata.aspectRatio && (
+              <span className="px-2 py-0.5 text-xs text-gray-500">
+                {prompt.imagePromptMetadata.aspectRatio}
+              </span>
+            )}
+          </div>
+        )}
         <div className="flex items-start gap-3 mb-3">
           <div className="flex-1 min-w-0">
             <h3 className="text-base font-semibold text-gray-900 truncate">
@@ -125,14 +158,20 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
               OpenAI官方
             </span>
           )}
-          {prompt.tags.filter(t => t !== "OpenAI官方").slice(0, 2).map((tag) => (
+          {prompt.source === "prompts.chat" && (
+            <span className="px-2 py-0.5 text-xs bg-gradient-to-r from-violet-100 to-purple-100 text-violet-700 rounded flex items-center gap-1">
+              <Palette className="w-3 h-3" />
+              prompts.chat
+            </span>
+          )}
+          {prompt.tags.filter(t => t !== "OpenAI官方" && t !== "文生图").slice(0, 2).map((tag) => (
             <span key={tag} className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded">
               {tag}
             </span>
           ))}
-          {prompt.tags.filter(t => t !== "OpenAI官方").length > 2 && (
+          {prompt.tags.filter(t => t !== "OpenAI官方" && t !== "文生图").length > 2 && (
             <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-500 rounded">
-              +{prompt.tags.filter(t => t !== "OpenAI官方").length - 2}
+              +{prompt.tags.filter(t => t !== "OpenAI官方" && t !== "文生图").length - 2}
             </span>
           )}
         </div>
@@ -219,6 +258,23 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
           />
         </div>
       )}
+      {/* 图像提示词专用徽章 */}
+      {prompt.promptType === "image" && prompt.imagePromptMetadata && (
+        <div className="flex flex-wrap items-center gap-2 mb-4">
+          <span className="px-2.5 py-1 text-xs bg-gradient-to-r from-pink-100 to-rose-100 text-pink-700 rounded-full flex items-center gap-1.5 font-medium">
+            <Palette className="w-3.5 h-3.5" />
+            文生图
+          </span>
+          <span className="px-2.5 py-1 text-xs bg-gray-100 text-gray-700 rounded font-medium">
+            {getModelDisplayName(prompt.imagePromptMetadata.model)}
+          </span>
+          {prompt.imagePromptMetadata.aspectRatio && (
+            <span className="px-2.5 py-1 text-xs text-gray-500">
+              宽高比: {prompt.imagePromptMetadata.aspectRatio}
+            </span>
+          )}
+        </div>
+      )}
       {/* 头部：标题和标签 */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
@@ -236,7 +292,13 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
                 OpenAI官方
               </span>
             )}
-            {prompt.tags.filter(t => t !== "OpenAI官方").map((tag) => (
+            {prompt.source === "prompts.chat" && (
+              <span className="tag bg-gradient-to-r from-violet-100 to-purple-100 text-violet-700 flex items-center gap-1">
+                <Palette className="w-3 h-3" />
+                prompts.chat
+              </span>
+            )}
+            {prompt.tags.filter(t => t !== "OpenAI官方" && t !== "文生图").map((tag) => (
               <span key={tag} className="tag bg-gray-100 text-gray-600">
                 {tag}
               </span>

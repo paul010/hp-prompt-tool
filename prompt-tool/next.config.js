@@ -8,9 +8,10 @@ const nextConfig = {
   staticPageGenerationTimeout: 120,
   
   // ✅ 禁用 ISR 缓存以避免 3.9MB CSV 缓存问题
-  onDemandISRRevalidate: {
-    maxDuration: 60,
-  },
+  // 注意：onDemandISRRevalidate 已在最新版本中移除
+  // onDemandISRRevalidate: {
+  //   maxDuration: 60,
+  // },
   
   // ✅ 优化图片处理
   images: {

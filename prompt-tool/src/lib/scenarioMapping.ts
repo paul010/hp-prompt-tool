@@ -1,6 +1,6 @@
 // ============================================================
 // Scenario Category Mapping Utilities
-// 简化的8个核心分类映射
+// 简化的9个核心分类映射（含图像生成）
 // ============================================================
 
 import { BusinessScenario } from "./types";
@@ -80,7 +80,7 @@ export function isValidScenario(category: string): category is BusinessScenario 
 }
 
 /**
- * 获取所有8个核心场景
+ * 获取所有9个核心场景
  */
 export function getAllScenarios(): BusinessScenario[] {
   return [
@@ -92,6 +92,7 @@ export function getAllScenarios(): BusinessScenario[] {
     "学习成长",
     "演示汇报",
     "商务决策",
+    "图像生成",
   ];
 }
 
@@ -154,6 +155,10 @@ export function getScenarioMetadata(scenario: BusinessScenario): ScenarioMetadat
     "商务决策": {
       id: "商务决策",
       aliases: ["决策", "战略", "分析", "高管", "产品"],
+    },
+    "图像生成": {
+      id: "图像生成",
+      aliases: ["文生图", "图像", "AI绘画", "Midjourney", "DALL-E", "Stable Diffusion", "AI art", "prompt"],
     },
   };
 

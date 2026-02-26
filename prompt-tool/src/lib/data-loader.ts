@@ -1,6 +1,7 @@
 import Papa from 'papaparse';
 import { Prompt, BusinessScenario, AIPlatform } from './types';
 import { OPENAI_PROMPTS } from '@/data/openaiPrompts';
+import { PROMPTS_CHAT_IMAGE_PROMPTS } from '@/data/promptsChatImagePrompts';
 import { withPromptsChatImageMetadata } from './promptImageUtils';
 
 // 数据源 URL - 直接从上游获取
@@ -38,8 +39,8 @@ export async function loadPrompts(): Promise<Prompt[]> {
       skipEmptyLines: true,
       complete: (results) => {
         const communityPrompts = convertToPrompts(results.data);
-        // 合并社区提示词和 OpenAI 官方提示词
-        const allPrompts = [...OPENAI_PROMPTS, ...communityPrompts];
+        // 合并所有提示词：OpenAI 官方 + 社区提示词 + prompts.chat 图像提示词
+        const allPrompts = [...OPENAI_PROMPTS, ...communityPrompts, ...PROMPTS_CHAT_IMAGE_PROMPTS];
         resolve(allPrompts);
       },
       error: (error: Error) => {

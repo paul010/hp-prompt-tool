@@ -5,8 +5,8 @@
 // 支持的语言类型
 export type Language = "en" | "zh-CN" | "zh-TW" | "ja" | "ko";
 
-// 默认语言
-export const DEFAULT_LANGUAGE: Language = "en";
+// 默认语言（改为中文优先，适合教学场景）
+export const DEFAULT_LANGUAGE: Language = "zh-CN";
 
 // 多语言内容类型
 export interface LocalizedContent {
@@ -18,10 +18,10 @@ export interface LocalizedContent {
 }
 
 // ============================================================
-// 业务场景类型 - 简化的8个核心分类
+// 业务场景类型 - 9个核心分类（含图像生成）
 // ============================================================
 
-// 8个核心业务场景（简化版）
+// 9个核心业务场景
 export type BusinessScenario =
   | "办公协作"     // 邮件、会议、文档、即时通讯、项目规划
   | "数据分析"     // 分析、报表、SQL、可视化、商业洞察
@@ -30,7 +30,8 @@ export type BusinessScenario =
   | "客户服务"     // 支持、FAQ、投诉、成功管理
   | "学习成长"     // 教学、培训、辅导、认证
   | "演示汇报"     // PPT、演讲、培训、路演、多语言
-  | "商务决策";    // 战略、投资、分析、决策、规划
+  | "商务决策"     // 战略、投资、分析、决策、规划
+  | "图像生成";    // 文生图提示词（Midjourney、DALL-E、Stable Diffusion 等）
 
 // 场景分类配置类型
 export interface ScenarioConfig {
@@ -69,7 +70,36 @@ export interface JobRoleConfig {
 // AI 平台类型
 // ============================================================
 
-export type AIPlatform = "chatgpt" | "claude" | "gemini" | "wenxin" | "tongyi" | "kimi" | "copilot";
+export type AIPlatform =
+  | "chatgpt" | "claude" | "gemini" | "wenxin" | "tongyi" | "kimi" | "copilot"
+  | "midjourney" | "dalle" | "stable-diffusion" | "leonardo" | "firefly" | "flux";
+
+// ============================================================
+// 提示词内容类型（用于区分文本/图像/视频/技能提示词）
+// ============================================================
+
+export type PromptContentType = "text" | "image" | "video" | "skill";
+
+// ============================================================
+// 图像生成模型类型
+// ============================================================
+
+export type ImageModel =
+  | "midjourney"        // Midjourney
+  | "dalle"             // DALL-E 3
+  | "stable-diffusion"; // Stable Diffusion
+
+// ============================================================
+// 图像提示词元数据
+// ============================================================
+
+export interface ImagePromptMetadata {
+  model: ImageModel;                     // 推荐使用的图像生成模型
+  aspectRatio?: string;                  // 宽高比，如 "16:9", "2:3"
+  negativePrompt?: string;               // 负向提示词
+  parameters?: Record<string, unknown>;  // 模型特定参数
+  styleKeywords?: string[];              // 风格关键词
+}
 
 // ============================================================
 // 输入字段类型（用于占位符系统）
@@ -142,7 +172,9 @@ export interface Prompt {
   name: string | LocalizedContent;     // 支持旧版字符串和新版多语言
   nameZh?: string;                     // @deprecated 兼容旧版
   description: string | LocalizedContent; // 支持旧版字符串和新版多语言
+  descriptionZh?: string;              // 中文描述（兼容旧版格式）
   content: string | LocalizedContent;  // 支持旧版字符串和新版多语言
+  contentZh?: string;                  // 中文内容（兼容旧版格式）
   scenario: BusinessScenario;
   tags: string[];
   forDevelopers: boolean;
@@ -150,12 +182,15 @@ export interface Prompt {
   recommendedPlatforms: AIPlatform[];
   category?: string;
   examples?: string[];
-  source?: "openai" | "community" | "custom"; // 数据来源
+  source?: "openai" | "community" | "custom" | "prompts.chat"; // 数据来源
   sourceUrl?: string; // 来源链接
   imageUrl?: string; // 可选图片地址（主要用于 prompts.chat 来源）
   imageAlt?: string; // 图片替代文本
   imageSource?: string; // 图片来源标识
   inputFields?: string[] | InputField[]; // 支持旧版字符串数组和新版 InputField 对象
+  // 图像提示词专用字段
+  promptType?: PromptContentType;        // 提示词内容类型
+  imagePromptMetadata?: ImagePromptMetadata;  // 图像提示词元数据
 }
 
 // AI 平台配置

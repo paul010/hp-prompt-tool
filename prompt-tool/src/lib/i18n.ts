@@ -14,7 +14,8 @@ export const SUPPORTED_LANGUAGES: Record<Language, { name: string; flag: string;
 } as const;
 
 // 语言降级顺序（当指定语言的内容不存在时）
-const LANGUAGE_FALLBACK_ORDER: Language[] = ["en", "zh-CN", "zh-TW", "ja", "ko"];
+// 中文优先，适合教学场景
+const LANGUAGE_FALLBACK_ORDER: Language[] = ["zh-CN", "en", "zh-TW", "ja", "ko"];
 
 /**
  * 从多语言内容中获取指定语言的文本

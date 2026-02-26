@@ -71,6 +71,37 @@ export const AI_PLATFORMS: PlatformConfig[] = [
     description: "Moonshot 的长文本 AI，支持超长文档",
     strengths: ["超长文档", "资料分析", "研报解读", "论文阅读"],
   },
+  // 图像生成平台
+  {
+    id: "midjourney",
+    name: "Midjourney",
+    nameEn: "Midjourney",
+    icon: "🖼️",
+    color: "#ef4444",
+    url: "https://www.midjourney.com",
+    description: "高质量艺术图像生成，擅长创意和艺术风格",
+    strengths: ["艺术风格", "高质量输出", "创意性强"],
+  },
+  {
+    id: "dalle",
+    name: "DALL-E 3",
+    nameEn: "DALL-E 3",
+    icon: "🎭",
+    color: "#10a37f",
+    url: "https://openai.com/dall-e-3",
+    description: "OpenAI 图像生成，与 ChatGPT 深度集成",
+    strengths: ["易用性", "文本理解", "ChatGPT 集成"],
+  },
+  {
+    id: "stable-diffusion",
+    name: "Stable Diffusion",
+    nameEn: "Stable Diffusion",
+    icon: "🌊",
+    color: "#8b5cf6",
+    url: "https://stability.ai",
+    description: "开源图像生成，可本地部署",
+    strengths: ["开源", "可定制", "本地部署"],
+  },
 ];
 
 // 生成 AI 平台跳转 URL
@@ -92,6 +123,13 @@ export function getPlatformUrl(platform: AIPlatform, prompt: string): string {
       return `https://tongyi.aliyun.com/qianwen/?prompt=${encodedPrompt}`;
     case "kimi":
       return `https://kimi.moonshot.cn/?prompt=${encodedPrompt}`;
+    // 图像生成平台（直接跳转到主页，因为大多数不支持 URL 参数传递提示词）
+    case "midjourney":
+      return "https://www.midjourney.com";
+    case "dalle":
+      return "https://chat.openai.com/?prompt=" + encodedPrompt; // DALL-E 3 通过 ChatGPT 访问
+    case "stable-diffusion":
+      return "https://stability.ai";
     default:
       return "#";
   }
