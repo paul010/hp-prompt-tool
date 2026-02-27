@@ -23,13 +23,7 @@ export interface RawPromptData {
 
 // 从上游 URL 加载提示词（带缓存）
 export async function loadPrompts(): Promise<Prompt[]> {
-  // 暂时只返回已翻译的提示词：OpenAI 官方 + prompts.chat 图像提示词
-  // 社区提示词（CSV）尚未翻译，暂时隐藏以提供更好的中文体验
-  // TODO: 未来翻译社区提示词后重新启用
-  const allPrompts = [...OPENAI_PROMPTS, ...PROMPTS_CHAT_IMAGE_PROMPTS];
-  return allPrompts;
-
-  /* 原始加载逻辑（暂时禁用）
+  // 重新加载社区提示词，确保每个分类都有足够的提示词
   const response = await fetch(DATA_SOURCE_URL, {
     next: { revalidate: 3600 }, // 缓存1小时
   });
@@ -55,7 +49,6 @@ export async function loadPrompts(): Promise<Prompt[]> {
       },
     });
   });
-  */
 }
 
 function convertToPrompts(rawData: RawPromptData[]): Prompt[] {
@@ -80,12 +73,16 @@ function convertToPrompts(rawData: RawPromptData[]): Prompt[] {
       row.image_description
     );
 
+    // 为社区提示词添加中文字段（暂时使用英文内容作为占位符）
+    // TODO: 未来添加机器翻译
     const prompt: Prompt = {
       id: `prompt-${index}`,
       name: row.act,
-      nameZh: row.act,
+      nameZh: row.act,  // 暂时使用英文名称
       description: row.prompt.length > 150 ? row.prompt.substring(0, 150) + '...' : row.prompt,
+      descriptionZh: row.prompt.length > 150 ? row.prompt.substring(0, 150) + '...' : row.prompt,  // 暂时使用英文
       content: row.prompt,
+      contentZh: row.prompt,  // 暂时使用英文内容，未来添加机器翻译
       scenario: scenario,
       tags: extractTags(row.act, forDevs),
       forDevelopers: forDevs,
