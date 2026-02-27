@@ -3,6 +3,7 @@ import { Prompt, BusinessScenario, AIPlatform } from './types';
 import { OPENAI_PROMPTS } from '@/data/openaiPrompts';
 import { PROMPTS_CHAT_IMAGE_PROMPTS } from '@/data/promptsChatImagePrompts';
 import { withPromptsChatImageMetadata } from './promptImageUtils';
+import { getCuratedPrompts } from '@/data/curatedPrompts';
 
 // 常见提示词角色翻译映射
 const ROLE_TRANSLATIONS: Record<string, { name: string; description?: string }> = {
@@ -341,12 +342,37 @@ export async function loadPrompts(): Promise<Prompt[]> {
         const communityPrompts = convertToPrompts(results.data);
         // 合并所有提示词：OpenAI 官方 + 社区提示词 + prompts.chat 图像提示词
         const allPrompts = [...OPENAI_PROMPTS, ...communityPrompts, ...PROMPTS_CHAT_IMAGE_PROMPTS];
-        resolve(allPrompts);
+        // 应用精选限制：移除社区提示词中的重复项
+        const dedupedPrompts = applyCuratedLimits(allPrompts);
+        resolve(dedupedPrompts);
       },
       error: (error: Error) => {
         reject(error);
       },
     });
+  });
+}
+
+/**
+ * 应用精选限制，移除特定分类的重复或低质量提示词
+ * 对于有精选列表的分类，只保留精选提示词 + 其他分类的提示词
+ */
+function applyCuratedLimits(prompts: Prompt[]): Prompt[] {
+  const curatedScenarios = ['数据分析']; // 有精选列表的分类
+
+  return prompts.filter((prompt) => {
+    // 如果提示词来自精选源，保留
+    if (prompt.source === 'curated') {
+      return true;
+    }
+
+    // 如果提示词属于有精选列表的分类，且不是精选源，则过滤掉
+    if (curatedScenarios.includes(prompt.scenario)) {
+      return false;
+    }
+
+    // 其他分类的提示词保留
+    return true;
   });
 }
 

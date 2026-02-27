@@ -3,9 +3,13 @@ import { Hero } from "../components/Hero";
 import { CertificationBanner } from "../components/CertificationBanner";
 import { QuickStart } from "../components/QuickStart";
 import { loadPrompts } from "../lib/data-loader";
+import { FEATURED_DATA_ANALYSIS_PROMPTS } from "@/data/curatedPrompts";
 
 export default async function HomePage() {
   const prompts = await loadPrompts();
+
+  // 合并精选提示词到主列表
+  const allPrompts = [...FEATURED_DATA_ANALYSIS_PROMPTS, ...prompts];
 
   return (
     <div className="min-h-screen bg-white">
@@ -20,7 +24,7 @@ export default async function HomePage() {
 
       {/* 提示词列表 */}
       <div className="border-t-4 border-academy-black">
-        <PromptList prompts={prompts} />
+        <PromptList prompts={allPrompts} />
       </div>
     </div>
   );

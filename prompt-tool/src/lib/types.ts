@@ -182,7 +182,7 @@ export interface Prompt {
   recommendedPlatforms: AIPlatform[];
   category?: string;
   examples?: string[];
-  source?: "openai" | "community" | "custom" | "prompts.chat"; // 数据来源
+  source?: "openai" | "community" | "custom" | "prompts.chat" | "curated"; // 数据来源
   sourceUrl?: string; // 来源链接
   imageUrl?: string; // 可选图片地址（主要用于 prompts.chat 来源）
   imageAlt?: string; // 图片替代文本
