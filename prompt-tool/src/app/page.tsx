@@ -27,8 +27,8 @@ export default async function HomePage() {
       {/* Hero 区域 - 数字学院风格 */}
       <Hero />
 
-      {/* 认证横幅 */}
-      <CertificationBanner />
+      {/* 认证横幅 - 已暂时隐藏 */}
+      {/* <CertificationBanner /> */}
 
       {/* 快速开始 - 三张引导卡片 */}
       <QuickStart />
