@@ -26,6 +26,7 @@ export const PROMPTS_CHAT_IMAGE_PROMPTS: Prompt[] = [
     nameZh: "唯美日落",
     description: "为图片添加正确的光照和日落效果，推荐使用 Gemini",
     content: `8K ultra hd aesthetic, romantic, sunset, golden hour light, warm cinematic tones, soft glow, cozy winter mood, natural candid emotion, shallow depth of field, film look, high detail.`,
+    contentZh: `8K 超高清美学风格，浪漫，日落，黄金时刻光照，温暖的电影色调，柔和光晕，舒适的冬日氛围，自然真实的情感，浅景深，电影质感，高细节。`,
     scenario: "图像生成",
     tags: ["architecture", "creative", "image-prompt", "文生图"],
     promptType: "image",
@@ -62,6 +63,21 @@ Clothing and accessories should be translated into LEGO-printed torso designs (s
 Use bright but balanced LEGO colors, smooth plastic material, subtle reflections, and studio lighting.
 
 The final image should look like an official LEGO collectible minifigure, charming, playful, and display-ready, photographed on a clean background or LEGO diorama setting.`,
+    contentZh: `将参考图中的主体转换为乐高人偶风格的角色。
+
+保持独特的面部特征、发型、服装颜色和配饰，使主体保持清晰可辨认。
+
+角色应渲染为经典乐高人偶，具有以下特征：
+- 圆柱形黄色（或肤色乐高）头部
+- 简单的乐高面部表情（友好的微笑、点状眼睛或经典乐高眼睛）
+- 乐高比例的块状手和手臂
+- 短而僵硬的乐高腿
+
+服装和配饰应转换为乐高印刷的躯干设计（简单图形、干净线条、无织物纹理）。
+
+使用明亮但平衡的乐高颜色、光滑的塑料材质、微妙的反射和摄影棚灯光。
+
+最终图像应看起来像官方乐高收藏人偶，迷人、俏皮、适合展示，在干净的背景或乐高立体模型场景中拍摄。`,
     scenario: "图像生成",
     tags: ["Art", "Character Development", "Games", "3D", "figurine", "文生图"],
     promptType: "image",
@@ -104,6 +120,27 @@ Technical Specs:
 
 Constraints:
 - Do not stylize or cartoonize the output. It must be an exact digital twin of the source image.`,
+    contentZh: `担任首席 3D 角色艺术家和摄影测量专家。您的任务是从提供的参考图像创建一个超写实、8k 分辨率的人物角色表，用于数字头像。
+
+您将：
+- 通过保持参考图像中的精确面部几何结构、皮肤纹理、毛囊细节和眼睛颜色来确保角色一致性。
+- 构建多视图 \"正交\" 布局，以 T 形姿势或放松的 A 形姿势展示人物。
+
+所需视图：
+1. 全身正面视图。
+2. 全身左侧视图。
+3. 全身右侧视图。
+4. 全身背面视图。
+
+灯光与风格：
+- 使用中性电影摄影棚灯光（高调），无阴影，白色背景，便于 3D 建模。
+- 应用超写实皮肤着色器、可见毛孔和逼真的服装物理效果。
+
+技术规格：
+- 使用 85mm 镜头、f/8 光圈拍摄，所有视图清晰对焦，RAW 照片质量。
+
+限制条件：
+- 不要风格化或卡通化输出。它必须是源图像的精确数字孪生。`,
     scenario: "图像生成",
     tags: ["Character Development", "Art", "3D", "avatar", "photorealistic", "文生图"],
     promptType: "image",
@@ -135,6 +172,16 @@ Cinematic lighting with:
 - Rain and atmospheric fog
 
 Style: Cyberpunk, Blade Runner inspired, ultra-photorealistic, shot on Arri Alexa, shallow depth of field.`,
+    contentZh: `电影质量的反乌托邦未来快照。在潮湿、遍布碎片街道上，一名网络黑客紧急与神经技术交互，捕捉高科技低生活社会的紧张感。
+
+电影灯光效果：
+- 霓虹蓝色和粉色轮廓光
+- 潮湿街道的反射
+- 背景中的全息显示屏
+- 可见的赛博增强植入物
+- 雨水和大气雾效
+
+风格：赛博朋克，灵感来自《银翼杀手》，超写实主义，使用 Arri Alexa 拍摄，浅景深。`,
     scenario: "图像生成",
     tags: ["Sci-Fi", "Cyberpunk", "Portrait", "cinematic", "文生图"],
     promptType: "image",
