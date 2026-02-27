@@ -157,7 +157,6 @@ const ROLE_TRANSLATIONS: Record<string, { name: string; description?: string }> 
   "seo": { name: "SEO 优化专家" },
   "social media": { name: "社交媒体专家" },
   "marketing": { name: "市场营销专家" },
-  "sales": { name: "销售专家" },
   "negotiation": { name: "谈判专家" },
 
   // 技术相关
