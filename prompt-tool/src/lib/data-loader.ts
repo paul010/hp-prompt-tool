@@ -23,6 +23,13 @@ export interface RawPromptData {
 
 // 从上游 URL 加载提示词（带缓存）
 export async function loadPrompts(): Promise<Prompt[]> {
+  // 暂时只返回已翻译的提示词：OpenAI 官方 + prompts.chat 图像提示词
+  // 社区提示词（CSV）尚未翻译，暂时隐藏以提供更好的中文体验
+  // TODO: 未来翻译社区提示词后重新启用
+  const allPrompts = [...OPENAI_PROMPTS, ...PROMPTS_CHAT_IMAGE_PROMPTS];
+  return allPrompts;
+
+  /* 原始加载逻辑（暂时禁用）
   const response = await fetch(DATA_SOURCE_URL, {
     next: { revalidate: 3600 }, // 缓存1小时
   });
@@ -48,6 +55,7 @@ export async function loadPrompts(): Promise<Prompt[]> {
       },
     });
   });
+  */
 }
 
 function convertToPrompts(rawData: RawPromptData[]): Prompt[] {
