@@ -440,6 +440,9 @@ function inferScenario(act: string, prompt: string): BusinessScenario {
       'analytics', 'insight', 'etl', 'data warehouse', 'datalake',
       // 数据处理
       'data cleaning', 'data wrangling', 'data transformation', 'data mining',
+      // 机器学习 & 预测分析
+      'machine learning', 'ml engineer', 'prediction model', 'predictive',
+      'deep learning', 'neural network', 'clustering', 'classification',
       // 专业工具
       'tableau', 'power bi', 'excel analyst', 'spreadsheet',
       // 分析关键词（限定词，避免过度匹配）
