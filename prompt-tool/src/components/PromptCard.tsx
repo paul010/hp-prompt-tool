@@ -344,7 +344,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
           }`}
         >
           <pre className="whitespace-pre-wrap text-sm text-gray-700 font-mono">
-            {language.startsWith("zh") ? (prompt.contentZh || displayContent) : displayContent}
+            {displayContent}
           </pre>
         </div>
         <button

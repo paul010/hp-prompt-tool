@@ -31,14 +31,17 @@ export function LanguageProvider({ children, defaultLanguage }: LanguageProvider
 
   // 初始化语言设置
   useEffect(() => {
-    // 一次性清除旧的语言偏好（2025-02-26 发布中文化版本）
-    // 这样所有用户都默认使用中文，符合教学场景需求
+    // 2025-02-27 强制所有用户使用中文（提示词内容中文化）
     if (typeof window !== "undefined") {
-      const migrationKey = "prompt-language-migrated-20250226";
+      const forceChineseKey = "prompt-language-force-chinese-20250227";
       try {
-        if (!localStorage.getItem(migrationKey)) {
+        if (!localStorage.getItem(forceChineseKey)) {
+          // 清除旧的语言偏好
           localStorage.removeItem("prompt-language");
-          localStorage.setItem(migrationKey, "true");
+          // 设置为中文并标记迁移完成
+          localStorage.setItem("prompt-language", "zh-CN");
+          localStorage.setItem(forceChineseKey, "true");
+          console.log("🇨🇳 语言已强制设置为中文（中文化版本）");
         }
       } catch {
         // localStorage 可能不可用，忽略错误
