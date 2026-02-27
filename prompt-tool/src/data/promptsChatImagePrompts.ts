@@ -215,6 +215,18 @@ Style specifications:
 No text overlay, no humans — focus only on the dogs and their fun, heartwarming golf moment.
 
 Quality: Crisp details, expressive eyes, and a lighthearted Pixar-like charm.`,
+    contentZh: `皮克斯风格的 9:16 竖版视频，一群快乐的卡通狗在明亮多彩的高尔夫球场上打高尔夫。一只主狗居中，直立站姿，比例夸张，正在挥杆，带着兴奋的大大笑容，而它的狗友们用富有表情的脸做出反应——欢呼、惊叹或拿着微小的高尔夫配件。
+
+风格要求：
+- 平滑、俏皮的角色动画，带有微妙的挤压和拉伸效果
+- 温暖、充满活力的光线，柔和的阴影
+- 丰富饱和的色彩
+- 背景略微模糊，有风格化的树木和云朵
+- 平滑的缓慢推入
+
+无文字叠加，无人类——只关注狗狗们和它们有趣、温馨的高尔夫时刻。
+
+质量：清晰的细节，富有表情的眼睛，轻松愉快的皮克斯式魅力。`,
     scenario: "图像生成",
     tags: ["Animation", "Pixar", "3D", "character", "cute", "文生图"],
     promptType: "image",
@@ -246,6 +258,16 @@ Technical specifications:
 - Rich color grading
 
 Style: Luxury cocktail photography, James Bond inspired, moody and sophisticated.`,
+    contentZh: `电影感特写镜头，一位神秘的调酒师将发光的绿色液体倒入杯中，浓重的烟雾升起，黑暗的鸡尾酒酒吧背景，4K，超写实，慢动作。
+
+技术规格：
+- 使用 85mm 镜头拍摄，f/1.4 光圈
+- 浅景深
+- 戏剧性背光
+- 烟雾和氛围
+- 丰富的色彩调色
+
+风格：奢华鸡尾酒摄影，灵感来自詹姆斯·邦德，情绪化且精致。`,
     scenario: "图像生成",
     tags: ["Photography", "Food", "cocktail", "cinematic", "文生图"],
     promptType: "image",
