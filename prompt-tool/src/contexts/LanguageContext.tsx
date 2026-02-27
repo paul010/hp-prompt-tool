@@ -4,7 +4,7 @@
 
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { Language, DEFAULT_LANGUAGE } from "@/lib/types";
 import {
   getCurrentLanguage,
@@ -18,7 +18,14 @@ interface LanguageContextType {
   isReady: boolean; // 是否已初始化（避免 SSR 水合不匹配）
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+// Provide default value for SSR safety
+const defaultContextValue: LanguageContextType = {
+  language: DEFAULT_LANGUAGE,
+  setLanguage: () => {},
+  isReady: false,
+};
+
+const LanguageContext = createContext<LanguageContextType>(defaultContextValue);
 
 interface LanguageProviderProps {
   children: ReactNode;
@@ -77,11 +84,7 @@ export function LanguageProvider({ children, defaultLanguage }: LanguageProvider
  * 使用语言上下文的 Hook
  */
 export function useLanguage(): LanguageContextType {
-  const context = useContext(LanguageContext);
-  if (context === undefined) {
-    throw new Error("useLanguage must be used within a LanguageProvider");
-  }
-  return context;
+  return useContext(LanguageContext);
 }
 
 /**

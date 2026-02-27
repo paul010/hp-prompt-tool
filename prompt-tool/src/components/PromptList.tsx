@@ -47,7 +47,7 @@ export function PromptList({ prompts }: PromptListProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(24);
 
-  // 从 URL 参数初始化筛选状态
+  // 从 URL 参数初始化筛选状态 (客户端安全)
   useEffect(() => {
     // 只在客户端执行
     if (typeof window !== 'undefined') {

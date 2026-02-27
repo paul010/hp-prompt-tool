@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '../contexts/LanguageContext';
 import { GraduationCap, Rocket, Compass, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -19,9 +19,8 @@ interface QuickStartItem {
 export function QuickStart() {
   const { language } = useLanguage();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const isZh = language.startsWith('zh');
   const [isClient, setIsClient] = useState(false);
+  const isZh = language.startsWith('zh');
 
   // 确保在客户端渲染
   useEffect(() => {
