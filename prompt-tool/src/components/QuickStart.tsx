@@ -1,8 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useLanguage } from '../contexts/LanguageContext';
 import { GraduationCap, Rocket, Compass, ArrowRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 interface QuickStartItem {
   icon: React.ReactNode;
@@ -16,7 +18,15 @@ interface QuickStartItem {
 
 export function QuickStart() {
   const { language } = useLanguage();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const isZh = language.startsWith('zh');
+  const [isClient, setIsClient] = useState(false);
+
+  // 确保在客户端渲染
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const QUICK_START_ITEMS: QuickStartItem[] = [
     {
@@ -48,6 +58,16 @@ export function QuickStart() {
     },
   ];
 
+  const handleQuickStartClick = (action: string) => {
+    if (action === 'learning-path') {
+      router.push('/learning-path');
+    } else if (action === 'filter-beginner') {
+      router.push('/?difficulty=入門');
+    } else if (action === 'filter-advanced') {
+      router.push('/?difficulty=專家');
+    }
+  };
+
   return (
     <section className="py-20 sm:py-28 lg:py-36 bg-gradient-to-b from-white via-academy-gray-light to-white">
       {/* 点阵背景 */}
@@ -73,7 +93,13 @@ export function QuickStart() {
         {/* 卡片网格 */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
           {QUICK_START_ITEMS.map((item, idx) => (
-            <QuickStartCard key={item.action} item={item} language={language} index={idx} />
+            <QuickStartCard
+              key={item.action}
+              item={item}
+              language={language}
+              index={idx}
+              onClick={() => isClient && handleQuickStartClick(item.action)}
+            />
           ))}
         </div>
       </div>
@@ -85,22 +111,16 @@ function QuickStartCard({
   item,
   language,
   index,
+  onClick,
 }: {
   item: QuickStartItem;
   language: string;
   index: number;
+  onClick: () => void;
 }) {
   const isZh = language.startsWith('zh');
   const title = isZh ? item.titleZh : item.titleEn;
   const desc = isZh ? item.descZh : item.descEn;
-
-  const CardWrapper = item.action === 'learning-path' ? Link : 'a';
-  const href =
-    item.action === 'learning-path'
-      ? '/learning-path'
-      : item.action === 'filter-beginner'
-      ? '/?difficulty=入門'
-      : '/?difficulty=進階&difficulty=專家';
 
   // 卡片颜色循环
   const bgColors = [
@@ -112,9 +132,9 @@ function QuickStartCard({
   const textColor = index === 2 ? 'text-white' : 'text-academy-black';
 
   return (
-    <CardWrapper
-      href={href}
-      className="group block"
+    <div
+      onClick={onClick}
+      className="group block cursor-pointer"
     >
       <div
         className={`relative ${bgColor} ${textColor} border-4 border-academy-black rounded-none p-8 transition-all duration-300 hover:shadow-2xl hover:-translate-y-3`}
@@ -150,6 +170,6 @@ function QuickStartCard({
           <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
         </div>
       </div>
-    </CardWrapper>
+    </div>
   );
 }

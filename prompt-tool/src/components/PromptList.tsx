@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Prompt, LocalizedContent } from "../lib/types";
 import { PromptCard } from "./PromptCard";
 import { SearchBar } from "./SearchBar";
@@ -38,6 +39,8 @@ function getPromptContent(prompt: Prompt, language: string): string {
 
 export function PromptList({ prompts }: PromptListProps) {
   const { language } = useLanguage();
+  const searchParams = useSearchParams();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedScenario, setSelectedScenario] = useState("");
   const [selectedPlatform, setSelectedPlatform] = useState("");
@@ -45,6 +48,19 @@ export function PromptList({ prompts }: PromptListProps) {
   const [selectedSort, setSelectedSort] = useState("relevance");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(24);
+
+  // 从 URL 参数初始化筛选状态
+  useEffect(() => {
+    const difficultyParam = searchParams.get('difficulty');
+    if (difficultyParam) {
+      setSelectedDifficulty(difficultyParam);
+      // 滚动到提示词列表区域
+      const promptListElement = document.getElementById('prompt-list-section');
+      if (promptListElement) {
+        promptListElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [searchParams]);
 
   // 计算各场景数量
   const scenarioCounts = useMemo(() => {
@@ -138,7 +154,7 @@ export function PromptList({ prompts }: PromptListProps) {
       />
 
       {/* 主内容区 */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div id="prompt-list-section" className="flex-1 flex flex-col min-w-0">
         {/* 顶部横幅 - AI Summit 2026 主题风格 */}
         <div className="bg-academy-black text-white py-8 sm:py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
           {/* 背景装饰 */}
