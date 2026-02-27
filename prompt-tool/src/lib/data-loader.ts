@@ -168,7 +168,6 @@ const ROLE_TRANSLATIONS: Record<string, { name: string; description?: string }> 
   "devops": { name: "DevOps 专家" },
   "infrastructure": { name: "基础设施专家" },
   "server": { name: "服务器管理专家" },
-  "database": { name: "数据库管理员" },
   "security": { name: "安全专家" },
   "terminal": { name: "终端专家" },
   "bash": { name: "Bash 脚本专家" },
@@ -176,7 +175,6 @@ const ROLE_TRANSLATIONS: Record<string, { name: string; description?: string }> 
   "command line": { name: "命令行专家" },
 
   // 语言相关
-  "translator": { name: "翻译员" },
   "english teacher": { name: "英语教师" },
   "language tutor": { name: "语言导师" },
   "interpretation": { name: "口译员" },
