@@ -43,23 +43,34 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
   // 获取本地化内容（兼容多语言和单语言格式）
   const displayName = useMemo(() => {
     if (typeof prompt.name === "string") {
-      return language.startsWith("zh") ? (prompt.nameZh || prompt.name) : prompt.name;
+      // 优先使用中文
+      if (prompt.nameZh) {
+        return prompt.nameZh;
+      }
+      return prompt.name;
     }
     return getLocalized(prompt.name, language);
   }, [prompt.name, prompt.nameZh, language]);
 
   const displayDescription = useMemo(() => {
     if (typeof prompt.description === "string") {
-      // 添加对中文翻译的支持
-      return language.startsWith("zh") ? (prompt.descriptionZh || prompt.description) : prompt.description;
+      // 优先使用中文
+      if (prompt.descriptionZh) {
+        return prompt.descriptionZh;
+      }
+      return prompt.description;
     }
     return getLocalized(prompt.description, language);
   }, [prompt.description, prompt.descriptionZh, language]);
 
   const displayContent = useMemo(() => {
     if (typeof prompt.content === "string") {
-      // 添加对中文翻译的支持
-      return language.startsWith("zh") ? (prompt.contentZh || prompt.content) : prompt.content;
+      // 优先使用中文，如果没有中文则使用英文
+      // 默认语言是中文（zh-CN），所以优先显示 contentZh
+      if (prompt.contentZh) {
+        return prompt.contentZh;
+      }
+      return prompt.content;
     }
     return getLocalized(prompt.content, language);
   }, [prompt.content, prompt.contentZh, language]);
