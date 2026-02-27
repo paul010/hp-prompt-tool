@@ -3,13 +3,24 @@ import { Hero } from "../components/Hero";
 import { CertificationBanner } from "../components/CertificationBanner";
 import { QuickStart } from "../components/QuickStart";
 import { loadPrompts } from "../lib/data-loader";
-import { FEATURED_DATA_ANALYSIS_PROMPTS } from "@/data/curatedPrompts";
+import {
+  FEATURED_DATA_ANALYSIS_PROMPTS,
+  FEATURED_CONTENT_CREATION_PROMPTS,
+  FEATURED_LEARNING_GROWTH_PROMPTS,
+  FEATURED_PRESENTATION_PROMPTS,
+} from "@/data/curatedPrompts";
 
 export default async function HomePage() {
   const prompts = await loadPrompts();
 
-  // 合并精选提示词到主列表
-  const allPrompts = [...FEATURED_DATA_ANALYSIS_PROMPTS, ...prompts];
+  // 合并所有精选提示词到主列表
+  const allPrompts = [
+    ...FEATURED_DATA_ANALYSIS_PROMPTS,
+    ...FEATURED_CONTENT_CREATION_PROMPTS,
+    ...FEATURED_LEARNING_GROWTH_PROMPTS,
+    ...FEATURED_PRESENTATION_PROMPTS,
+    ...prompts,
+  ];
 
   return (
     <div className="min-h-screen bg-white">

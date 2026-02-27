@@ -358,7 +358,7 @@ export async function loadPrompts(): Promise<Prompt[]> {
  * 对于有精选列表的分类，只保留精选提示词 + 其他分类的提示词
  */
 function applyCuratedLimits(prompts: Prompt[]): Prompt[] {
-  const curatedScenarios = ['数据分析']; // 有精选列表的分类
+  const curatedScenarios = ['数据分析', '内容创作', '学习成长', '演示汇报']; // 有精选列表的分类
 
   return prompts.filter((prompt) => {
     // 如果提示词来自精选源，保留
