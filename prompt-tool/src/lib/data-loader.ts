@@ -323,34 +323,47 @@ export interface RawPromptData {
 
 // 从上游 URL 加载提示词（带缓存）
 export async function loadPrompts(): Promise<Prompt[]> {
-  // 重新加载社区提示词，确保每个分类都有足够的提示词
-  const response = await fetch(DATA_SOURCE_URL, {
-    next: { revalidate: 3600 }, // 缓存1小时
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch prompts: ${response.statusText}`);
-  }
-
-  const csvText = await response.text();
-
-  return new Promise((resolve, reject) => {
-    Papa.parse<RawPromptData>(csvText, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        const communityPrompts = convertToPrompts(results.data);
-        // 合并所有提示词：OpenAI 官方 + 社区提示词 + prompts.chat 图像提示词
-        const allPrompts = [...OPENAI_PROMPTS, ...communityPrompts, ...PROMPTS_CHAT_IMAGE_PROMPTS];
-        // 应用精选限制：移除社区提示词中的重复项
-        const dedupedPrompts = applyCuratedLimits(allPrompts);
-        resolve(dedupedPrompts);
-      },
-      error: (error: Error) => {
-        reject(error);
-      },
+  try {
+    // 重新加载社区提示词，确保每个分类都有足够的提示词
+    const response = await fetch(DATA_SOURCE_URL, {
+      next: { revalidate: 3600 }, // 缓存1小时
+      // 增加超时设置，避免长时间等待
+      signal: AbortSignal.timeout(30000), // 30秒超时
     });
-  });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch prompts: ${response.statusText}`);
+    }
+
+    const csvText = await response.text();
+
+    return new Promise((resolve, reject) => {
+      Papa.parse<RawPromptData>(csvText, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          const communityPrompts = convertToPrompts(results.data);
+          // 合并所有提示词：OpenAI 官方 + 社区提示词 + prompts.chat 图像提示词
+          const allPrompts = [...OPENAI_PROMPTS, ...communityPrompts, ...PROMPTS_CHAT_IMAGE_PROMPTS];
+          // 应用精选限制：移除社区提示词中的重复项
+          const dedupedPrompts = applyCuratedLimits(allPrompts);
+          resolve(dedupedPrompts);
+        },
+        error: (error: Error) => {
+          reject(error);
+        },
+      });
+    });
+  } catch (error) {
+    // 网络错误或其他错误时，优雅降级到本地数据源
+    console.warn('Failed to fetch community prompts from GitHub, using local data only:', error);
+
+    // 只使用本地数据源
+    const localPrompts = [...OPENAI_PROMPTS, ...PROMPTS_CHAT_IMAGE_PROMPTS];
+    const dedupedPrompts = applyCuratedLimits(localPrompts);
+
+    return dedupedPrompts;
+  }
 }
 
 /**
