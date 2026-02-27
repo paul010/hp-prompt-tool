@@ -28,14 +28,13 @@ function getModelDisplayName(model: string): string {
 }
 
 export function PromptCard({ prompt, compact = false }: PromptCardProps) {
-  const { language } = useLanguage();
+  const { language, setLanguage } = useLanguage();
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [showPlatformModal, setShowPlatformModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showBuilderModal, setShowBuilderModal] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
-  const [localLanguage, setLocalLanguage] = useState(language);
 
   useEffect(() => {
     setImageFailed(false);
@@ -327,15 +326,15 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
         {/* 语言切换按钮 */}
         <div className="absolute top-2 right-2 z-10 flex gap-1">
           <button
-            onClick={() => setLocalLanguage(language.startsWith("zh") ? "en" : "zh-CN")}
+            onClick={() => setLanguage(language.startsWith("zh") ? "en" : "zh-CN")}
             className={`px-3 py-1.5 text-xs font-bold rounded-lg border-2 transition-all ${
-              localLanguage.startsWith("zh")
+              language.startsWith("zh")
                 ? "bg-hp-blue text-white border-hp-blue shadow-md"
                 : "bg-white text-gray-700 border-gray-300 hover:border-hp-blue hover:text-hp-blue"
             }`}
             title="切换中英文"
           >
-            {localLanguage.startsWith("zh") ? "🇨🇳 中文" : "🇺🇸 English"}
+            {language.startsWith("zh") ? "🇨🇳 中文" : "🇺🇸 English"}
           </button>
         </div>
 
@@ -345,7 +344,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
           }`}
         >
           <pre className="whitespace-pre-wrap text-sm text-gray-700 font-mono">
-            {localLanguage.startsWith("zh") ? (prompt.contentZh || displayContent) : displayContent}
+            {language.startsWith("zh") ? (prompt.contentZh || displayContent) : displayContent}
           </pre>
         </div>
         <button
