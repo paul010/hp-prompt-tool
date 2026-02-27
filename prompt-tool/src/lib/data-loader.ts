@@ -61,18 +61,31 @@ const ROLE_TRANSLATIONS: Record<string, { name: string; description?: string }> 
   // 数据相关
   "data analyst": { name: "数据分析师" },
   "data scientist": { name: "数据科学家" },
+  "data engineer": { name: "数据工程师" },
   "statistician": { name: "统计学家" },
+  "statistic": { name: "统计分析专家" },
   "excel expert": { name: "Excel 专家" },
   "sql expert": { name: "SQL 专家" },
   "excel": { name: "Excel 专家" },
   "spreadsheet": { name: "电子表格专家" },
   "chart": { name: "图表制作专家" },
   "data visualization": { name: "数据可视化专家" },
+  "visualization": { name: "可视化专家" },
   "business analyst": { name: "商业分析师" },
   "bi analyst": { name: "商业智能分析师" },
+  "business intelligence": { name: "商业智能专家" },
   "database": { name: "数据库专家" },
-  "data engineer": { name: "数据工程师" },
   "machine learning": { name: "机器学习专家" },
+  "ml engineer": { name: "机器学习工程师" },
+  "data mining": { name: "数据挖掘专家" },
+  "etl": { name: "ETL 工程师" },
+  "analytics": { name: "分析专家" },
+  "tableau": { name: "Tableau 专家" },
+  "power bi": { name: "Power BI 专家" },
+  "python": { name: "Python 数据分析师" },
+  "r": { name: "R 语言分析师" },
+  "pandas": { name: "Pandas 数据分析专家" },
+  "numpy": { name: "NumPy 数值计算专家" },
   "ai assistant": { name: "AI 助手" },
   "chatgpt": { name: "ChatGPT 助手" },
 
@@ -411,9 +424,26 @@ function inferScenario(act: string, prompt: string): BusinessScenario {
       'communication', 'coordination', 'collaboration', 'teamwork'
     ],
     '数据分析': [
-      'sql', 'data', 'chart', 'statistic', 'analyze', 'report', 'visualization', 'graph',
-      'database', 'query', 'table', 'pivot', 'dashboard', 'metrics', 'kpi',
-      'analytics', 'insight', 'business intelligence', 'etl', 'warehouse'
+      // 数据处理核心
+      'data analyst', 'data scientist', 'data engineer', 'data analysis',
+      // SQL & 数据库
+      'sql', 'mysql', 'postgresql', 'query', 'select', 'join', 'aggregate',
+      'database', 'db', 'schema', 'normalize',
+      // 统计分析
+      'statistic', 'statistics', 'statistical', 'regression', 'correlation',
+      'hypothesis', 'distribution', 'variance', 'standard deviation',
+      // 数据可视化
+      'chart', 'graph', 'plot', 'visualization', 'visualize', 'dashboard',
+      'histogram', 'scatter', 'bar chart', 'line graph', 'heatmap', 'pivot table',
+      // 商业智能 & 报告
+      'business intelligence', 'bi analyst', 'metrics', 'kpi', 'reporting',
+      'analytics', 'insight', 'etl', 'data warehouse', 'datalake',
+      // 数据处理
+      'data cleaning', 'data wrangling', 'data transformation', 'data mining',
+      // 专业工具
+      'tableau', 'power bi', 'excel analyst', 'spreadsheet',
+      // 分析关键词（限定词，避免过度匹配）
+      'analyze data', 'data analysis', 'predictive analysis', 'descriptive'
     ],
     '技术开发': [
       // 编程开发
@@ -472,10 +502,11 @@ function inferScenario(act: string, prompt: string): BusinessScenario {
   const text = `${act} ${prompt}`.toLowerCase();
 
   // 按优先级顺序检查（从最具体到最通用）
+  // 数据分析优先级提升，确保数据相关提示词被正确归类
   const priorityOrder: BusinessScenario[] = [
     '商务决策',
+    '数据分析',      // 提升优先级，避免被技术开发抢走
     '技术开发',
-    '数据分析',
     '内容创作',
     '演示汇报',
     '学习成长',
