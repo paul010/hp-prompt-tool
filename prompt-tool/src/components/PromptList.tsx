@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import { Prompt, LocalizedContent } from "../lib/types";
 import { PromptCard } from "./PromptCard";
 import { SearchBar } from "./SearchBar";
@@ -39,7 +38,6 @@ function getPromptContent(prompt: Prompt, language: string): string {
 
 export function PromptList({ prompts }: PromptListProps) {
   const { language } = useLanguage();
-  const searchParams = useSearchParams();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedScenario, setSelectedScenario] = useState("");
@@ -51,16 +49,20 @@ export function PromptList({ prompts }: PromptListProps) {
 
   // 从 URL 参数初始化筛选状态
   useEffect(() => {
-    const difficultyParam = searchParams.get('difficulty');
-    if (difficultyParam) {
-      setSelectedDifficulty(difficultyParam);
-      // 滚动到提示词列表区域
-      const promptListElement = document.getElementById('prompt-list-section');
-      if (promptListElement) {
-        promptListElement.scrollIntoView({ behavior: 'smooth' });
+    // 只在客户端执行
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const difficultyParam = urlParams.get('difficulty');
+      if (difficultyParam) {
+        setSelectedDifficulty(difficultyParam);
+        // 滚动到提示词列表区域
+        const promptListElement = document.getElementById('prompt-list-section');
+        if (promptListElement) {
+          promptListElement.scrollIntoView({ behavior: 'smooth' });
+        }
       }
     }
-  }, [searchParams]);
+  }, []);
 
   // 计算各场景数量
   const scenarioCounts = useMemo(() => {

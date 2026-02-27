@@ -1,4 +1,4 @@
-import { PromptList } from "../components/PromptList";
+import { PromptListWrapper } from "../components/PromptListWrapper";
 import { Hero } from "../components/Hero";
 import { CertificationBanner } from "../components/CertificationBanner";
 import { QuickStart } from "../components/QuickStart";
@@ -35,7 +35,7 @@ export default async function HomePage() {
 
       {/* 提示词列表 */}
       <div className="border-t-4 border-academy-black">
-        <PromptList prompts={allPrompts} />
+        <PromptListWrapper prompts={allPrompts} />
       </div>
     </div>
   );
