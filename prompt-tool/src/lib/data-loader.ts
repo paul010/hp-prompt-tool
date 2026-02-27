@@ -4,6 +4,137 @@ import { OPENAI_PROMPTS } from '@/data/openaiPrompts';
 import { PROMPTS_CHAT_IMAGE_PROMPTS } from '@/data/promptsChatImagePrompts';
 import { withPromptsChatImageMetadata } from './promptImageUtils';
 
+// 常见提示词角色翻译映射
+const ROLE_TRANSLATIONS: Record<string, { name: string; description?: string }> = {
+  // 编程相关
+  "linux terminal": { name: "Linux 终端" },
+  "developer": { name: "开发者" },
+  "programming": { name: "编程助手" },
+  "code reviewer": { name: "代码审查员" },
+  "software architect": { name: "软件架构师" },
+  "web developer": { name: "Web 开发者" },
+  "full-stack developer": { name: "全栈开发者" },
+
+  // 写作相关
+  "writer": { name: "写作助手" },
+  "content writer": { name: "内容撰稿人" },
+  "copywriter": { name: "文案撰稿人" },
+  "essay writer": { name: "论文写作助手" },
+  "storyteller": { name: "故事讲述者" },
+  "novelist": { name: "小说家" },
+  "screenwriter": { name: "编剧" },
+  "journalist": { name: "新闻记者" },
+
+  // 数据相关
+  "data analyst": { name: "数据分析师" },
+  "data scientist": { name: "数据科学家" },
+  "statistician": { name: "统计学家" },
+  "excel expert": { name: "Excel 专家" },
+  "sql expert": { name: "SQL 专家" },
+
+  // 设计相关
+  "designer": { name: "设计师" },
+  "ui/ux designer": { name: "UI/UX 设计师" },
+  "graphic designer": { name: "平面设计师" },
+
+  // 营销相关
+  "marketing consultant": { name: "营销顾问" },
+  "social media manager": { name: "社交媒体经理" },
+  "seo expert": { name: "SEO 专家" },
+
+  // 教育相关
+  "teacher": { name: "教师" },
+  "tutor": { name: "导师" },
+  "professor": { name: "教授" },
+  "educator": { name: "教育工作者" },
+  "teaching assistant": { name: "助教" },
+
+  // 商业相关
+  "business consultant": { name: "商业顾问" },
+  "entrepreneur": { name: "创业者" },
+  "startup advisor": { name: "创业顾问" },
+  "project manager": { name: "项目经理" },
+  "product manager": { name: "产品经理" },
+
+  // 客服相关
+  "customer service": { name: "客服代表" },
+  "support agent": { name: "支持专员" },
+  "sales representative": { name: "销售代表" },
+
+  // 创意相关
+  "creative director": { name: "创意总监" },
+  "artist": { name: "艺术家" },
+  "photographer": { name: "摄影师" },
+  "composer": { name: "作曲家" },
+
+  // 技术相关
+  "it support": { name: "IT 支持" },
+  "system administrator": { name: "系统管理员" },
+  "network engineer": { name: "网络工程师" },
+  "cybersecurity expert": { name: "网络安全专家" },
+
+  // 语言相关
+  "translator": { name: "翻译员" },
+  "english teacher": { name: "英语教师" },
+  "language tutor": { name: "语言导师" },
+
+  // 其他常见角色
+  "assistant": { name: "智能助手" },
+  "personal assistant": { name: "个人助理" },
+  "virtual assistant": { name: "虚拟助理" },
+  "researcher": { name: "研究员" },
+  "analyst": { name: "分析师" },
+  "consultant": { name: "顾问" },
+  "advisor": { name: "顾问" },
+  "coach": { name: "教练" },
+  "mentor": { name: "导师" },
+  "guidance counselor": { name: "指导顾问" },
+  "career counselor": { name: "职业顾问" },
+  "interviewer": { name: "面试官" },
+  "recruiter": { name: "招聘专员" },
+  "hr manager": { name: "人力资源经理" },
+
+  // 专业领域
+  "lawyer": { name: "律师" },
+  "legal consultant": { name: "法律顾问" },
+  "doctor": { name: "医生" },
+  "nutritionist": { name: "营养师" },
+  "fitness coach": { name: "健身教练" },
+  "financial advisor": { name: "理财顾问" },
+  "accountant": { name: "会计师" },
+  "investment advisor": { name: "投资顾问" },
+};
+
+// 翻译提示词内容（简单规则）
+function translatePromptContent(act: string, content: string): string {
+  const actLower = act.toLowerCase().trim();
+
+  // 查找角色翻译
+  for (const [english, chinese] of Object.entries(ROLE_TRANSLATIONS)) {
+    if (actLower.includes(english) || actLower === english) {
+      // 简单的内容翻译策略：在原内容前添加中文说明
+      return `[扮演${chinese.name}]\n\n${content}`;
+    }
+  }
+
+  // 如果没有找到翻译，返回原内容
+  return content;
+}
+
+// 翻译角色名称
+function translateRoleName(act: string): string {
+  const actLower = act.toLowerCase().trim();
+
+  for (const [english, chinese] of Object.entries(ROLE_TRANSLATIONS)) {
+    if (actLower.includes(english) || actLower === english) {
+      return chinese.name;
+    }
+  }
+
+  // 没有找到翻译，返回原名称
+  return act;
+}
+
 // 数据源 URL - 直接从上游获取
 const DATA_SOURCE_URL = 'https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv';
 
@@ -73,16 +204,19 @@ function convertToPrompts(rawData: RawPromptData[]): Prompt[] {
       row.image_description
     );
 
-    // 为社区提示词添加中文字段（暂时使用英文内容作为占位符）
-    // TODO: 未来添加机器翻译
+    // 使用翻译函数为社区提示词添加中文支持
+    const translatedName = translateRoleName(row.act);
+    const translatedContent = translatePromptContent(row.act, row.prompt);
+    const descriptionText = row.prompt.length > 150 ? row.prompt.substring(0, 150) + '...' : row.prompt;
+
     const prompt: Prompt = {
       id: `prompt-${index}`,
       name: row.act,
-      nameZh: row.act,  // 暂时使用英文名称
-      description: row.prompt.length > 150 ? row.prompt.substring(0, 150) + '...' : row.prompt,
-      descriptionZh: row.prompt.length > 150 ? row.prompt.substring(0, 150) + '...' : row.prompt,  // 暂时使用英文
+      nameZh: translatedName,
+      description: descriptionText,
+      descriptionZh: descriptionText,
       content: row.prompt,
-      contentZh: row.prompt,  // 暂时使用英文内容，未来添加机器翻译
+      contentZh: translatedContent,
       scenario: scenario,
       tags: extractTags(row.act, forDevs),
       forDevelopers: forDevs,
