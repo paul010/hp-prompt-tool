@@ -261,32 +261,6 @@ const ROLE_TRANSLATIONS: Record<string, { name: string; description?: string }> 
   "real estate": { name: "房地产专家" },
   "agent": { name: "代理人" },
   "broker": { name: "经纪人" },
-
-  // 其他常见角色
-  "assistant": { name: "智能助手" },
-  "personal assistant": { name: "个人助理" },
-  "virtual assistant": { name: "虚拟助理" },
-  "researcher": { name: "研究员" },
-  "analyst": { name: "分析师" },
-  "consultant": { name: "顾问" },
-  "advisor": { name: "顾问" },
-  "coach": { name: "教练" },
-  "mentor": { name: "导师" },
-  "guidance counselor": { name: "指导顾问" },
-  "career counselor": { name: "职业顾问" },
-  "interviewer": { name: "面试官" },
-  "recruiter": { name: "招聘专员" },
-  "hr manager": { name: "人力资源经理" },
-
-  // 专业领域
-  "lawyer": { name: "律师" },
-  "legal consultant": { name: "法律顾问" },
-  "doctor": { name: "医生" },
-  "nutritionist": { name: "营养师" },
-  "fitness coach": { name: "健身教练" },
-  "financial advisor": { name: "理财顾问" },
-  "accountant": { name: "会计师" },
-  "investment advisor": { name: "投资顾问" },
 };
 
 // 翻译提示词内容（简单规则）
