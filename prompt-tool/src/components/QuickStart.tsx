@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '../contexts/LanguageContext';
-import { GraduationCap, Rocket, Compass, ArrowRight } from 'lucide-react';
+import { GraduationCap, Rocket, Compass, ArrowRight, Sparkles } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface QuickStartItem {
@@ -14,6 +14,8 @@ interface QuickStartItem {
   descZh: string;
   action: 'filter-beginner' | 'filter-advanced' | 'learning-path';
   number: string;
+  gradient: string;
+  iconBg: string;
 }
 
 export function QuickStart() {
@@ -36,6 +38,8 @@ export function QuickStart() {
       descZh: '從入門難度提示詞開始，掌握基礎技能',
       action: 'filter-beginner',
       number: '01',
+      gradient: 'from-emerald-400 to-teal-500',
+      iconBg: 'bg-emerald-500',
     },
     {
       icon: <Rocket className="w-8 h-8" />,
@@ -45,6 +49,8 @@ export function QuickStart() {
       descZh: '深入學習進階和專家難度，挑戰更高目標',
       action: 'filter-advanced',
       number: '02',
+      gradient: 'from-orange-400 to-pink-500',
+      iconBg: 'bg-orange-500',
     },
     {
       icon: <Compass className="w-8 h-8" />,
@@ -54,6 +60,8 @@ export function QuickStart() {
       descZh: '查看學習路線，獲得個性化的學習建議',
       action: 'learning-path',
       number: '03',
+      gradient: 'from-hp-blue to-hp-light',
+      iconBg: 'bg-hp-blue',
     },
   ];
 
@@ -68,29 +76,34 @@ export function QuickStart() {
   };
 
   return (
-    <section className="py-20 sm:py-28 lg:py-36 bg-gradient-to-b from-white via-academy-gray-light to-white">
-      {/* 点阵背景 */}
-      <div className="absolute inset-0 opacity-30" style={{
-        backgroundImage: 'radial-gradient(circle, #ddd 1px, transparent 1px)',
-        backgroundSize: '20px 20px',
-      }} />
+    <section className="py-20 sm:py-28 lg:py-36 bg-gradient-to-b from-white via-gray-50 to-white relative overflow-hidden">
+      {/* 装饰性背景 */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-hp-blue/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-hp-light/5 rounded-full blur-3xl"></div>
+      </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 标题 */}
-        <div className="text-center mb-20 lg:mb-24">
-          <h2 className="text-4xl md:text-5xl font-black text-academy-black mb-6"
-            style={{ fontStyle: 'italic', transform: 'skewY(-2deg)' }}>
-            {isZh ? '快速開始' : 'Quick Start'}
+        <div className="text-center mb-16 lg:mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-hp-blue/5 rounded-full border border-hp-blue/20 mb-6">
+            <Sparkles className="w-4 h-4 text-hp-blue" />
+            <span className="text-sm font-semibold text-hp-blue tracking-wide uppercase">
+              {isZh ? '快速开始' : 'Quick Start'}
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6">
+            {isZh ? '选择最适合你的学习路径' : 'Choose Your Learning Path'}
           </h2>
-          <p className="text-lg text-academy-black max-w-2xl mx-auto font-semibold">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             {isZh
-              ? '選擇最適合你的學習路徑，立即開啟 AI 之旅'
-              : 'Choose the best learning path for you and start your AI journey now'}
+              ? '根据你的经验水平，立即开始 AI 提示词学习之旅'
+              : 'Start your AI prompting journey based on your experience level'}
           </p>
         </div>
 
         {/* 卡片网格 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {QUICK_START_ITEMS.map((item, idx) => (
             <QuickStartCard
               key={item.action}
@@ -121,53 +134,49 @@ function QuickStartCard({
   const title = isZh ? item.titleZh : item.titleEn;
   const desc = isZh ? item.descZh : item.descEn;
 
-  // 卡片颜色循环
-  const bgColors = [
-    'bg-academy-yellow', // 01 - 黄色
-    'bg-academy-pink',   // 02 - 粉红
-    'bg-academy-blue',   // 03 - 蓝色
-  ];
-  const bgColor = bgColors[index % 3];
-  const textColor = index === 2 ? 'text-white' : 'text-academy-black';
-
   return (
     <div
       onClick={onClick}
-      className="group block cursor-pointer"
+      className="group relative cursor-pointer"
     >
-      <div
-        className={`relative ${bgColor} ${textColor} border-4 border-academy-black rounded-none p-8 transition-all duration-300 hover:shadow-2xl hover:-translate-y-3`}
-        style={{
-          boxShadow: '0 8px 16px rgba(26,26,26,0.3), -4px 4px 0 rgba(26,26,26,0.2)',
-        }}
-      >
-        {/* 编号标签 */}
-        <div className="inline-flex items-center justify-center w-14 h-14 bg-academy-black text-white font-black text-2xl rounded-none mb-6">
-          {item.number}
+      {/* 发光效果 */}
+      <div className={`absolute -inset-0.5 bg-gradient-to-r ${item.gradient} rounded-2xl blur opacity-0 group-hover:opacity-30 transition duration-500`}></div>
+
+      {/* 卡片内容 */}
+      <div className="relative h-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:-translate-y-2 overflow-hidden">
+        {/* 顶部渐变条 */}
+        <div className={`h-2 bg-gradient-to-r ${item.gradient}`}></div>
+
+        <div className="p-8">
+          {/* 编号和图标 */}
+          <div className="flex items-start justify-between mb-6">
+            <div className={`inline-flex items-center justify-center w-14 h-14 ${item.iconBg} text-white font-black text-xl rounded-xl shadow-lg`}>
+              {item.number}
+            </div>
+            <div className={`p-3 rounded-xl ${item.iconBg}/10 group-hover/${item.iconBg}/20 transition-colors duration-300`}>
+              <div className={`${item.iconBg} bg-clip-text text-transparent`}>
+                {item.icon}
+              </div>
+            </div>
+          </div>
+
+          {/* 文字内容 */}
+          <h3 className="text-2xl font-black text-gray-900 mb-4">
+            {title}
+          </h3>
+          <p className="text-gray-600 leading-relaxed mb-8">
+            {desc}
+          </p>
+
+          {/* CTA */}
+          <div className={`inline-flex items-center gap-2 font-semibold text-hp-blue group-hover:gap-3 transition-all duration-300`}>
+            <span>{isZh ? '开始' : 'Start'}</span>
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+          </div>
         </div>
 
-        {/* 图标 */}
-        <div className="mb-6 text-4xl">
-          {item.icon}
-        </div>
-
-        {/* 文字内容 */}
-        <h3 className={`text-2xl font-black mb-4 ${textColor}`}
-          style={{ fontStyle: 'italic' }}>
-          {title}
-        </h3>
-        <p className={`leading-relaxed mb-8 font-semibold ${textColor} opacity-90`}>
-          {desc}
-        </p>
-
-        {/* CTA 按钮 */}
-        <div className={`inline-flex items-center gap-2 font-black group-hover:gap-3 transition-all ${
-          index === 2 ? 'bg-white text-academy-blue' : 'bg-academy-black text-white'
-        } px-4 py-2 border-4 border-${index === 2 ? 'white' : 'academy-black'} rounded-none`}
-          style={{ fontStyle: 'italic' }}>
-          <span>{isZh ? '開始' : 'Start'}</span>
-          <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-        </div>
+        {/* 悬停时显示的渐变背景 */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none`}></div>
       </div>
     </div>
   );
