@@ -2,21 +2,21 @@
 
 import { Suspense } from "react";
 import { PromptList } from "./PromptList";
-import { Prompt } from "../lib/types";
+import type { PromptPage } from "../lib/prompt-query";
 
 interface PromptListWrapperProps {
-  prompts: Prompt[];
+  initialPage: PromptPage;
 }
 
-export function PromptListWrapper({ prompts }: PromptListWrapperProps) {
+export function PromptListWrapper({ initialPage }: PromptListWrapperProps) {
   return (
-    <Suspense fallback={<PromptListLoading prompts={prompts} />}>
-      <PromptList prompts={prompts} />
+    <Suspense fallback={<PromptListLoading />}>
+      <PromptList initialPage={initialPage} />
     </Suspense>
   );
 }
 
-function PromptListLoading({ prompts }: { prompts: Prompt[] }) {
+function PromptListLoading() {
   return (
     <div className="min-h-screen bg-white flex flex-col md:flex-row">
       {/* 侧边栏占位 */}

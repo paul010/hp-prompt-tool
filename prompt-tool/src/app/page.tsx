@@ -2,25 +2,12 @@ import { PromptListWrapper } from "../components/PromptListWrapper";
 import { Hero } from "../components/Hero";
 import { CertificationBanner } from "../components/CertificationBanner";
 import { QuickStart } from "../components/QuickStart";
-import { loadPrompts } from "../lib/data-loader";
-import {
-  FEATURED_DATA_ANALYSIS_PROMPTS,
-  FEATURED_CONTENT_CREATION_PROMPTS,
-  FEATURED_LEARNING_GROWTH_PROMPTS,
-  FEATURED_PRESENTATION_PROMPTS,
-} from "@/data/curatedPrompts";
+import { getPromptCatalog } from "../lib/prompt-catalog";
+import { queryPrompts } from "../lib/prompt-query";
 
 export default async function HomePage() {
-  const prompts = await loadPrompts();
-
-  // 合并所有精选提示词到主列表
-  const allPrompts = [
-    ...FEATURED_DATA_ANALYSIS_PROMPTS,
-    ...FEATURED_CONTENT_CREATION_PROMPTS,
-    ...FEATURED_LEARNING_GROWTH_PROMPTS,
-    ...FEATURED_PRESENTATION_PROMPTS,
-    ...prompts,
-  ];
+  const { prompts, version } = await getPromptCatalog();
+  const initialPage = queryPrompts(prompts, {}, version);
 
   return (
     <div className="min-h-screen bg-white">
@@ -35,7 +22,7 @@ export default async function HomePage() {
 
       {/* 提示词列表 */}
       <div className="border-t-4 border-academy-black">
-        <PromptListWrapper prompts={allPrompts} />
+        <PromptListWrapper initialPage={initialPage} />
       </div>
     </div>
   );

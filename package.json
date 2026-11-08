@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "cd prompt-tool && next dev",
     "build": "cd prompt-tool && next build",
-    "start": "cd prompt-tool && next start"
+    "start": "cd prompt-tool && next start",
+    "test:payload": "node tests/prompt-payload.test.cjs"
   }
 }

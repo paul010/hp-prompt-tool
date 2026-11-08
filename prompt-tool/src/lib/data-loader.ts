@@ -1,4 +1,6 @@
 import Papa from 'papaparse';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
 import { Prompt, BusinessScenario, AIPlatform } from './types';
 import { OPENAI_PROMPTS } from '@/data/openaiPrompts';
 import { PROMPTS_CHAT_IMAGE_PROMPTS } from '@/data/promptsChatImagePrompts';
@@ -304,8 +306,8 @@ function translateRoleName(act: string): string {
   return act;
 }
 
-// 数据源 URL - 直接从上游获取
-const DATA_SOURCE_URL = 'https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv';
+// Use the versioned snapshot maintained by the existing hourly sync workflow.
+// Never fetch an unbounded upstream file into the Next.js Data Cache at runtime.
 
 export interface RawPromptData {
   act: string;
@@ -324,18 +326,7 @@ export interface RawPromptData {
 // 从上游 URL 加载提示词（带缓存）
 export async function loadPrompts(): Promise<Prompt[]> {
   try {
-    // 重新加载社区提示词，确保每个分类都有足够的提示词
-    const response = await fetch(DATA_SOURCE_URL, {
-      next: { revalidate: 3600 }, // 缓存1小时
-      // 增加超时设置，避免长时间等待
-      signal: AbortSignal.timeout(30000), // 30秒超时
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch prompts: ${response.statusText}`);
-    }
-
-    const csvText = await response.text();
+    const csvText = await readFile(path.join(process.cwd(), 'data/prompts.csv'), 'utf8');
 
     return new Promise((resolve, reject) => {
       Papa.parse<RawPromptData>(csvText, {
@@ -355,14 +346,8 @@ export async function loadPrompts(): Promise<Prompt[]> {
       });
     });
   } catch (error) {
-    // 网络错误或其他错误时，优雅降级到本地数据源
-    console.warn('Failed to fetch community prompts from GitHub, using local data only:', error);
-
-    // 只使用本地数据源
-    const localPrompts = [...OPENAI_PROMPTS, ...PROMPTS_CHAT_IMAGE_PROMPTS];
-    const dedupedPrompts = applyCuratedLimits(localPrompts);
-
-    return dedupedPrompts;
+    console.error('Unable to read the versioned prompt catalogue:', error);
+    throw error;
   }
 }
 

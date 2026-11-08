@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
-import { Prompt, LocalizedContent } from "../lib/types";
+import { useState, useEffect } from "react";
+import type { PromptPage } from "../lib/prompt-query";
+import { loadPromptDetail } from "../lib/prompt-detail-client";
 import { PromptCard } from "./PromptCard";
 import { SearchBar } from "./SearchBar";
 import { Sidebar } from "./Sidebar";
@@ -10,33 +11,11 @@ import { ActiveFilters } from "./ActiveFilters";
 import { SCENARIOS } from "../data/prompts";
 import { Shield, Zap, Crosshair, Users, Sparkles } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
-import { getLocalized } from "../lib/i18n";
 
-interface PromptListProps {
-  prompts: Prompt[];
-}
 
-// Helper function to get name from prompt (handles both string and LocalizedContent)
-function getPromptName(prompt: Prompt, language: string): string {
-  if (typeof prompt.name === "string") {
-    return language.startsWith("zh") ? (prompt.nameZh || prompt.name) : prompt.name;
-  }
-  return getLocalized(prompt.name, language as any);
-}
+interface PromptListProps { initialPage: PromptPage; }
 
-// Helper function to get description from prompt
-function getPromptDescription(prompt: Prompt, language: string): string {
-  if (typeof prompt.description === "string") return prompt.description;
-  return getLocalized(prompt.description, language as any);
-}
-
-// Helper function to get content from prompt
-function getPromptContent(prompt: Prompt, language: string): string {
-  if (typeof prompt.content === "string") return prompt.content;
-  return getLocalized(prompt.content, language as any);
-}
-
-export function PromptList({ prompts }: PromptListProps) {
+export function PromptList({ initialPage }: PromptListProps) {
   const { language } = useLanguage();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -64,69 +43,46 @@ export function PromptList({ prompts }: PromptListProps) {
     }
   }, []);
 
-  // 计算各场景数量
-  const scenarioCounts = useMemo(() => {
-    const counts: Record<string, number> = { all: prompts.length };
-    SCENARIOS.forEach((s) => {
-      counts[s.id] = prompts.filter((p) => p.scenario === s.id).length;
-    });
-    return counts;
-  }, [prompts]);
+  const [result, setResult] = useState(initialPage);
+  const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState('');
+  const [retry, setRetry] = useState(0);
 
-  // 过滤和排序
-  const filteredAndSortedPrompts = useMemo(() => {
-    let filtered = prompts.filter((prompt) => {
-      // 搜索过滤
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        const name = getPromptName(prompt, language);
-        const description = getPromptDescription(prompt, language);
-        const content = getPromptContent(prompt, language);
-        const matchesSearch =
-          name.toLowerCase().includes(query) ||
-          description.toLowerCase().includes(query) ||
-          content.toLowerCase().includes(query) ||
-          prompt.tags.some((tag) => tag.toLowerCase().includes(query));
-        if (!matchesSearch) return false;
-      }
-
-      // 场景过滤
-      if (selectedScenario && prompt.scenario !== selectedScenario) {
-        return false;
-      }
-
-      // 难度过滤
-      if (selectedDifficulty && prompt.difficulty !== selectedDifficulty) {
-        return false;
-      }
-
-      // 平台过滤（检查是否推荐该平台）
-      if (selectedPlatform) {
-        if (!prompt.recommendedPlatforms.includes(selectedPlatform as any)) {
-          return false;
+  useEffect(() => {
+    const controller = new AbortController();
+    setLoading(true);
+    setLoadError('');
+    const timer = setTimeout(async () => {
+      try {
+        const params = new URLSearchParams({
+          search: searchQuery, scenario: selectedScenario, platform: selectedPlatform,
+          difficulty: selectedDifficulty, sort: selectedSort, language,
+          page: String(currentPage), pageSize: String(pageSize),
+        });
+        const response = await fetch(`/api/prompts?${params}`, { signal: controller.signal });
+        if (!response.ok) throw new Error('提示词暂时无法加载，请重试。');
+        const next: PromptPage = await response.json();
+        if (!next || !Array.isArray(next.prompts) || !next.prompts.every(prompt => typeof prompt.id === 'string' && Array.isArray(prompt.tags) && Array.isArray(prompt.recommendedPlatforms))
+          || !Number.isSafeInteger(next.total) || !Number.isSafeInteger(next.totalAll) || !Number.isSafeInteger(next.page)
+          || !Number.isSafeInteger(next.totalPages) || !next.counts || typeof next.version !== 'string') {
+          throw new Error('列表数据不完整，请重试。');
         }
+        if (!controller.signal.aborted) {
+          setResult(next);
+          if (next.page !== currentPage) setCurrentPage(next.page);
+        }
+      } catch (error) {
+        if (!controller.signal.aborted) setLoadError(error instanceof Error ? error.message : '加载失败，请重试。');
+      } finally {
+        if (!controller.signal.aborted) setLoading(false);
       }
+    }, searchQuery ? 180 : 0);
+    return () => { clearTimeout(timer); controller.abort(); };
+  }, [searchQuery, selectedScenario, selectedPlatform, selectedDifficulty, selectedSort, language, currentPage, pageSize, retry]);
 
-      return true;
-    });
-
-    // 排序逻辑
-    if (selectedSort === "difficulty") {
-      const order: Record<string, number> = { "入门": 1, "进阶": 2, "专家": 3 };
-      filtered.sort((a, b) => order[a.difficulty] - order[b.difficulty]);
-    } else if (selectedSort === "name") {
-      filtered.sort((a, b) => getPromptName(a, language).localeCompare(getPromptName(b, language)));
-    }
-
-    return filtered;
-  }, [prompts, searchQuery, selectedScenario, selectedPlatform, selectedDifficulty, selectedSort, language]);
-
-  // 分页
-  const totalPages = Math.ceil(filteredAndSortedPrompts.length / pageSize);
-  const paginatedPrompts = filteredAndSortedPrompts.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+  const scenarioCounts = result.counts;
+  const paginatedPrompts = result.prompts;
+  const totalPages = result.totalPages;
 
   const handleClearFilter = (key: string) => {
     switch (key) {
@@ -184,7 +140,7 @@ export function PromptList({ prompts }: PromptListProps) {
 
             {/* 描述文案 */}
             <p className="text-white/80 text-sm sm:text-base max-w-3xl mb-6">
-              从动手尝试到系统学习，再到深度探索。精选 <span className="text-white font-semibold">{prompts.length}+</span> 企业场景 AI 提示词，
+              从动手尝试到系统学习，再到深度探索。精选 <span className="text-white font-semibold">{result.totalAll}+</span> 企业场景 AI 提示词，
               以 <span className="text-white font-semibold">Microsoft Copilot</span> 为核心工具生态，
               助力 HP 员工在实际业务场景中建立 AI 应用信心。
             </p>
@@ -213,7 +169,7 @@ export function PromptList({ prompts }: PromptListProps) {
 
         {/* 搜索和筛选栏 */}
         <SearchBar
-          onSearchChange={setSearchQuery}
+          onSearchChange={(query) => { setSearchQuery(query); setCurrentPage(1); }}
           onScenarioChange={(s) => { setSelectedScenario(s); setCurrentPage(1); }}
           onPlatformChange={(p) => { setSelectedPlatform(p); setCurrentPage(1); }}
           onDifficultyChange={(d) => { setSelectedDifficulty(d); setCurrentPage(1); }}
@@ -252,23 +208,27 @@ export function PromptList({ prompts }: PromptListProps) {
           {/* 结果统计 */}
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold text-academy-black">
-              {filteredAndSortedPrompts.length > 0
-                ? `找到 ${filteredAndSortedPrompts.length} 个提示词`
+              {result.total > 0
+                ? `找到 ${result.total} 个提示词`
                 : "没有找到匹配的提示词"}
             </h2>
             <span className="text-sm text-gray-500 hidden sm:inline">
-              共 {prompts.length} 条
+              共 {result.totalAll} 条
             </span>
           </div>
 
+          {loading && <p role="status" className="mb-4 text-sm text-gray-600">正在加载提示词…</p>}
+          {loadError && <div role="alert" className="mb-4 rounded bg-red-50 p-4 text-red-700">
+            {loadError} <button onClick={() => setRetry(value => value + 1)} className="underline">重试</button>
+          </div>}
           {/* 网格卡片 */}
-          {paginatedPrompts.length > 0 ? (
+          {!loading && !loadError && paginatedPrompts.length > 0 ? (
             <div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
               {paginatedPrompts.map((prompt) => (
-                <PromptCard key={prompt.id} prompt={prompt} compact />
+                <PromptCard key={`${result.version}:${prompt.id}`} prompt={prompt} compact loadDetail={() => loadPromptDetail(prompt.id, result.version)} />
               ))}
             </div>
-          ) : (
+          ) : !loading && !loadError ? (
             <div className="text-center py-16">
               <div className="text-6xl mb-4">🔍</div>
               <h3 className="text-xl font-semibold text-academy-black mb-2">
@@ -278,7 +238,7 @@ export function PromptList({ prompts }: PromptListProps) {
                 试试调整搜索关键词或筛选条件
               </p>
             </div>
-          )}
+          ) : null}
 
           {/* 页脚 */}
           <footer className="mt-12 pt-8 border-t border-4 border-academy-black bg-gradient-to-r from-hp-blue/5 to-hp-dark/5">
@@ -328,14 +288,14 @@ export function PromptList({ prompts }: PromptListProps) {
         </main>
 
         {/* 分页 */}
-        <Pagination
-          currentPage={currentPage}
+        {!loading && !loadError && <Pagination
+          currentPage={result.page}
           totalPages={totalPages}
           pageSize={pageSize}
-          totalItems={filteredAndSortedPrompts.length}
+          totalItems={result.total}
           onPageChange={setCurrentPage}
           onPageSizeChange={(size) => { setPageSize(size); setCurrentPage(1); }}
-        />
+        />}
       </div>
     </div>
   );

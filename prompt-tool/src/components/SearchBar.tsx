@@ -3,7 +3,7 @@
 import { SearchCheck, X } from "lucide-react";
 import { SCENARIOS, DIFFICULTY_LEVELS } from "@/data/prompts";
 import { AI_PLATFORMS } from "@/lib/platforms";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface SearchBarProps {
   onSearchChange: (query: string) => void;
@@ -31,6 +31,7 @@ export function SearchBar({
   searchQuery,
 }: SearchBarProps) {
   const [localQuery, setLocalQuery] = useState(searchQuery);
+  useEffect(() => setLocalQuery(searchQuery), [searchQuery]);
 
   const handleClear = () => {
     setLocalQuery("");

@@ -1,9 +1,9 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { Prompt, InputField } from "../lib/types";
+import { Prompt, InputField, AIPlatform } from "../lib/types";
 import { Copy, ChevronDown, ChevronUp, Eye, Award, Settings, Palette } from "lucide-react";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { AI_PLATFORMS, getPlatformUrl, getRecommendedPlatforms } from "../lib/platforms";
 import { PlatformModal } from "./PlatformModal";
 import { PromptDetailModal } from "./PromptDetailModal";
@@ -15,6 +15,7 @@ import { shouldRenderPromptImage } from "../lib/promptImageUtils";
 interface PromptCardProps {
   prompt: Prompt;
   compact?: boolean;
+  loadDetail?: () => Promise<Prompt>;
 }
 
 // 模型名称显示映射
@@ -27,7 +28,50 @@ function getModelDisplayName(model: string): string {
   return modelNames[model] || model;
 }
 
-export function PromptCard({ prompt, compact = false }: PromptCardProps) {
+export function PromptCard({ prompt: summary, compact = false, loadDetail }: PromptCardProps) {
+  const [detail, setDetail] = useState<Prompt | null>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
+  const [detailError, setDetailError] = useState('');
+  const inFlight = useRef<Promise<Prompt> | null>(null);
+  const prompt = detail || summary;
+  const fullContent = (item: Prompt) => typeof item.content === 'string'
+    ? item.contentZh || item.content : getLocalized(item.content, language);
+  const ensureDetail = async (): Promise<Prompt> => {
+    if (!loadDetail || detail) return detail || summary;
+    if (inFlight.current) return inFlight.current;
+    setDetailLoading(true);
+    setDetailError('');
+    const request = loadDetail().then(item => { setDetail(item); return item; });
+    inFlight.current = request;
+    try { return await request; }
+    finally { inFlight.current = null; setDetailLoading(false); }
+  };
+  const withDetail = async (action: (item: Prompt) => void | Promise<void>) => {
+    if (detailLoading) return;
+    setDetailError('');
+    try { await action(await ensureDetail()); }
+    catch (error) { setDetailError(error instanceof Error ? error.message : '正文加载失败，请重试。'); }
+  };
+  const openPlatform = async (platform: AIPlatform) => {
+    if (detailLoading) return;
+    // Open during the user gesture so asynchronous loading cannot trigger popup blocking.
+    const tab = window.open('about:blank', '_blank');
+    if (tab) tab.opener = null;
+    setDetailError('');
+    try {
+      const item = await ensureDetail();
+      if (tab) tab.location.href = getPlatformUrl(platform, fullContent(item));
+      else setDetailError('浏览器阻止了新窗口，请允许弹出窗口后重试。');
+    } catch (error) {
+      tab?.close();
+      setDetailError(error instanceof Error ? error.message : '正文加载失败，请重试。');
+    }
+  };
+  const detailStatus = <>
+    {detailLoading && <p role="status" className="mb-2 text-xs text-gray-500">正在加载完整提示词…</p>}
+    {detailError && <p role="alert" className="mb-2 text-xs text-red-700">{detailError} 可再次点击操作重试。</p>}
+  </>;
+
   const { language, setLanguage } = useLanguage();
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -92,10 +136,24 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
   const hasInputFields = inputFields.length > 0;
   const canRenderImage = shouldRenderPromptImage(prompt) && !imageFailed;
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(displayContent);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = () => {
+    if (detailLoading) return;
+    setDetailError('');
+    // Start the clipboard operation in the click itself. WebKit otherwise loses
+    // transient activation while the full text is being fetched.
+    const item = ensureDetail();
+    const operation = typeof ClipboardItem !== 'undefined' && navigator.clipboard?.write
+      ? navigator.clipboard.write([new ClipboardItem({
+          'text/plain': item.then(value => new Blob([fullContent(value)], { type: 'text/plain' })),
+        })])
+      : item.then(value => {
+          if (loadDetail && !detail) throw new Error('正文已加载，请再次点击复制。');
+          return navigator.clipboard.writeText(fullContent(value));
+        });
+    operation.then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }).catch(error => setDetailError(error instanceof Error ? error.message : '复制失败，请重试。'));
   };
 
   const recommendedPlatforms = getRecommendedPlatforms(
@@ -111,7 +169,8 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
   // 紧凑模式
   if (compact) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 hover:border-hp-blue hover:shadow-lg transition-all overflow-hidden p-4">
+      <div aria-busy={detailLoading} className="bg-white rounded-xl border border-gray-200 hover:border-hp-blue hover:shadow-lg transition-all overflow-hidden p-4">
+        {detailStatus}
         {canRenderImage && (
           <div className="mb-3 overflow-hidden rounded-lg border border-gray-100 bg-gray-50">
             <img
@@ -191,7 +250,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
           <div className="flex gap-2">
             {hasInputFields && (
               <button
-                onClick={() => setShowBuilderModal(true)}
+                onClick={() => withDetail(() => setShowBuilderModal(true))}
                 className="text-sm font-medium text-purple-600 hover:text-purple-700 flex items-center gap-1 transition-all"
               >
                 <Settings className="w-3.5 h-3.5" />
@@ -207,7 +266,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
               {copied ? "已复制" : "复制"}
             </button>
             <button
-              onClick={() => setShowDetailModal(true)}
+              onClick={() => withDetail(() => setShowDetailModal(true))}
               className="text-sm font-medium text-gray-600 hover:text-hp-blue flex items-center gap-1 transition-all"
             >
               <Eye className="w-3.5 h-3.5" />
@@ -218,7 +277,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
             {platformsToShow.slice(0, 4).map((platform) => (
               <button
                 key={platform.id}
-                onClick={() => window.open(getPlatformUrl(platform.id, displayContent), "_blank")}
+                onClick={() => openPlatform(platform.id)}
                 className="w-8 h-8 rounded-lg border border-gray-200 hover:border-hp-blue hover:bg-gray-50 flex items-center justify-center transition-all"
                 title={platform.name}
               >
@@ -227,7 +286,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
             ))}
             {platformsToShow.length > 4 && (
               <button
-                onClick={() => setShowPlatformModal(true)}
+                onClick={() => withDetail(() => setShowPlatformModal(true))}
                 className="w-8 h-8 rounded-lg border border-dashed border-gray-300 hover:border-hp-blue flex items-center justify-center text-xs text-gray-500 hover:text-hp-blue transition-all"
               >
                 +{platformsToShow.length - 4}
@@ -257,7 +316,8 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
 
   // 完整模式（原有布局）
   return (
-    <div className="prompt-card p-6 animate-fade-in">
+    <div aria-busy={detailLoading} className="prompt-card p-6 animate-fade-in">
+      {detailStatus}
       {canRenderImage && (
         <div className="mb-4 overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
           <img
@@ -359,7 +419,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
           </pre>
         </div>
         <button
-          onClick={() => setExpanded(!expanded)}
+          onClick={() => withDetail(() => setExpanded(!expanded))}
           className="absolute bottom-6 right-4 flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
         >
           {expanded ? (
@@ -398,7 +458,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
         <div className="flex gap-2">
           {hasInputFields && (
             <button
-              onClick={() => setShowBuilderModal(true)}
+              onClick={() => withDetail(() => setShowBuilderModal(true))}
               className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium bg-purple-50 text-purple-700 hover:bg-purple-100 transition-all"
             >
               <Settings className="w-4 h-4" />
@@ -417,7 +477,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
             {copied ? "已复制" : "复制提示词"}
           </button>
           <button
-            onClick={() => setShowDetailModal(true)}
+            onClick={() => withDetail(() => setShowDetailModal(true))}
             className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium bg-blue-50 text-blue-700 hover:bg-blue-100 transition-all"
           >
             <Eye className="w-4 h-4" />
@@ -431,10 +491,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
             {platformsToShow.slice(0, 3).map((platform) => (
               <button
                 key={platform.id}
-                onClick={() => {
-                  const url = getPlatformUrl(platform.id, displayContent);
-                  window.open(url, "_blank");
-                }}
+                onClick={() => openPlatform(platform.id)}
                 className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-gray-200 hover:border-gray-300 transition-all hover:shadow-sm group"
                 title={platform.description}
               >
@@ -446,7 +503,7 @@ export function PromptCard({ prompt, compact = false }: PromptCardProps) {
             ))}
             {platformsToShow.length > 3 && (
               <button
-                onClick={() => setShowPlatformModal(true)}
+                onClick={() => withDetail(() => setShowPlatformModal(true))}
                 className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-dashed border-gray-300 hover:border-hp-blue transition-all hover:shadow-sm group"
               >
                 <span className="text-sm font-medium text-gray-500 group-hover:text-hp-blue">
